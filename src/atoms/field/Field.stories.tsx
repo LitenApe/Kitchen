@@ -3,9 +3,30 @@ import { BaseInput } from '../base_input';
 import { Label } from '../label';
 import { Field as Component } from '.';
 
+/**
+ * `Field` groups a form control with its label. It generates an `id` and
+ * shares it, together with any props passed to the field, with the components
+ * inside it:
+ *
+ * - `Label` uses the `id` for its `htmlFor`
+ * - `Input`, `Checkbox`, `Radio`, `Select` and `BaseInput` use it as their `id`
+ *
+ * This links a label to its control without wiring up ids by hand. Props set
+ * directly on a component take precedence over the ones shared by the field,
+ * so a field-wide prop such as `error` or `onChange` can still be overridden
+ * for a single control.
+ *
+ * `Field` does not render an element of its own. Use `BaseField` when you also
+ * want an error message to be shown.
+ */
 export default {
   title: 'Atom/Field',
   component: Component,
+  parameters: {
+    docs: {
+      subtitle: 'Links a label to its form control',
+    },
+  },
 } as Meta;
 
 const Template: StoryFn = ({ children, ...args }) => (

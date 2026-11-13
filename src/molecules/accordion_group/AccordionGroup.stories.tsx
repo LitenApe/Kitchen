@@ -6,22 +6,47 @@ import {
   AccordionPanel,
 } from '../../atoms/accordion';
 
+/**
+ * `AccordionGroup` coordinates a set of `Accordion` components so that only
+ * one of them is open at a time. Opening an accordion closes the one which
+ * was open, and clicking the open accordion closes it.
+ *
+ * Like `Accordion`, it can be used in two ways:
+ *
+ * - **Uncontrolled**: the group keeps track of which accordion is open. Use
+ *   `initial` to choose which one starts open, by its index.
+ * - **Controlled**: pass both `open` and `onClick`. A click only calls
+ *   `onClick` with the event, the accordion's index and its requested state,
+ *   and it is up to you to update `open`. Passing `onClick` without `open`
+ *   logs a warning and ignores the click.
+ *
+ * Only `Accordion` elements are allowed as direct children. Anything else is
+ * left out, with a warning in the console.
+ *
+ * The example below is uncontrolled and starts with the second accordion open.
+ */
 export default {
   title: 'Molecule/AccordionGroup',
   component: Component,
+  parameters: {
+    docs: {
+      subtitle: 'A set of accordions where only one is open at a time',
+    },
+  },
   argTypes: {
     open: {
-      name: 'open',
-      description: 'controls which accordion that should be open',
+      description:
+        'The index of the open accordion, or `-1` for none. Makes the group controlled together with `onClick`.',
       type: 'number',
     },
     onClick: {
-      name: 'onClick',
-      description: 'click handler to react on accordion toggle events',
+      description:
+        "Called with the click event, the accordion's index and its requested open state when a heading is clicked.",
     },
     initial: {
-      name: 'initial',
-      description: 'sets initial accordion to be open',
+      description:
+        'The index of the accordion which starts open when the group is uncontrolled. Defaults to `-1`, where all of them are closed.',
+      type: 'number',
     },
   },
 } as Meta;
@@ -87,4 +112,7 @@ AccordionGroup.storyName = 'AccordionGroup';
 AccordionGroup.args = {
   ...AccordionGroup.args,
   initial: 1,
+  // an explicit `undefined` stops Storybook from injecting an action for
+  // `onClick`, which would make the group controlled and ignore clicks
+  onClick: undefined,
 };

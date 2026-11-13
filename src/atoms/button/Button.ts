@@ -29,7 +29,8 @@ function Button<T extends PermittedTags = 'button'>(
   }
 
   return createElement(as, {
-    type: 'button',
+    // keeps buttons from submitting forms; links have no such behaviour
+    type: as === 'button' ? 'button' : undefined,
     'aria-disabled': isDisabled,
     onClick: clickHandler,
     ...args,

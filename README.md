@@ -8,7 +8,13 @@ Another important thing to note is that the project is yet to be configured for 
 
 ## Project Status
 
-The project is abandoned, as I regret creating dependencies on third-party libraries such as framer-motion. Additionally, I consumed my contexts thoughtlessly, which resulted in a few problems where some things get duplicated when attempting to combine props from various sources. I might restart the project after I figure out what my end goal is with a personal styleless component library.
+The project is abandoned, as I regret creating dependencies on third-party libraries such as framer-motion. Additionally, I consumed my contexts thoughtlessly, which resulted in a few problems where props get duplicated or lost when attempting to combine them from various sources.
+
+Components such as `Field` and `RadioGroup` share their props with the components inside them through React context, and each component merges the shared props with its own. A component can only read from the closest provider of a context, so when two providers of the same context are nested, the outer one is hidden from everything inside the inner one.
+
+`RadioField` shows the problem clearly. Its props are passed to a `BaseField`, which shares them through a `Field`. Every radio is also wrapped in a `Field` of its own, so that it can be linked to its label, which means the radios only see those inner fields. As a result, props such as `onChange` and `disabled` never reach the radios, and an `error` is displayed without the radios being marked as invalid or described by the message. `InputField`, which has no inner field, passes the same props on as expected.
+
+Fixing this properly means rethinking how props flow between the components rather than patching them one by one. I might restart the project after I figure out what my end goal is with a personal styleless component library.
 
 ## Project Structure
 
