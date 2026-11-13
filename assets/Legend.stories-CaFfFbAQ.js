@@ -1,4 +1,0 @@
-import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{t}from"./jsx-runtime-MKhVqBIO.js";import{n,t as r}from"./legend-D9VIhRGp.js";var i,a,o,s,c;function l(){return(l=e((()=>{r(),i=t(),a={title:`Atom/Legend`,component:n},o=({children:e,...t})=>(0,i.jsx)(n,{...t,children:e}),s=o.bind({}),s.args={...s.args,children:`I'm a legend`},c=[`Legend`],s.parameters={...s.parameters,docs:{...s.parameters?.docs,source:{originalSource:`({
-  children,
-  ...args
-}) => <Component {...args}>{children}</Component>`,...s.parameters?.docs?.source}}}})))()}l();export{s as Legend,c as __namedExportsOrder,a as default};

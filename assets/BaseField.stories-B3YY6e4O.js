@@ -1,4 +1,0 @@
-import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{t}from"./jsx-runtime-MKhVqBIO.js";import{n,t as r}from"./label-OZN2ntTl.js";import{n as i,t as a}from"./input-2_3MlLFa.js";import{n as o,t as s}from"./base_field-D_UvdVxf.js";var c,l,u,d,f;function p(){return(p=e((()=>{s(),a(),r(),c=t(),l={title:`Molecule/BaseField`,component:o},u=e=>(0,c.jsxs)(o,{...e,children:[(0,c.jsx)(n,{children:`Test Label`}),(0,c.jsx)(i,{})]}),d=u.bind({}),d.storyName=`BaseField`,d.args={...d.args,error:``},f=[`BaseField`],d.parameters={...d.parameters,docs:{...d.parameters?.docs,source:{originalSource:`args => <Component {...args}>
-    <Label>Test Label</Label>
-    <Input />
-  </Component>`,...d.parameters?.docs?.source}}}})))()}p();export{d as BaseField,f as __namedExportsOrder,l as default};

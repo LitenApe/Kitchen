@@ -1,4 +1,0 @@
-import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{t}from"./jsx-runtime-MKhVqBIO.js";import{a as n,i as r,n as i,t as a}from"./label-OZN2ntTl.js";import{n as o,t as s}from"./base_input-B6z7kjTW.js";var c,l,u,d,f;function p(){return(p=e((()=>{s(),a(),r(),c=t(),l={title:`Atom/Field`,component:n},u=({children:e,...t})=>(0,c.jsx)(n,{...t,children:e}),d=u.bind({}),d.args={children:[(0,c.jsx)(i,{children:`label`},`field-label`),(0,c.jsx)(o,{},`field-input`)]},f=[`Field`],d.parameters={...d.parameters,docs:{...d.parameters?.docs,source:{originalSource:`({
-  children,
-  ...args
-}) => <Component {...args}>{children}</Component>`,...d.parameters?.docs?.source}}}})))()}p();export{d as Field,f as __namedExportsOrder,l as default};

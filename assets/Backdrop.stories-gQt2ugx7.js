@@ -1,0 +1,8 @@
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{t}from"./react-DlPsW1c0.js";import{t as n}from"./jsx-runtime-MKhVqBIO.js";import{i as r,n as i,r as a,t as o}from"./proxy-Cdr7bdZi.js";function s(e,t){let{visible:n,...r}=e;return(0,c.createElement)(a,{initial:!1},n&&(0,c.createElement)(i.div,{style:{position:`fixed`,width:`100vw`,height:`100vh`,left:0,top:0,zIndex:1e3},initial:`invisible`,animate:`visible`,exit:`invisible`,variants:{invisible:{backgroundColor:`rgba(0, 0, 0, 0)`},visible:{backgroundColor:`rgba(0, 0, 0, 0.75)`}},transition:{duration:.3,type:`spring`},...r,ref:t}))}var c,l;function u(){return(u=e((()=>{r(),o(),c=t(),l=(0,c.forwardRef)(s)})))()}function d(){return(d=e((()=>{u()})))()}var f,p,m,h,g;function _(){return(_=e((()=>{d(),f=n(),p={title:`Atom/Backdrop`,component:l,parameters:{docs:{subtitle:`Dims the page to highlight what needs attention`,description:{component:`A backdrop is a full-screen overlay which dims the page behind it. It is
+commonly placed behind modals and dialogs, or used to highlight an image
+or another piece of content which needs the user's attention.
+
+The backdrop is fixed to the viewport and placed above the page content
+(\`z-index: 1000\`). Changing \`visible\` fades it in, or fades it out before
+removing it from the page. Anything passed as \`children\` is rendered
+inside the backdrop.`}}},argTypes:{visible:{description:`Whether the backdrop is shown.`,type:`boolean`}}},m=e=>(0,f.jsx)(l,{...e}),h=m.bind({}),h.args={...h.args,visible:!0},g=[`Backdrop`],h.parameters={...h.parameters,docs:{...h.parameters?.docs,source:{originalSource:`args => <Component {...args} />`,...h.parameters?.docs?.source}}}})))()}_();export{h as Backdrop,g as __namedExportsOrder,p as default};

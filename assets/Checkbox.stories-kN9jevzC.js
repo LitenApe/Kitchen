@@ -1,4 +1,0 @@
-import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{t}from"./jsx-runtime-MKhVqBIO.js";import{a as n,i as r,n as i,t as a}from"./label-OZN2ntTl.js";import{n as o,t as s}from"./checkbox-B_wSN1q0.js";var c,l,u,d,f;function p(){return(p=e((()=>{s(),r(),a(),c=t(),l={title:`Atom/Checkbox`,component:o,parameters:{docs:{subtitle:`Enable users to toggle between to choices`}}},u=e=>(0,c.jsxs)(n,{...e,children:[(0,c.jsx)(o,{}),(0,c.jsx)(i,{children:`Checkbox label`})]}),d=u.bind({}),d.args={...d.args},f=[`Checkbox`],d.parameters={...d.parameters,docs:{...d.parameters?.docs,source:{originalSource:`args => <Field {...args}>
-    <Component />
-    <Label>Checkbox label</Label>
-  </Field>`,...d.parameters?.docs?.source}}}})))()}p();export{d as Checkbox,f as __namedExportsOrder,l as default};
