@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{t}from"./react-DlPsW1c0.js";function n(e=`kitchen`){return(0,r.useMemo)(()=>(i.hasOwnProperty(e)||(i[e]=0),`${e}-${++i[e]}`),[e])}var r,i;function a(){return(a=e((()=>{r=t(),i={}})))()}export{n,a as t};

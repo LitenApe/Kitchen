@@ -1,0 +1,4 @@
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{t}from"./jsx-runtime-MKhVqBIO.js";import{a as n,i as r,n as i,t as a}from"./label-OZN2ntTl.js";import{n as o,t as s}from"./radio-RkmaVpWc.js";var c,l,u,d,f;function p(){return(p=e((()=>{s(),r(),a(),c=t(),l={title:`Atom/Radio`,component:o},u=e=>(0,c.jsxs)(n,{...e,children:[(0,c.jsx)(o,{}),(0,c.jsx)(i,{children:`Radio label`})]}),d=u.bind({}),d.args={...d.args},f=[`Radio`],d.parameters={...d.parameters,docs:{...d.parameters?.docs,source:{originalSource:`args => <Field {...args}>
+    <Component />
+    <Label>Radio label</Label>
+  </Field>`,...d.parameters?.docs?.source}}}})))()}p();export{d as Radio,f as __namedExportsOrder,l as default};

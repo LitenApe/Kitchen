@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";function t(...e){let t=e.filter(Boolean);return t.length<=1?t[0]:function(e){t.forEach(t=>{try{t.current=e}catch{console.warn(`Encountered an error while mergin refs. Ensure that all provided refs are of type RefObject`)}})}}function n(){return(n=e((()=>{})))()}export{t as n,n as t};

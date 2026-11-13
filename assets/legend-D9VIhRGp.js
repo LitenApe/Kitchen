@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{t}from"./react-DlPsW1c0.js";function n(e,t){return(0,r.createElement)(`legend`,{...e,ref:t})}var r,i;function a(){return(a=e((()=>{r=t(),i=(0,r.forwardRef)(n)})))()}function o(){return(o=e((()=>{a()})))()}export{i as n,a as r,o as t};
