@@ -1,6 +1,12 @@
 import { BaseInput, BaseInputProps } from '../base_input';
 import { FieldProps, useField } from '../field';
-import { ForwardedRef, cloneElement, createElement, forwardRef } from 'react';
+import {
+  ForwardedRef,
+  JSX,
+  cloneElement,
+  createElement,
+  forwardRef,
+} from 'react';
 import { PermittedTags, WithPostfix, WithPrefix } from './types';
 
 import { concat } from '../../utils/functions/concat';

@@ -2,6 +2,7 @@ import {
   ComponentPropsWithoutRef,
   ElementType,
   ForwardedRef,
+  JSX,
   createElement,
   forwardRef,
   useEffect,
@@ -22,7 +23,7 @@ function BaseInput<T extends PermittedTags = 'input'>(
   props: BaseInputProps<T>,
   ref: ForwardedRef<HTMLInputElement | HTMLTextAreaElement>
 ): JSX.Element {
-  const internalRef = useRef<HTMLInputElement>();
+  const internalRef = useRef<HTMLInputElement>(null);
   const { as = 'input', ...rest } = props;
   const { getFieldProps } = useField();
   const { error, ...args } = getFieldProps(rest as FieldProps);

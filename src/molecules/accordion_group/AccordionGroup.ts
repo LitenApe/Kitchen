@@ -3,6 +3,7 @@ import {
   cloneElement,
   createElement,
   Fragment,
+  JSX,
   MouseEvent,
   ReactElement,
   useEffect,

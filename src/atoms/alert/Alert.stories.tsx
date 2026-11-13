@@ -1,12 +1,12 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react-vite';
 import { Alert as Component } from '.';
 
 export default {
   title: 'Atom/Alert',
   component: Component,
   parameters: {
-    componentSubtitle: 'Notification of important information',
     docs: {
+      subtitle: 'Notification of important information',
       description: {
         component: `
     An alert is a component that displays a brief, important
@@ -25,7 +25,7 @@ export default {
   },
 } as Meta;
 
-const Template: Story = (args) => <Component as="p" {...args} />;
+const Template: StoryFn = (args) => <Component as="p" {...args} />;
 
 export const Alert = Template.bind({});
 Alert.args = { ...Alert.args, children: 'Alert message' };

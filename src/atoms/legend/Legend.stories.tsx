@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react-vite';
 import { Legend as Component } from '.';
 
 export default {
@@ -6,7 +6,7 @@ export default {
   component: Component,
 } as Meta;
 
-const Template: Story = ({ children, ...args }) => (
+const Template: StoryFn = ({ children, ...args }) => (
   <Component {...args}>{children}</Component>
 );
 

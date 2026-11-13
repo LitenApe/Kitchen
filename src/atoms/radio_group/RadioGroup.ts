@@ -2,6 +2,7 @@ import {
   ComponentPropsWithoutRef,
   FocusEvent,
   ForwardedRef,
+  JSX,
   createElement,
   createRef,
   forwardRef,

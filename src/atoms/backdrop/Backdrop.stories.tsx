@@ -1,13 +1,13 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react-vite';
 import { Backdrop as Component } from '.';
 
 export default {
   title: 'Atom/Backdrop',
   component: Component,
   parameters: {
-    componentSubtitle:
-      'An overlay to highlight content which needs the users attention',
     docs: {
+      subtitle:
+        'An overlay to highlight content which needs the users attention',
       description: {
         component: `
     The overlay is a simple "backdrop" to hide away the current
@@ -22,7 +22,7 @@ export default {
   },
 } as Meta;
 
-const Template: Story = (args) => <Component {...args} />;
+const Template: StoryFn = (args) => <Component {...args} />;
 
 export const Backdrop = Template.bind({});
 Backdrop.args = { ...Backdrop.args, visible: true };

@@ -1,5 +1,6 @@
 import {
   createElement,
+  JSX,
   PropsWithChildren,
   useCallback,
   useRef,

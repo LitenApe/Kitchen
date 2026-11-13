@@ -1,4 +1,4 @@
-import { ForwardedRef, createElement, forwardRef } from 'react';
+import { ForwardedRef, JSX, createElement, forwardRef } from 'react';
 import { Select, Option as SelectOption } from '../../atoms/select';
 
 import { BaseField } from '../base_field';

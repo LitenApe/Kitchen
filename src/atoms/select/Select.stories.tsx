@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react-vite';
 import {
   Select as Component,
   Option as ComponentOption,
@@ -12,7 +12,7 @@ export default {
   component: Component,
 } as Meta;
 
-const Template: Story = ({ children, ...args }) => (
+const Template: StoryFn = ({ children, ...args }) => (
   <Field>
     <Label>Choose a camera manufacturer</Label>
     <Component {...args}>{children}</Component>

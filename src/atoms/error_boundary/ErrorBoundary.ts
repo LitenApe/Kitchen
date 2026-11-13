@@ -1,4 +1,4 @@
-import { Component, createElement, ReactNode } from 'react';
+import { Component, createElement, JSX, ReactNode } from 'react';
 import { isDefined } from '../../utils/functions/isDefined';
 
 interface ErrorBoundaryProps {

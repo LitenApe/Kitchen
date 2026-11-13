@@ -1,9 +1,9 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react-vite';
 
 import { Input as Component } from '.';
 import { Field } from '../field';
 import { Label } from '../label';
-import { action } from '@storybook/addon-actions';
+import { action } from 'storybook/actions';
 
 export default {
   title: 'Atom/Input',
@@ -40,7 +40,7 @@ export default {
   },
 } as Meta;
 
-const Template: Story = (args) => (
+const Template: StoryFn = (args) => (
   <Field>
     <Label>Input label</Label>
     <Component {...args} />

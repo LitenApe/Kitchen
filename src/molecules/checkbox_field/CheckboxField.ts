@@ -1,4 +1,4 @@
-import { ForwardedRef, createElement, forwardRef } from 'react';
+import { ForwardedRef, JSX, createElement, forwardRef } from 'react';
 
 import { BaseField } from '../base_field';
 import { Checkbox } from '../../atoms/checkbox';

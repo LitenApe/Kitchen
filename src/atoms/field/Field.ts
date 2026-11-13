@@ -1,5 +1,5 @@
 import { FieldContext, FieldProps } from './bones/FieldContext';
-import { PropsWithChildren, createElement } from 'react';
+import { JSX, PropsWithChildren, createElement } from 'react';
 
 import { useId } from '../../utils/hooks/useId';
 

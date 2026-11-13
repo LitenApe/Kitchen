@@ -1,4 +1,4 @@
-import { createElement, ForwardedRef, forwardRef } from 'react';
+import { createElement, ForwardedRef, forwardRef, JSX } from 'react';
 import { BaseInput, BaseInputProps } from '../base_input';
 
 function Checkbox(

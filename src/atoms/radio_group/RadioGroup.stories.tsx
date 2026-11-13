@@ -1,5 +1,5 @@
-import { Meta, Story } from '@storybook/react';
-import { action } from '@storybook/addon-actions';
+import { Meta, StoryFn } from '@storybook/react-vite';
+import { action } from 'storybook/actions';
 import { RadioGroup as Component } from '.';
 import { Radio } from '../radio';
 import { Label } from '../label';
@@ -11,7 +11,7 @@ export default {
   component: Component,
 } as Meta;
 
-const Template: Story = (args) => (
+const Template: StoryFn = (args) => (
   <Component {...args}>
     <Legend>Bicycle brand</Legend>
     <Field>

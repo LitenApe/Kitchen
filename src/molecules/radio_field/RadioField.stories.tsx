@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react-vite';
 import { RadioField as Component } from '.';
 
 export default {
@@ -6,7 +6,7 @@ export default {
   component: Component,
 } as Meta;
 
-const Template: Story = (args) => (
+const Template: StoryFn = (args) => (
   <Component label="field label" options={[]} name="os" {...args} />
 );
 

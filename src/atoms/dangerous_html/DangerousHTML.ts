@@ -1,4 +1,4 @@
-import { ForwardedRef, createElement, forwardRef } from 'react';
+import { ForwardedRef, JSX, createElement, forwardRef } from 'react';
 
 import { DynamicProps } from '../../utils/types/DynamicProps';
 

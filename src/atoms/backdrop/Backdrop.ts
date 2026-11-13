@@ -1,6 +1,7 @@
 import { AnimatePresence, HTMLMotionProps, motion } from 'framer-motion';
 import {
   ForwardedRef,
+  JSX,
   PropsWithChildren,
   createElement,
   forwardRef,

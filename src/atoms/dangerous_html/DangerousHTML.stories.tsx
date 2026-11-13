@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react-vite';
 import { DangerousHTML as Component } from '.';
 
 export default {
@@ -13,7 +13,7 @@ export default {
   },
 } as Meta;
 
-const Template: Story = (args) => <Component content="" {...args} />;
+const Template: StoryFn = (args) => <Component content="" {...args} />;
 
 export const DangerousHTML = Template.bind({});
 DangerousHTML.storyName = 'DangerousHTML';

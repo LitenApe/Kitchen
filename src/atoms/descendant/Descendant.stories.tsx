@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react-vite';
 import { createRef } from 'react';
 import { Descendant as Component, useDescendant } from '.';
 import { useMount } from '../../utils/hooks/useMount';
@@ -23,7 +23,7 @@ function TestComponent({ pos }: { pos: number }) {
   );
 }
 
-const Template: Story = (args) => (
+const Template: StoryFn = (args) => (
   <Component {...args}>
     <TestComponent pos={0} />
     <div style={{ padding: 5 }}>
