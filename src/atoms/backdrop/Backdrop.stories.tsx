@@ -7,9 +7,8 @@ import { Backdrop as Component } from '.';
  * or another piece of content which needs the user's attention.
  *
  * The backdrop is fixed to the viewport and placed above the page content
- * (`z-index: 1000`). Changing `visible` fades it in, or fades it out before
- * removing it from the page. Anything passed as `children` is rendered
- * inside the backdrop.
+ * (`z-index: 1000`). It is only rendered while `visible` is set. Anything
+ * passed as `children` is rendered inside the backdrop.
  */
 export default {
   title: 'Atom/Backdrop',

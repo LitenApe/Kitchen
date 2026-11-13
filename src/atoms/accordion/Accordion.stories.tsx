@@ -125,9 +125,9 @@ AccordionHeader.args = {
  * `AccordionPanel` is a `section` which holds the content. It is labelled by
  * its header, and hidden from assistive technologies with `aria-hidden` while
  * the accordion is closed. The content is only rendered while the accordion
- * is open, and its height animates as it opens and closes.
+ * is open.
  *
- * Change `open` from **Controls** to see the animation.
+ * Change `open` from **Controls** to show or hide the content.
  */
 export const AccordionPanel = Template.bind({});
 AccordionPanel.storyName = 'AccordionPanel';

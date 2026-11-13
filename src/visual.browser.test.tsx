@@ -3,7 +3,6 @@ import {
   composeStory,
   setProjectAnnotations,
 } from '@storybook/react-vite';
-import { MotionGlobalConfig } from 'framer-motion';
 import { page } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
 import preview from '../.storybook/preview';
@@ -18,9 +17,6 @@ type StoriesModule = Parameters<typeof composeStories>[0];
 type ComposedStory = ReturnType<typeof composeStory>;
 
 setProjectAnnotations(preview);
-
-// render animations in their final state so screenshots are deterministic
-MotionGlobalConfig.skipAnimations = true;
 
 // gives deferred content, such as the Alert's delayed message, time to settle
 const SETTLE_DELAY_MS = 200;
