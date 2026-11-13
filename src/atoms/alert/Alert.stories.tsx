@@ -1,26 +1,36 @@
 import { Meta, StoryFn } from '@storybook/react-vite';
 import { Alert as Component } from '.';
 
+/**
+ * An alert displays a brief, important message which draws the user's
+ * attention without interrupting their task. Alerts which are rendered
+ * dynamically are announced by most screen readers.
+ *
+ * `Alert` uses `aria-live` instead of the `alert` role, so you can choose how
+ * urgently each message is announced. It defaults to `assertive`, which
+ * interrupts whatever the screen reader is reading. Pass `aria-live="polite"`
+ * to wait until the screen reader has finished instead.
+ *
+ * The content is inserted shortly after the element has mounted. Screen
+ * readers only announce changes to live regions which already exist, so a
+ * message rendered at the same time as its container would go unnoticed. The
+ * message is announced again whenever its content changes.
+ */
 export default {
   title: 'Atom/Alert',
   component: Component,
   parameters: {
     docs: {
-      subtitle: 'Notification of important information',
-      description: {
-        component: `
-    An alert is a component that displays a brief, important
-    message in a way that attracts the user's attention without
-    interrupting the user's task. Dynamically rendered alerts
-    are automatically announced by most screen readers, and in
-    some operating systems, they may trigger an alert sound.
-
-    The Alert component makes use of aria-live instead of
-    the alert role so that developers and designers can choose
-    whether or not a given alert should interrupt a screen reader
-    or not.
-        `,
-      },
+      subtitle: 'Announces important messages to screen readers',
+    },
+  },
+  argTypes: {
+    as: {
+      description: 'The element to render. Defaults to `div`.',
+    },
+    children: {
+      description: 'The message to show and announce.',
+      type: 'string',
     },
   },
 } as Meta;

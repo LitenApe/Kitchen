@@ -6,39 +6,46 @@ import {
   AccordionPanel as Panel,
 } from '.';
 
+/**
+ * An accordion is a heading paired with a section of content which users can
+ * show or hide. The heading works as a control that reveals or hides its
+ * content. Accordions are commonly used to reduce the need to scroll when
+ * presenting multiple sections on a single page.
+ *
+ * `Accordion` holds the open state and shares it with its `AccordionHeader`
+ * and `AccordionPanel`, which take care of the accessibility attributes that
+ * link the two together. It can be used in two ways:
+ *
+ * - **Uncontrolled**: the accordion manages its own state. Use `initial` to
+ *   choose whether it starts open.
+ * - **Controlled**: pass both `open` and `onClick`. A click only calls
+ *   `onClick` with the requested state, and it is up to you to update `open`.
+ *   Passing `onClick` without `open` logs a warning and ignores the click.
+ *
+ * The example below is controlled. Clicking the heading logs the requested
+ * state in the **Actions** panel, and `open` can be changed from **Controls**.
+ */
 export default {
   title: 'Atom/Accordion',
   component: Component,
   parameters: {
     docs: {
-      subtitle: 'Sections with show/hide functionality',
-      description: {
-        component: `
-    An accordion is a vertically stacked stacked
-    heading and content which interact to either display or
-    hide content from the user. The heading functions as a
-    control which enables users to reveal or hide their
-    associated section of content. Accordions are commonly
-    used to reduce the need to scroll when presenting multiple
-    sections on a single page.
-
-    The Accordion element serves as the parent for the heading
-    and panel, and is the component used to interact with
-    the show or hide state of the underlying components.
-        `,
-      },
+      subtitle: 'A heading which shows or hides a section of content',
     },
   },
   argTypes: {
+    initial: {
+      description: 'Whether the accordion starts open when it is uncontrolled.',
+      type: 'boolean',
+    },
     open: {
-      name: 'open',
-      description: 'controls whether or not the accordion content is visible',
+      description:
+        'Whether the content is visible. Makes the accordion controlled together with `onClick`.',
       type: 'boolean',
     },
     onClick: {
-      name: 'onClick',
       description:
-        'click handler for toggling whether or not the content should be visible',
+        'Called with the click event and the requested open state when the heading is clicked.',
       type: 'function',
     },
   },
@@ -94,40 +101,36 @@ Accordion.args = {
   ),
 };
 
+/**
+ * `AccordionHeader` is the button which shows or hides the content. It points
+ * to its panel through `aria-controls` and reports whether the panel is open
+ * through `aria-expanded`. It renders only a button, so wrap it in a heading
+ * of the appropriate level (`h2` to `h6`) when using it on a page.
+ *
+ * Setting `disabled` or `aria-disabled` makes it ignore clicks, while keeping
+ * it focusable so keyboard and screen reader users can still discover it.
+ *
+ * This example is uncontrolled, so clicking it toggles `aria-expanded`.
+ */
 export const AccordionHeader = Template.bind({});
 AccordionHeader.storyName = 'AccordionHeader';
-AccordionHeader.parameters = {
-  docs: {
-    description: {
-      story: `
-    The AccordionHeader serves as the content sections
-    heading in addition to enabling users to show or hide the
-    associated content when interacted with. The heading, by itself
-    is only a button, and should therefore be wrapped by an appropriate
-    heading tag when used on a page.
-      `,
-    },
-  },
-};
 AccordionHeader.args = {
   children: <Heading>Accordion Heading</Heading>,
+  // an explicit `undefined` stops Storybook from injecting an action for
+  // `onClick`, which would make the accordion controlled and ignore clicks
+  onClick: undefined,
 };
 
+/**
+ * `AccordionPanel` is a `section` which holds the content. It is labelled by
+ * its header, and hidden from assistive technologies with `aria-hidden` while
+ * the accordion is closed. The content is only rendered while the accordion
+ * is open, and its height animates as it opens and closes.
+ *
+ * Change `open` from **Controls** to see the animation.
+ */
 export const AccordionPanel = Template.bind({});
 AccordionPanel.storyName = 'AccordionPanel';
-AccordionPanel.parameters = {
-  docs: {
-    description: {
-      story: `
-    The AccordionPanel is where the content lives and
-    is simply a section element which serves as an container
-    for whatever you want to render inside of it. The content's
-    visibility is controlled by users interacting with the
-    associated header.
-      `,
-    },
-  },
-};
 AccordionPanel.args = {
   open: true,
   children: (

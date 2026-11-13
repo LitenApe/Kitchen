@@ -1,14 +1,29 @@
 import { Meta, StoryFn } from '@storybook/react-vite';
 import { DangerousHTML as Component } from '.';
 
+/**
+ * `DangerousHTML` renders a string of HTML, such as content from a CMS or
+ * converted markdown, inside an element of your choice.
+ *
+ * **Only pass HTML which you trust or have sanitised.** The string is
+ * inserted as-is through React's `dangerouslySetInnerHTML`, so untrusted
+ * input can be used to run scripts on the page (cross-site scripting).
+ */
 export default {
   title: 'Atom/DangerousHTML',
   component: Component,
+  parameters: {
+    docs: {
+      subtitle: 'Renders a string of HTML',
+    },
+  },
   argTypes: {
     content: {
-      name: 'content',
       description:
-        'HTML text string to be converted and injected into the DOM as HMTL',
+        'The HTML string to render inside the element. Must be trusted or sanitised.',
+    },
+    as: {
+      description: 'The element to render the HTML into. Defaults to `div`.',
     },
   },
 } as Meta;

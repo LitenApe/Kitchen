@@ -43,6 +43,12 @@ describe('Button general behavior', () => {
     expect(button.element().nodeName).toEqual('A');
   });
 
+  test('has no type when rendered as anchor', async () => {
+    await render(<Button as="a">Test</Button>);
+    const button = page.getByText('Test');
+    await expect.element(button).not.toHaveAttribute('type');
+  });
+
   test('refs are attached to DOM element', async () => {
     const ref = createRef<HTMLButtonElement>();
     await render(<Button ref={ref}>Test</Button>);

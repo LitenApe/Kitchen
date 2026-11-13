@@ -3,11 +3,19 @@ import { Checkbox as Component } from '.';
 import { Field } from '../field';
 import { Label } from '../label';
 
+/**
+ * A checkbox lets users turn a single option on or off, or pick any number of
+ * options from a list.
+ *
+ * `Checkbox` is a `BaseInput` with `type="checkbox"`, so inside a `Field` it
+ * is linked to its `Label`, and it supports `error` in the same way. Clicking
+ * the label toggles the checkbox.
+ */
 export default {
   title: 'Atom/Checkbox',
   component: Component,
   parameters: {
-    docs: { subtitle: 'Enable users to toggle between to choices' },
+    docs: { subtitle: 'Lets users turn an option on or off' },
   },
 } as Meta;
 
