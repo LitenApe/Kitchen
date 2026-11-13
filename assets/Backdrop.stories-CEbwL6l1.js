@@ -1,0 +1,7 @@
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{t}from"./react-DlPsW1c0.js";import{t as n}from"./jsx-runtime-MKhVqBIO.js";function r(e,t){let{visible:n,...r}=e;return n?(0,i.createElement)(`div`,{style:{position:`fixed`,width:`100vw`,height:`100vh`,left:0,top:0,zIndex:1e3,backgroundColor:`rgba(0, 0, 0, 0.75)`},...r,ref:t}):null}var i,a;function o(){return(o=e((()=>{i=t(),a=(0,i.forwardRef)(r)})))()}function s(){return(s=e((()=>{o()})))()}var c,l,u,d,f;function p(){return(p=e((()=>{s(),c=n(),l={title:`Atom/Backdrop`,component:a,parameters:{docs:{subtitle:`Dims the page to highlight what needs attention`,description:{component:`A backdrop is a full-screen overlay which dims the page behind it. It is
+commonly placed behind modals and dialogs, or used to highlight an image
+or another piece of content which needs the user's attention.
+
+The backdrop is fixed to the viewport and placed above the page content
+(\`z-index: 1000\`). It is only rendered while \`visible\` is set. Anything
+passed as \`children\` is rendered inside the backdrop.`}}},argTypes:{visible:{description:`Whether the backdrop is shown.`,type:`boolean`}}},u=e=>(0,c.jsx)(a,{...e}),d=u.bind({}),d.args={...d.args,visible:!0},f=[`Backdrop`],d.parameters={...d.parameters,docs:{...d.parameters?.docs,source:{originalSource:`args => <Component {...args} />`,...d.parameters?.docs?.source}}}})))()}p();export{d as Backdrop,f as __namedExportsOrder,l as default};
