@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react-vite';
 import { AccordionGroup as Component } from '.';
 import {
   Accordion,
@@ -26,7 +26,7 @@ export default {
   },
 } as Meta;
 
-const Template: Story = (args) => (
+const Template: StoryFn = (args) => (
   <Component {...args}>
     <Accordion>
       <AccordionHeader>Content 1</AccordionHeader>

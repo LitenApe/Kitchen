@@ -1,5 +1,5 @@
-import { action } from '@storybook/addon-actions';
-import { Meta, Story } from '@storybook/react';
+import { action } from 'storybook/actions';
+import { Meta, StoryFn } from '@storybook/react-vite';
 import {
   Accordion as Component,
   AccordionHeader as Heading,
@@ -10,8 +10,8 @@ export default {
   title: 'Atom/Accordion',
   component: Component,
   parameters: {
-    componentSubtitle: 'Sections with show/hide functionality',
     docs: {
+      subtitle: 'Sections with show/hide functionality',
       description: {
         component: `
     An accordion is a vertically stacked stacked
@@ -44,7 +44,7 @@ export default {
   },
 } as Meta;
 
-const Template: Story = ({ children, ...args }) => (
+const Template: StoryFn = ({ children, ...args }) => (
   <Component {...args}>{children}</Component>
 );
 

@@ -2,6 +2,7 @@ import { AnimatePresence, motion } from 'framer-motion';
 import {
   ComponentPropsWithoutRef,
   ForwardedRef,
+  JSX,
   createElement,
   forwardRef,
 } from 'react';

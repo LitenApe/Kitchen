@@ -1,3 +1,4 @@
+import type { JSX } from 'react';
 export type PermittedTags = 'input' | 'textarea';
 
 export interface WithPostfix {

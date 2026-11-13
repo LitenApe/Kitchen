@@ -1,5 +1,5 @@
 import { BaseInput, BaseInputProps } from '../base_input';
-import { ForwardedRef, createElement, forwardRef } from 'react';
+import { ForwardedRef, JSX, createElement, forwardRef } from 'react';
 
 import { useRadioGroup } from '../radio_group';
 

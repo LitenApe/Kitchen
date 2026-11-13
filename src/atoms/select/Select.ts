@@ -1,6 +1,7 @@
 import {
   ComponentPropsWithoutRef,
   ForwardedRef,
+  JSX,
   createElement,
   forwardRef,
   useEffect,
@@ -18,7 +19,7 @@ function Select(
   props: SelectProps,
   ref: ForwardedRef<HTMLSelectElement>
 ): JSX.Element {
-  const internalRef = useRef<HTMLSelectElement>();
+  const internalRef = useRef<HTMLSelectElement>(null);
   const { getFieldProps } = useField();
   const { error, ...args } = getFieldProps(props);
 

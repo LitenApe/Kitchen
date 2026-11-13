@@ -1,20 +1,20 @@
 # Kitchen
 
-Kitchen is a "one stop shop" for _cooking_ utensils used to create delishes web applications. Additionally, we provide you with all the spices and condiments needed to flavour your food, bringing it up to Michelin star levels of deliciousness. All jokes aside though. Kitchen is a styleless component library which can be forked and expanded to speed up the development process of a component library. Component libraries are slowly becoming a necessity for professional work. It speeds up development speed, reduces overall bugs and provides consistency between applications. Additionally, it helps developers create good markup and in our case here, also assist in providing accessible elements for most users out there.
+Kitchen is a "one-stop shop" for _cooking_ utensils used to create delicious web applications. Additionally, we provide you with all the spices and condiments needed to flavour your food, bringing it up to Michelin-star levels of deliciousness. All jokes aside, though, Kitchen is a styleless component library which can be forked and expanded to speed up the development of a component library. Component libraries are slowly becoming a necessity for professional work. They speed up development, reduce the overall number of bugs and provide consistency between applications. Additionally, they help developers create good markup and, in our case, also help provide accessible elements for most users out there.
 
-The project is still in alpha, and currently serves as a playground where I try to optimize the code to what I believe to be a maintainable codebase. A codebase which can be understood and worked on by people of all skill levels. All the components are written without JSX at the moment, which is intentional on my part. On one side, it as to test out how much easier or worse it is to work with React without JSX. On the other hand, it made it easier to work with polymophic components in the initial phase of the project.
+The project is still in alpha and currently serves as a playground where I try to optimize the code into what I believe to be a maintainable codebase, one which can be understood and worked on by people of all skill levels. All the components are written without JSX at the moment, which is intentional on my part. On the one hand, it was a way to test how much easier or harder it is to work with React without JSX. On the other hand, it made it easier to work with polymorphic components in the initial phase of the project.
 
-Another important thing of note is that the project is yet to be configured for **production**. At it's current state, the project only works as an development sandbox. This is because I am still unsure on how I want the component to be used. Should they all be individual packages? Should it be one large library which is added and upgraded as a whole? With all things, how the library is bundled and distributed will affect how easy it is to take it in use within professional codebases.
+Another important thing to note is that the project is yet to be configured for **production**. In its current state, the project only works as a development sandbox. This is because I am still unsure how I want the components to be used. Should they all be individual packages? Should it be one large library which is added and upgraded as a whole? As with all things, how the library is bundled and distributed will affect how easy it is to put to use within professional codebases.
 
 ## Project Status
 
-The project is abandoned as I regret creating a dependency to other third party libraries such as framer-motion. Additionally I consumed my contexts thoughtlessly, which resulted in a few problems where some things are getting duplicated when attempting to combine props from various sources. Might restart the project after I figure out what my end goal is with a personal style-less component library.
+The project is abandoned, as I regret creating dependencies on third-party libraries such as framer-motion. Additionally, I consumed my contexts thoughtlessly, which resulted in a few problems where some things get duplicated when attempting to combine props from various sources. I might restart the project after I figure out what my end goal is with a personal styleless component library.
 
 ## Project Structure
 
-The project is structured following the **atomic design system** to slowly build up fully functional and usable components. While it does not following the mindset of atomic design systems completely, it makes use of its principles to slowly build up the components complexity, effectively reducing the amount of logic needed in one single component. The components are supported by **utils** which lives on the outside and attempts to make the code more readable whenever applicable. It also helps to reduce **id** and **key** collisions with **hooks** such as **useId**.
+The project is structured following the **atomic design system** to slowly build up fully functional and usable components. While it does not follow the mindset of atomic design systems completely, it makes use of its principles to slowly build up the components' complexity, effectively reducing the amount of logic needed in any single component. The components are supported by **utils**, which live outside of them and attempt to make the code more readable whenever applicable. They also help reduce **id** and **key** collisions through **hooks** such as **useId**.
 
-Each component directory consist of at least three files, the component itself, a story for documentation and development of said component and tests for the component. All complementary components and logic which is needed for the **main** component to function is separated into a directory named **bones** to keep the root tidy. Bones are component specific functionality which is tailored for one particular use case. It makes no attempt at generalising it's problem, which means that other components which might have some similar use-case but not exactly similar while have their own version tailored towards their own use-case.
+Each component directory consists of at least three files: the component itself, a story for documenting and developing said component, and tests for the component. All complementary components and logic which the **main** component needs to function are separated into a directory named **bones** to keep the root tidy. Bones are component-specific functionality tailored to one particular use case. They make no attempt at generalising their problem, which means that other components with a similar, but not identical, use case will have their own version tailored to their own use case.
 
 Below you will find an illustration of how the project will be structured as it grows.
 
@@ -35,7 +35,7 @@ Kitchen/
 
 ## Roadmap
 
-As mentioned in the introduction, the project is still in alpha, which means that there are still a few things that needs to be done before the project be used distributed and used. Below you will find the tasks which needs to be finished before the components are usable in no particular order.
+As mentioned in the introduction, the project is still in alpha, which means that there are still a few things that need to be done before the project can be distributed and used. Below you will find, in no particular order, the tasks which need to be finished before the components are usable.
 
 ### Early alpha
 
@@ -84,28 +84,28 @@ As mentioned in the introduction, the project is still in alpha, which means tha
   - [ ] ComboboxField
 - [ ] Layout components
   - [ ] Dialog
-  - [ ] VisiblyHidden
+  - [ ] VisuallyHidden
 - [ ] Utility components
   - [ ] Dropzone
 - [ ] Other tasks
-  - [ ] Rewrite codebase to use JSX
+  - [ ] Rewrite the codebase to use JSX
   - [ ] Add documentation to components
-  - [ ] Mono or _Monolith_ code distribution
-  - [ ] Github Actions for tagging
-  - [ ] Github Actions for releases
-  - [ ] Github Actions for publishing
+  - [ ] Mono or _monolith_ code distribution
+  - [ ] GitHub Actions for tagging
+  - [ ] GitHub Actions for releases
+  - [ ] GitHub Actions for publishing
 
 ## Questions
 
-Create an issue with your questions and I'll try to answer it to the best of my ability. I don't take request for missing components as the project is still in its infant periode where the essentials still need to be developed.
+Create an issue with your questions and I'll try to answer them to the best of my ability. I don't take requests for missing components, as the project is still in its infancy and the essentials still need to be developed.
 
 ## Available Scripts
 
-The project was created through the use of **Create React App** and **Storybook** initialization commands. All the generated configuration should be untouched with some few exceptions to solve some build issues in the beginning related to **Storybook** and **TypeScript** which I encountered.
+**Storybook** is built with **Vite**, and tests run with **Vitest**. Node.js 22.12 or newer is required (24 recommended).
 
 ### start
 
-start can be used to start storybook which serves as a place for documentation and for component development.
+`start` starts **Storybook**, which serves as a place for documentation and component development.
 
 ```bash
 npm run start
@@ -113,18 +113,54 @@ npm run start
 
 ### test
 
-test executes all tests and enters watch mode. Please read the **Jest** documentation for more information regarding running tests and options. Tests are ran in watch mode by default, necessary flags will therefore be required to disable watch mode if it is an undesirable feature.
+`test` executes all tests and enters watch mode. Please read the **Vitest** documentation for more information about running tests and their options. Tests run in watch mode by default, so a flag is required to disable watch mode if it is undesirable.
+
+The tests are split into two **Vitest** projects to keep overhead to a minimum:
+
+- **node** runs every test by default and is meant for logic which does not need a DOM.
+- **browser** runs tests named `*.browser.test.tsx` or `*.browser.spec.ts` in a real Chromium browser through **Playwright**. Components are rendered with `vitest-browser-react`, and are queried and interacted with through `page` and `userEvent` from `vitest/browser`.
+
+Chromium has to be installed once before the browser tests can run.
+
+```bash
+npx playwright install chromium
+```
 
 ```bash
 npm run test
 
-// without watch mode
-npm run test -- watchAll=false
+# without watch mode
+npm run test -- --run
+
+# only one of the projects
+npm run test -- --project node
+npm run test -- --project browser
+
+# watch the browser tests run in a visible browser window
+npm run test -- --project browser --browser.headless=false
+```
+
+#### Visual regression tests
+
+`src/visual.browser.test.tsx` renders every story and compares it against a reference screenshot in `src/__screenshots__`, so new stories are covered automatically. A missing reference is created on the first run, and the test fails until it has been reviewed. When a visual change is intended, update the references and review them before committing.
+
+```bash
+npm run test -- --run src/visual.browser.test.tsx --update
+```
+
+Screenshots differ between operating systems, so references are stored per platform. References currently only exist for Windows, which is why the CI skips these tests.
+
+### typecheck
+
+`typecheck` runs the TypeScript compiler without emitting any files. Vite and Vitest strip types without checking them, so this is the only place where type errors are reported.
+
+```bash
+npm run typecheck
 ```
 
 ### build-storybook
 
-build-storybook builds storybook, as the name implies, which gives you distribution files if you want to host the documentation page somewhere.
+`build-storybook` builds **Storybook**, as the name implies, producing distribution files you can use if you want to host the documentation somewhere.
 
 ```bash
 npm run build-storybook
@@ -140,20 +176,4 @@ npm run lint
 
 ```bash
 npm run format
-```
-
-#### Don't Touch, Cant Touch
-
-The scripts listed under is defined in the **package.json** file, however, they serve no purpose at the moment. Build does nothing, as it has no target file to build from and eject should only be used if you know what you are doing. Eject exposes the build configuration, however, it is not possible to reverse the operation.
-
-##### build
-
-```bash
-npm run build
-```
-
-##### eject
-
-```bash
-npm run eject
 ```

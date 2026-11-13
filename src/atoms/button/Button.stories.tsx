@@ -1,13 +1,12 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react-vite';
 import { Button as Component } from '.';
 
 export default {
   title: 'Atom/Button',
   component: Component,
   parameters: {
-    componentSubtitle:
-      'An element which enable users to trigger events and actions',
     docs: {
+      subtitle: 'An element which enable users to trigger events and actions',
       description: {
         component: `
     The button is the most commonly used element for triggering actions
@@ -26,7 +25,7 @@ export default {
   },
 } as Meta;
 
-const Template: Story = (args) => <Component {...args} />;
+const Template: StoryFn = (args) => <Component {...args} />;
 
 export const Button = Template.bind({});
 Button.args = { ...Button.args, children: 'label' };

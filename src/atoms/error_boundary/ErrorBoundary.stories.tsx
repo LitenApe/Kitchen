@@ -1,4 +1,5 @@
-import { Meta, Story } from '@storybook/react';
+import type { JSX } from 'react';
+import { Meta, StoryFn } from '@storybook/react-vite';
 import { ErrorBoundary as Component } from '.';
 
 export default {
@@ -16,7 +17,7 @@ function ErrorThrower(): JSX.Element {
   throw new Error('Error thrown to trigger fallback');
 }
 
-const Template: Story = ({ children, ...rest }) => (
+const Template: StoryFn = ({ children, ...rest }) => (
   <Component fallback={() => <p>Fallback component rendered</p>} {...rest}>
     <ErrorThrower />
   </Component>

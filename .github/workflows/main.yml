@@ -13,16 +13,24 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/checkout@v7
+      - uses: actions/setup-node@v7
         with:
-          node-version: 16
+          node-version: 24
 
       - name: Install dependencies
         run: npm ci
 
+      - name: Install Playwright Chromium
+        run: npx playwright install --with-deps chromium
+
+      - name: Type check
+        run: npm run typecheck
+
+      # Reference screenshots are platform specific and only exist for
+      # Windows so far, so the visual regression tests are skipped on Linux.
       - name: Run tests with coverage
-        run: npm run test -- --watchAll=false --coverage
+        run: npm run test -- --run --coverage --exclude "src/visual.browser.test.tsx"
 
       - name: Build Storybook
         run: npm run build-storybook

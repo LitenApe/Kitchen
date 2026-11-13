@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react-vite';
 import { BaseInput } from '../base_input';
 import { Label } from '../label';
 import { Field as Component } from '.';
@@ -8,7 +8,7 @@ export default {
   component: Component,
 } as Meta;
 
-const Template: Story = ({ children, ...args }) => (
+const Template: StoryFn = ({ children, ...args }) => (
   <Component {...args}>{children}</Component>
 );
 

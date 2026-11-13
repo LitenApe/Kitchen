@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react-vite';
 import { Radio as Component } from '.';
 import { Field } from '../field';
 import { Label } from '../label';
@@ -8,7 +8,7 @@ export default {
   component: Component,
 } as Meta;
 
-const Template: Story = (args) => (
+const Template: StoryFn = (args) => (
   <Field {...args}>
     <Component />
     <Label>Radio label</Label>

@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react-vite';
 import { Checkbox as Component } from '.';
 import { Field } from '../field';
 import { Label } from '../label';
@@ -7,11 +7,11 @@ export default {
   title: 'Atom/Checkbox',
   component: Component,
   parameters: {
-    componentSubtitle: 'Enable users to toggle between to choices',
+    docs: { subtitle: 'Enable users to toggle between to choices' },
   },
 } as Meta;
 
-const Template: Story = (args) => (
+const Template: StoryFn = (args) => (
   <Field {...args}>
     <Component />
     <Label>Checkbox label</Label>

@@ -1,6 +1,7 @@
 import {
   ComponentPropsWithoutRef,
   ForwardedRef,
+  JSX,
   MouseEvent,
   createElement,
   forwardRef,

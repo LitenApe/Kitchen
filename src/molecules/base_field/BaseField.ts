@@ -1,5 +1,6 @@
 import {
   Children,
+  JSX,
   PropsWithChildren,
   cloneElement,
   createElement,

@@ -1,4 +1,4 @@
-import { Meta, Story } from '@storybook/react';
+import { Meta, StoryFn } from '@storybook/react-vite';
 
 import { InputField as Component } from '.';
 
@@ -7,7 +7,7 @@ export default {
   component: Component,
 } as Meta;
 
-const Template: Story = (args) => <Component label="field label" {...args} />;
+const Template: StoryFn = (args) => <Component label="field label" {...args} />;
 
 export const InputField = Template.bind({});
 InputField.storyName = 'InputField';

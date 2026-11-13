@@ -1,6 +1,7 @@
 import {
   ElementType,
   ForwardedRef,
+  JSX,
   ReactNode,
   createElement,
   forwardRef,

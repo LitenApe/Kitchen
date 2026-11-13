@@ -9,10 +9,10 @@ namespace Empty {
 type Bottom<T> = T extends string
   ? Empty.String
   : T extends any[]
-  ? Empty.Array
-  : T extends object
-  ? Empty.Object
-  : never;
+    ? Empty.Array
+    : T extends object
+      ? Empty.Object
+      : never;
 
 /**
  * Check if a value is empty or not.

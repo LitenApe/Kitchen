@@ -1,11 +1,12 @@
 import type {
   ComponentPropsWithoutRef,
   ElementType,
+  JSX,
   JSXElementConstructor,
 } from 'react';
 
 export type PropsOf<
-  T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>
+  T extends keyof JSX.IntrinsicElements | JSXElementConstructor<any>,
 > = JSX.LibraryManagedAttributes<T, ComponentPropsWithoutRef<T>>;
 
 export type AsProps<T extends ElementType> = {
