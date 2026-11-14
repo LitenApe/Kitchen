@@ -1,11 +1,9 @@
 import { type ComponentPropsWithRef, type JSX, useId } from 'react';
 
-import { isDefined } from '../../utils/functions/isDefined';
-import { joinIds } from '../../utils/functions/joinIds';
-import { useCustomValidity } from '../../utils/hooks/useCustomValidity';
-import { useMergedRefs } from '../../utils/hooks/useMergedRefs';
 import { useField } from '../field';
 import Affix from './bones/Affix';
+import InputElement from './bones/InputElement';
+import { InputLayout, getInputLayout } from './bones/getInputLayout';
 import type { AffixProps } from './types';
 
 // `prefix` is also an HTML attribute, which the affix takes the place of
@@ -22,40 +20,29 @@ export type InputProps = Omit<ComponentPropsWithRef<'input'>, 'prefix'> & {
  * `Field`, and can show a prefix or a postfix.
  */
 function Input(ownProps: InputProps): JSX.Element {
-  const { prefix, postfix, error, ref, ...props } =
-    useField().getFieldProps(ownProps);
-  const validityRef = useCustomValidity<HTMLInputElement>(error);
-  const inputRef = useMergedRefs(validityRef, ref);
+  // the input's own props, combined with the ones its field shares
+  const inputProps = useField().getFieldProps(ownProps);
+  const { prefix, postfix, ...props } = inputProps;
   const affixId = useId();
-  const affix = prefix ?? postfix;
-  const describedBy = isDefined(affix)
-    ? joinIds(props['aria-describedby'], affixId)
-    : props['aria-describedby'];
 
-  const input = (
-    <input
-      // an input is a text field unless told otherwise
-      type="text"
-      aria-invalid={Boolean(error)}
-      {...props}
-      aria-describedby={describedBy}
-      ref={inputRef}
-    />
-  );
+  switch (getInputLayout(inputProps)) {
+    case InputLayout.Plain:
+      return <InputElement {...props} />;
 
-  if (!isDefined(affix)) {
-    return input;
+    case InputLayout.Prefixed:
+      return (
+        <Affix id={affixId} content={prefix} placement="before">
+          <InputElement {...props} affixId={affixId} />
+        </Affix>
+      );
+
+    case InputLayout.Postfixed:
+      return (
+        <Affix id={affixId} content={postfix} placement="after">
+          <InputElement {...props} affixId={affixId} />
+        </Affix>
+      );
   }
-
-  return (
-    <Affix
-      id={affixId}
-      content={affix}
-      placement={isDefined(prefix) ? 'before' : 'after'}
-    >
-      {input}
-    </Affix>
-  );
 }
 
 export default Input;
