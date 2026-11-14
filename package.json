@@ -23,7 +23,7 @@
     "bracketSpacing": true,
     "bracketSameLine": false,
     "arrowParens": "always",
-    "endOfLine": "crlf"
+    "endOfLine": "lf"
   },
   "dependencies": {
     "react": "^19.3.1",
