@@ -1,4 +1,5 @@
-import { Meta, StoryFn } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+
 import { SelectField } from '.';
 
 /**
@@ -8,10 +9,12 @@ import { SelectField } from '.';
  * Set the text of the label with `label`, and list the choices in `options`
  * as `{ label, value }` objects, which may also include other props for their
  * option. An entry can also be a component, for example one which renders an
- * `OptionGroup`. Every other prop, such as `value`, `onChange` or `error`, is
- * passed on to the select, which also receives the `ref`.
+ * `OptionGroup`. Every other prop, such as `value` or `onChange`, is passed on
+ * to the select, which also receives the `ref`. When `error` is set, the
+ * message is shown after the select, and the select is marked as invalid and
+ * described by it.
  */
-export default {
+const meta = {
   title: 'Molecule/SelectField',
   component: SelectField,
   parameters: {
@@ -34,30 +37,31 @@ export default {
       type: 'string',
     },
   },
-} satisfies Meta;
+} satisfies Meta<typeof SelectField>;
 
-const Template: StoryFn = (args) => (
-  <SelectField label="field label" options={[]} {...args} />
-);
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Component = Template.bind({});
-Component.storyName = 'SelectField';
-Component.args = {
-  ...Component.args,
-  error: '',
-  label: 'Choose a camera manufacturer',
-  options: [
-    {
-      label: 'Fujifilm',
-      value: 'fujifilm',
-    },
-    {
-      label: 'Canon',
-      value: 'canon',
-    },
-    {
-      label: 'Nikon',
-      value: 'nikon',
-    },
-  ],
+export const Default: Story = {
+  args: {
+    label: 'Choose a camera manufacturer',
+    error: '',
+    options: [
+      { label: 'Fujifilm', value: 'fujifilm' },
+      { label: 'Canon', value: 'canon' },
+      { label: 'Nikon', value: 'nikon' },
+    ],
+  },
+};
+
+export const WithError: Story = {
+  args: {
+    ...Default.args,
+    error: 'Choose one of the manufacturers',
+  },
+  // axe checks the story once `play` has finished, so this waits for the
+  // message, which the `Alert` holds back after it mounts
+  play: async ({ canvas }) => {
+    await canvas.findByText('Choose one of the manufacturers');
+  },
 };

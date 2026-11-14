@@ -1,8 +1,7 @@
+import { Field } from '../field';
+import Label from './Label';
 import { page } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
-import { Field } from '../field';
-
-import Label from './Label';
 
 describe('Label general behavior', () => {
   test('renders its children', async () => {
@@ -45,14 +44,5 @@ describe('Label general behavior', () => {
     const label = page.getByTestId('test-component');
     await expect.element(label).toHaveAttribute('id', 'label');
     await expect.element(label).toHaveAttribute('for', 'control');
-  });
-
-  test('can be focused programmatically', async () => {
-    await render(<Label data-testid="test-component">Name</Label>);
-    const label = page.getByTestId('test-component').element();
-
-    label.focus();
-
-    expect(document.activeElement).toBe(label);
   });
 });

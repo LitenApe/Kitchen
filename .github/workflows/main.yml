@@ -8,6 +8,11 @@ on:
 
   workflow_dispatch:
 
+# Every job can read the repository and nothing else, unless it sets
+# permissions of its own, as the deploy job does.
+permissions:
+  contents: read
+
 jobs:
   pipeline:
     runs-on: ubuntu-latest
@@ -30,17 +35,41 @@ jobs:
       # Reference screenshots are platform specific and only exist for
       # Windows so far, so the visual project is skipped on Linux.
       - name: Run tests with coverage
-        run: npm run test -- --run --coverage --project node --project browser
+        run: npm run test -- --run --coverage --project node --project browser --project storybook
 
       - name: Build Storybook
         run: npm run build-storybook
 
-      - name: Pushing distribution files to Pages branch
+      - name: Upload Storybook for GitHub Pages
         if: github.ref == 'refs/heads/main'
-        uses: s0/git-publish-subdir-action@develop
-        env:
-          REPO: self
-          BRANCH: gh-pages
-          FOLDER: storybook-static
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          MESSAGE: 'Build: ({sha})'
+        uses: actions/upload-pages-artifact@v5
+        with:
+          path: storybook-static
+
+  # Publishes the Storybook uploaded above to GitHub Pages, which requires the
+  # repository's Pages source to be set to "GitHub Actions".
+  deploy:
+    if: github.ref == 'refs/heads/main'
+    needs: pipeline
+    runs-on: ubuntu-latest
+
+    # lets the job create a Pages deployment, and prove to Pages that the
+    # deployment comes from this workflow
+    permissions:
+      pages: write
+      id-token: write
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    # A deployment which has started is allowed to finish, while only the
+    # latest of those queued behind it is kept.
+    concurrency:
+      group: pages
+      cancel-in-progress: false
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v5

@@ -40,19 +40,6 @@ describe('Checkbox general behavior', () => {
     await expect.element(ref.current).toBeChecked();
   });
 
-  test('an error marks it as invalid, with the error as its message', async () => {
-    await render(
-      <Checkbox data-testid="test-component" error="Accept the terms" />
-    );
-    const checkbox = page.getByTestId('test-component');
-
-    await expect.element(checkbox).toHaveAttribute('aria-invalid', 'true');
-    expect(checkbox.element()).toHaveProperty(
-      'validationMessage',
-      'Accept the terms'
-    );
-  });
-
   test('has "id" when wrapped by "Field"', async () => {
     await render(
       <Field>
@@ -65,24 +52,9 @@ describe('Checkbox general behavior', () => {
       .toHaveAttribute('id');
   });
 
-  test('is valid without an error', async () => {
-    await render(<Checkbox data-testid="test-component" />);
-
-    await expect
-      .element(page.getByTestId('test-component'))
-      .toHaveAttribute('aria-invalid', 'false');
-  });
-
-  test('keeps its error message when given a ref', async () => {
-    const ref = createRef<HTMLInputElement>();
-    await render(<Checkbox ref={ref} error="Accept the terms" />);
-
-    expect(ref.current?.validationMessage).toBe('Accept the terms');
-  });
-
   test('takes props from "Field", where its own props take precedence', async () => {
     await render(
-      <Field name="field" value="field" error="Accept the terms">
+      <Field name="field" value="field" aria-invalid>
         <Checkbox data-testid="test-component" value="own" />
       </Field>
     );
@@ -91,7 +63,6 @@ describe('Checkbox general behavior', () => {
     await expect.element(checkbox).toHaveAttribute('name', 'field');
     await expect.element(checkbox).toHaveAttribute('value', 'own');
     await expect.element(checkbox).toHaveAttribute('aria-invalid', 'true');
-    await expect.element(checkbox).not.toHaveAttribute('error');
   });
 
   test('stays a checkbox when "Field" shares another type', async () => {

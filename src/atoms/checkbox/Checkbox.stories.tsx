@@ -1,4 +1,5 @@
-import { Meta, StoryFn } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+
 import { Checkbox } from '.';
 import { Field } from '../field';
 import { Label } from '../label';
@@ -8,24 +9,30 @@ import { Label } from '../label';
  * options from a list.
  *
  * Inside a `Field`, `Checkbox` is linked to its `Label`, so clicking the label
- * toggles the checkbox. Setting `error` marks it as invalid with
- * `aria-invalid`, and uses the error as the browser's native validation
- * message.
+ * toggles the checkbox.
+ *
+ * `Checkbox` does not show error messages. To show one, mark the checkbox as
+ * invalid with `aria-invalid`, and point it to the message with
+ * `aria-describedby`. `CheckboxField` does this for you, and also announces
+ * the message.
  */
-export default {
+const meta = {
   title: 'Atom/Checkbox',
   component: Checkbox,
   parameters: {
-    docs: { subtitle: 'Lets users turn an option on or off' },
+    docs: {
+      subtitle: 'Lets users turn an option on or off',
+    },
   },
-} satisfies Meta;
+  render: (args) => (
+    <Field>
+      <Checkbox {...args} />
+      <Label>Checkbox label</Label>
+    </Field>
+  ),
+} satisfies Meta<typeof Checkbox>;
 
-const Template: StoryFn = (args) => (
-  <Field {...args}>
-    <Checkbox />
-    <Label>Checkbox label</Label>
-  </Field>
-);
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Component = Template.bind({});
-Component.args = { ...Component.args };
+export const Default: Story = {};

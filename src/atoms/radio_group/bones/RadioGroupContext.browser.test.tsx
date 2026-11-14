@@ -15,15 +15,9 @@ describe('useRadioGroup general behavior', () => {
     expect(result.current.getGroupProps(props)).toBe(props);
   });
 
-  test('has no error outside a radio group', async () => {
-    const { result } = await renderHook(() => useRadioGroup());
-    expect(result.current.error).toBeUndefined();
-  });
-
   test('returns the surrounding radio group', async () => {
     const group = {
       getGroupProps: <T extends GroupMemberProps>(props: T) => props,
-      error: 'Choose an option',
     };
     const { result } = await renderHook(() => useRadioGroup(), {
       wrapper: ({ children }: { children: ReactNode }) => (

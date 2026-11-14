@@ -1,4 +1,5 @@
-import { Meta, StoryFn } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+
 import { RadioField } from '.';
 
 /**
@@ -13,7 +14,7 @@ import { RadioField } from '.';
  * whole. When `error` is set, the message is shown after the group, and the
  * group is marked as invalid and described by it.
  */
-export default {
+const meta = {
   title: 'Molecule/RadioField',
   component: RadioField,
   parameters: {
@@ -44,30 +45,32 @@ export default {
       type: 'string',
     },
   },
-} satisfies Meta;
+} satisfies Meta<typeof RadioField>;
 
-const Template: StoryFn = (args) => (
-  <RadioField label="field label" options={[]} name="os" {...args} />
-);
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Component = Template.bind({});
-Component.storyName = 'RadioField';
-Component.args = {
-  ...Component.args,
-  error: '',
-  label: 'Preferred Operating System',
-  options: [
-    {
-      label: 'Linux',
-      value: 'linux',
-    },
-    {
-      label: 'Windows',
-      value: 'windows',
-    },
-    {
-      label: 'MacOS',
-      value: 'macos',
-    },
-  ],
+export const Default: Story = {
+  args: {
+    name: 'os',
+    label: 'Preferred Operating System',
+    error: '',
+    options: [
+      { label: 'Linux', value: 'linux' },
+      { label: 'Windows', value: 'windows' },
+      { label: 'MacOS', value: 'macos' },
+    ],
+  },
+};
+
+export const WithError: Story = {
+  args: {
+    ...Default.args,
+    error: 'Choose an operating system',
+  },
+  // axe checks the story once `play` has finished, so this waits for the
+  // message, which the `Alert` holds back after it mounts
+  play: async ({ canvas }) => {
+    await canvas.findByText('Choose an operating system');
+  },
 };

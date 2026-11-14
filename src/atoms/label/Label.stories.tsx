@@ -1,4 +1,5 @@
-import { Meta, StoryFn } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+
 import { Label } from '.';
 
 /**
@@ -9,7 +10,7 @@ import { Label } from '.';
  * by setting its `htmlFor` to the field's `id`. An explicit `htmlFor` takes
  * precedence.
  */
-export default {
+const meta = {
   title: 'Atom/Label',
   component: Label,
   parameters: {
@@ -17,11 +18,13 @@ export default {
       subtitle: 'Names a form control',
     },
   },
-} satisfies Meta;
+} satisfies Meta<typeof Label>;
 
-const Template: StoryFn = ({ children, ...args }) => (
-  <Label {...args}>{children}</Label>
-);
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Component = Template.bind({});
-Component.args = { ...Component.args, children: "I'm a label" };
+export const Default: Story = {
+  args: {
+    children: "I'm a label",
+  },
+};

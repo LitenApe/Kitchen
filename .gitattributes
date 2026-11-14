@@ -1,0 +1,6 @@
+# Keep LF line endings in the repository and in every checkout, whatever
+# core.autocrlf is set to, so that files match Prettier's `endOfLine: "lf"`.
+* text=auto eol=lf
+
+# Screenshots and other binary files are never converted
+*.png binary

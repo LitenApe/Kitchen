@@ -19,6 +19,11 @@ export type RadioFieldProps = {
   label: string;
   /** The choices, which may include other props for their radio. */
   options: Array<RadioOption>;
+  /**
+   * An error message to show and announce, which also marks the group as
+   * invalid.
+   */
+  error?: string;
 } & Omit<RadioGroupProps, 'children' | 'name'>;
 
 function RadioField({

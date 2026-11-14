@@ -162,21 +162,9 @@ describe('Radios general behavior', () => {
     expect(mock).not.toHaveBeenCalled();
   });
 
-  test('is valid without an error', async () => {
+  test('aria-invalid marks the group as invalid, rather than its radios', async () => {
     await render(
-      <RadioGroup>
-        <Radio value="1" />
-      </RadioGroup>
-    );
-
-    await expect
-      .element(page.getByRole('radiogroup'))
-      .toHaveAttribute('aria-invalid', 'false');
-  });
-
-  test('an error marks the group as invalid, rather than its radios', async () => {
-    await render(
-      <RadioGroup error="Choose an option">
+      <RadioGroup aria-invalid>
         <Radio value="1" />
         <Radio value="2" />
       </RadioGroup>
@@ -187,19 +175,6 @@ describe('Radios general behavior', () => {
       .toHaveAttribute('aria-invalid', 'true');
     for (const radio of page.getByRole('radio').all()) {
       await expect.element(radio).not.toHaveAttribute('aria-invalid');
-    }
-  });
-
-  test('an error keeps every radio from being submitted', async () => {
-    await render(
-      <RadioGroup error="Choose an option">
-        <Radio value="1" />
-        <Radio value="2" />
-      </RadioGroup>
-    );
-
-    for (const radio of page.getByRole('radio').elements()) {
-      expect(radio).toHaveProperty('validationMessage', 'Choose an option');
     }
   });
 
@@ -218,9 +193,9 @@ describe('Radios general behavior', () => {
       .not.toHaveAttribute('aria-describedby');
   });
 
-  test('takes the error and description of a surrounding field', async () => {
+  test('takes aria-invalid and the description of a surrounding field', async () => {
     await render(
-      <Field error="Choose an option" aria-describedby="message">
+      <Field aria-invalid aria-describedby="message">
         <RadioGroup>
           <Radio value="1" />
         </RadioGroup>

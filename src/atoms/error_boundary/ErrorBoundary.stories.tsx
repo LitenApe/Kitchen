@@ -1,6 +1,18 @@
 import type { JSX } from 'react';
-import { Meta, StoryFn } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { fn } from 'storybook/test';
+
 import { ErrorBoundary } from '.';
+
+/** Rendered in place of the children which failed. */
+function Fallback(): JSX.Element {
+  return <p>Fallback component rendered</p>;
+}
+
+/** Always throws while rendering, to trigger the fallback. */
+function ErrorThrower(): JSX.Element {
+  throw new Error('Error thrown to trigger fallback');
+}
 
 /**
  * An error boundary catches errors thrown while its children render, and
@@ -14,9 +26,10 @@ import { ErrorBoundary } from '.';
  *
  * Like any React error boundary, it does not catch errors thrown in event
  * handlers or asynchronous code. The example below renders a child which
- * always throws, so the fallback is shown.
+ * always throws, so the fallback is shown and the error is logged in the
+ * **Actions** panel.
  */
-export default {
+const meta = {
   title: 'Atom/ErrorBoundary',
   component: ErrorBoundary,
   parameters: {
@@ -34,20 +47,18 @@ export default {
         "Called with the error and React's error info when an error is caught.",
     },
   },
-} satisfies Meta;
+  args: {
+    fallback: Fallback,
+    logger: fn(),
+  },
+  render: (args) => (
+    <ErrorBoundary {...args}>
+      <ErrorThrower />
+    </ErrorBoundary>
+  ),
+} satisfies Meta<typeof ErrorBoundary>;
 
-function ErrorThrower(): JSX.Element {
-  throw new Error('Error thrown to trigger fallback');
-}
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-const Template: StoryFn = ({ children, ...rest }) => (
-  <ErrorBoundary fallback={() => <p>Fallback component rendered</p>} {...rest}>
-    <ErrorThrower />
-  </ErrorBoundary>
-);
-
-export const Component = Template.bind({});
-Component.storyName = 'ErrorBoundary';
-Component.args = {
-  ...Component.args,
-};
+export const Default: Story = {};

@@ -120,7 +120,7 @@ describe('RadioField general behavior', () => {
       .toHaveAttribute('aria-describedby', error.element().id);
   });
 
-  test('an error keeps the radios from being submitted, without marking them', async () => {
+  test('an error marks only the group as invalid, not its radios', async () => {
     await render(
       <RadioField
         name="size"
@@ -132,7 +132,6 @@ describe('RadioField general behavior', () => {
 
     for (const radio of page.getByRole('radio').elements()) {
       expect(radio).not.toHaveAttribute('aria-invalid');
-      expect(radio).toHaveProperty('validationMessage', 'Choose a size');
     }
   });
 

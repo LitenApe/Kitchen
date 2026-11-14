@@ -1,5 +1,5 @@
-import { Meta, StoryFn } from '@storybook/react-vite';
-import { action } from 'storybook/actions';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { fn } from 'storybook/test';
 
 import { Textarea } from '.';
 import { Field } from '../field';
@@ -9,11 +9,14 @@ import { Label } from '../label';
  * `Textarea` lets users enter longer text, which may span several lines. Use
  * `Input` for a single line of text instead.
  *
- * Inside a `Field`, it is linked to its `Label`. Setting `error` marks it as
- * invalid with `aria-invalid`, and uses the error as the browser's native
- * validation message.
+ * Inside a `Field`, it is linked to its `Label`.
+ *
+ * `Textarea` does not show error messages. To show one, mark the textarea as
+ * invalid with `aria-invalid`, and point it to the message with
+ * `aria-describedby`. `BaseField` does this for you, and also announces the
+ * message.
  */
-export default {
+const meta = {
   title: 'Atom/Textarea',
   component: Textarea,
   parameters: {
@@ -26,23 +29,19 @@ export default {
       description: 'The number of lines of text which are visible at once.',
       type: 'number',
     },
-    error: {
-      description:
-        'An error message. Marks the textarea as invalid and becomes its native validation message.',
-      type: 'string',
-    },
   },
-} satisfies Meta;
+  args: {
+    onChange: fn(),
+  },
+  render: (args) => (
+    <Field>
+      <Label>Textarea label</Label>
+      <Textarea {...args} />
+    </Field>
+  ),
+} satisfies Meta<typeof Textarea>;
 
-const Template: StoryFn = (args) => (
-  <Field>
-    <Label>Textarea label</Label>
-    <Textarea {...args} />
-  </Field>
-);
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Component = Template.bind({});
-Component.args = {
-  ...Component.args,
-  onChange: action('textarea change'),
-};
+export const Default: Story = {};

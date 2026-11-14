@@ -37,7 +37,7 @@ describe('Textarea general behavior', () => {
 
   test('takes props from "Field", where its own props take precedence', async () => {
     await render(
-      <Field name="field" placeholder="field" error="Enter a message">
+      <Field name="field" placeholder="field" aria-invalid>
         <Textarea placeholder="own" />
       </Field>
     );
@@ -65,32 +65,5 @@ describe('Textarea general behavior', () => {
     await render(<Textarea ref={ref} />);
 
     expect(ref.current).toBe(page.getByRole('textbox').element());
-  });
-
-  test('is valid without an error', async () => {
-    await render(<Textarea />);
-    const textarea = page.getByRole('textbox');
-
-    await expect.element(textarea).toHaveAttribute('aria-invalid', 'false');
-    await expect.element(textarea).toBeValid();
-  });
-
-  test('an error marks it as invalid, with the error as its message', async () => {
-    await render(<Textarea error="Enter a message" />);
-    const textarea = page.getByRole('textbox');
-
-    await expect.element(textarea).toHaveAttribute('aria-invalid', 'true');
-    await expect.element(textarea).not.toHaveAttribute('error');
-    expect(textarea.element()).toHaveProperty(
-      'validationMessage',
-      'Enter a message'
-    );
-  });
-
-  test('keeps its error message when given a ref', async () => {
-    const ref = createRef<HTMLTextAreaElement>();
-    await render(<Textarea ref={ref} error="Enter a message" />);
-
-    expect(ref.current?.validationMessage).toBe('Enter a message');
   });
 });

@@ -7,6 +7,11 @@ import { BaseField } from '../base_field';
 export type CheckboxFieldProps = {
   /** The text of the label. */
   label: string;
+  /**
+   * An error message to show and announce, which also marks the checkbox as
+   * invalid.
+   */
+  error?: string;
 } & CheckboxProps;
 
 function CheckboxField({

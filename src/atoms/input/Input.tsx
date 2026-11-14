@@ -7,13 +7,8 @@ import { InputLayout, getInputLayout } from './bones/getInputLayout';
 import type { AffixProps } from './types';
 
 // `prefix` is also an HTML attribute, which the affix takes the place of
-export type InputProps = Omit<ComponentPropsWithRef<'input'>, 'prefix'> & {
-  /**
-   * An error message, which marks the input as invalid and becomes its native
-   * validation message.
-   */
-  error?: string;
-} & AffixProps;
+export type InputProps = Omit<ComponentPropsWithRef<'input'>, 'prefix'> &
+  AffixProps;
 
 /**
  * A text input, which takes its id and other props from a surrounding

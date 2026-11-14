@@ -1,4 +1,4 @@
-import { Meta, StoryFn } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/react-vite';
 
 import { InputField } from '.';
 
@@ -7,11 +7,12 @@ import { InputField } from '.';
  * built from `BaseField`, `Input` and `Label`.
  *
  * Set the text of the label with `label`. Every other prop, such as `value`,
- * `onChange`, `postfix` or `error`, is passed on to the input, which also
- * receives the `ref`. Use `as` to render another input component in place of
- * `Input`.
+ * `onChange` or `postfix`, is passed on to the input, which also receives the
+ * `ref`. Use `as` to render another input component in place of `Input`. When
+ * `error` is set, the message is shown after the input, and the input is
+ * marked as invalid and described by it.
  */
-export default {
+const meta = {
   title: 'Molecule/InputField',
   component: InputField,
   parameters: {
@@ -30,14 +31,26 @@ export default {
       type: 'string',
     },
   },
-} satisfies Meta;
+} satisfies Meta<typeof InputField>;
 
-const Template: StoryFn = (args) => <InputField label="field label" {...args} />;
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Component = Template.bind({});
-Component.storyName = 'InputField';
-Component.args = {
-  ...Component.args,
-  error: '',
-  label: 'field label',
+export const Default: Story = {
+  args: {
+    label: 'field label',
+    error: '',
+  },
+};
+
+export const WithError: Story = {
+  args: {
+    ...Default.args,
+    error: 'Fill in this field',
+  },
+  // axe checks the story once `play` has finished, so this waits for the
+  // message, which the `Alert` holds back after it mounts
+  play: async ({ canvas }) => {
+    await canvas.findByText('Fill in this field');
+  },
 };

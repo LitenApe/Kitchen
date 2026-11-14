@@ -12,7 +12,7 @@ The project is abandoned, as I consumed my contexts thoughtlessly, which resulte
 
 Components such as `Field` and `RadioGroup` share their props with the components inside them through React context, and each component merges the shared props with its own. A component can only read from the closest provider of a context, so when two providers of the same context are nested, the outer one is hidden from everything inside the inner one.
 
-`RadioField` shows the problem clearly. Its props are passed to a `BaseField`, which shares them through a `Field`. Every radio is also wrapped in a `Field` of its own, so that it can be linked to its label, which means the radios only see those inner fields. As a result, props such as `onChange` and `disabled` never reach the radios. Only an `error` comes through, because errors belong to the group, which sits outside the inner fields. `InputField`, which has no inner field, passes all of its props on as expected.
+`RadioField` shows the problem clearly. Its props are passed to a `BaseField`, which shares them through a `Field`. Every radio is also wrapped in a `Field` of its own, so that it can be linked to its label, which means the radios only see those inner fields. As a result, props such as `onChange` and `disabled` never reach the radios. Only an `error` works as expected, because `BaseField` shows the message itself, and the group which it marks as invalid sits outside the inner fields. `InputField`, which has no inner field, passes all of its props on as expected.
 
 Fixing this properly means rethinking how props flow between the components rather than patching them one by one. I might restart the project after I figure out what my end goal is with a personal styleless component library. Whatever it becomes, I intend to keep the components free of third-party libraries, so that React remains their only dependency.
 
@@ -121,11 +121,12 @@ npm run start
 
 `test` executes all tests and enters watch mode. Please read the **Vitest** documentation for more information about running tests and their options. Tests run in watch mode by default, so a flag is required to disable watch mode if it is undesirable.
 
-The tests are split into three **Vitest** projects to keep overhead to a minimum:
+The tests are split into four **Vitest** projects to keep overhead to a minimum:
 
 - **node** runs every test named `*.test.ts` or `*.test.tsx` by default, and is meant for logic which does not need a DOM.
 - **browser** runs tests named `*.browser.test.ts` or `*.browser.test.tsx` in a real Chromium browser through **Playwright**. Components are rendered with `vitest-browser-react`, and are queried and interacted with through `page` and `userEvent` from `vitest/browser`.
 - **visual** runs the visual regression tests, which are described below, in a browser of their own.
+- **storybook** turns every story into a test through **Storybook Test**, and runs the accessibility tests, which are described below.
 
 Chromium has to be installed once before the browser tests can run.
 
@@ -143,6 +144,7 @@ npm run test -- --run
 npm run test -- --project node
 npm run test -- --project browser
 npm run test -- --project visual
+npm run test -- --project storybook
 
 # watch the browser tests run in a visible browser window
 npm run test -- --project browser --browser.headless=false
@@ -159,6 +161,16 @@ npm run test -- --run --project visual --update
 The visual tests run in a project of their own, because Chromium paints native controls such as buttons differently once a mouse pointer has entered the page. The references are taken without a pointer, while other tests would leave one behind in a shared page.
 
 Screenshots differ between operating systems, so references are stored per platform. References currently only exist for Windows, which is why the CI skips these tests.
+
+#### Accessibility tests
+
+The **storybook** project renders every story in Chromium and checks it with **axe** through Storybook's accessibility addon. A story with violations fails, and the failure names the broken rule, the element which broke it, and a link to the story in a running **Storybook**.
+
+Each story is checked once it has rendered and its `play` function, if it has one, has finished. Content which appears later is only checked if the `play` function waits for it. An `Alert` holds its content back for a moment after it mounts, so every story which shows one waits for its message. Every component which takes an `error` also has a `WithError` story, so that its error state is checked as well.
+
+While `start` is running, the test widget at the bottom of the **Storybook** sidebar runs the same tests. Tick **Accessibility** in it to include the accessibility checks, which the widget leaves out by default.
+
+Passing these tests does not make a component accessible, as axe only finds the problems which can be detected automatically. Keyboard use and what screen readers announce still have to be tested by hand.
 
 ### typecheck
 

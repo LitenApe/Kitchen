@@ -1,4 +1,5 @@
-import { Meta, StoryFn } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+
 import { Backdrop } from '.';
 
 /**
@@ -12,7 +13,7 @@ import { Backdrop } from '.';
  * adjusted with `className` or `style`, which are applied on top of its own
  * styling.
  */
-export default {
+const meta = {
   title: 'Atom/Backdrop',
   component: Backdrop,
   parameters: {
@@ -26,9 +27,13 @@ export default {
       type: 'boolean',
     },
   },
-} satisfies Meta;
+} satisfies Meta<typeof Backdrop>;
 
-const Template: StoryFn = (args) => <Backdrop {...args} />;
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Component = Template.bind({});
-Component.args = { ...Component.args, visible: true };
+export const Default: Story = {
+  args: {
+    visible: true,
+  },
+};

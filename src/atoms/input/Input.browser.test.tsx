@@ -144,7 +144,7 @@ describe('Input default behavior', () => {
 
   test('takes props from "Field", where its own props take precedence', async () => {
     await render(
-      <Field name="field" placeholder="field" error="Enter a value">
+      <Field name="field" placeholder="field" aria-invalid>
         <Input placeholder="own" />
       </Field>
     );
@@ -160,32 +160,5 @@ describe('Input default behavior', () => {
     await render(<Input ref={ref} />);
 
     expect(ref.current).toBe(page.getByRole('textbox').element());
-  });
-
-  test('is valid without an error', async () => {
-    await render(<Input />);
-    const input = page.getByRole('textbox');
-
-    await expect.element(input).toHaveAttribute('aria-invalid', 'false');
-    await expect.element(input).toBeValid();
-  });
-
-  test('an error marks it as invalid, with the error as its message', async () => {
-    await render(<Input error="Enter a value" />);
-    const input = page.getByRole('textbox');
-
-    await expect.element(input).toHaveAttribute('aria-invalid', 'true');
-    await expect.element(input).not.toHaveAttribute('error');
-    expect(input.element()).toHaveProperty(
-      'validationMessage',
-      'Enter a value'
-    );
-  });
-
-  test('keeps its error message when given a ref', async () => {
-    const ref = createRef<HTMLInputElement>();
-    await render(<Input ref={ref} error="Enter a value" />);
-
-    expect(ref.current?.validationMessage).toBe('Enter a value');
   });
 });

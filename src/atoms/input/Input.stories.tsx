@@ -1,23 +1,25 @@
-import { Meta, StoryFn } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { fn } from 'storybook/test';
 
 import { Input } from '.';
 import { Field } from '../field';
 import { Label } from '../label';
-import { action } from 'storybook/actions';
 
 /**
  * `Input` lets users enter a single line of text. It renders an `input` with
  * `type="text"` by default. Use `Textarea` for longer text instead. Inside a
- * `Field`, it is linked to its `Label`. Setting `error` marks it as invalid
- * with `aria-invalid`, and uses the error as the browser's native validation
- * message.
+ * `Field`, it is linked to its `Label`.
  *
  * A `prefix` or `postfix`, such as a currency symbol or a unit, can be shown
  * before or after the input. It is linked to the input through
  * `aria-describedby`, so screen readers read it together with the input. Only
  * one of the two can be used at a time.
+ *
+ * `Input` does not show error messages. To show one, mark the input as invalid
+ * with `aria-invalid`, and point it to the message with `aria-describedby`.
+ * `InputField` does this for you, and also announces the message.
  */
-export default {
+const meta = {
   title: 'Atom/Input',
   component: Input,
   parameters: {
@@ -54,18 +56,22 @@ export default {
       type: 'string',
     },
   },
-} satisfies Meta;
+  args: {
+    onChange: fn(),
+  },
+  render: (args) => (
+    <Field>
+      <Label>Input label</Label>
+      <Input {...args} />
+    </Field>
+  ),
+} satisfies Meta<typeof Input>;
 
-const Template: StoryFn = (args) => (
-  <Field>
-    <Label>Input label</Label>
-    <Input {...args} />
-  </Field>
-);
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Component = Template.bind({});
-Component.args = {
-  ...Component.args,
-  type: 'text',
-  onChange: action('input change'),
+export const Default: Story = {
+  args: {
+    type: 'text',
+  },
 };

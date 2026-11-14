@@ -1,4 +1,5 @@
-import { Meta, StoryFn } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+
 import { Legend } from '.';
 
 /**
@@ -6,7 +7,7 @@ import { Legend } from '.';
  * controls, such as the radios in a `RadioGroup`, their accessible name. It
  * must be the first child of the `fieldset` it describes.
  */
-export default {
+const meta = {
   title: 'Atom/Legend',
   component: Legend,
   parameters: {
@@ -14,11 +15,13 @@ export default {
       subtitle: 'Names a group of form controls',
     },
   },
-} satisfies Meta;
+} satisfies Meta<typeof Legend>;
 
-const Template: StoryFn = ({ children, ...args }) => (
-  <Legend {...args}>{children}</Legend>
-);
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Component = Template.bind({});
-Component.args = { ...Component.args, children: "I'm a legend" };
+export const Default: Story = {
+  args: {
+    children: "I'm a legend",
+  },
+};

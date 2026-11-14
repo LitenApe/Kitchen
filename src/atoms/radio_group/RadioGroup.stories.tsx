@@ -1,10 +1,11 @@
-import { Meta, StoryFn } from '@storybook/react-vite';
-import { action } from 'storybook/actions';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+import { fn } from 'storybook/test';
+
 import { RadioGroup } from '.';
-import { Radio } from '../radio';
+import { Field } from '../field';
 import { Label } from '../label';
 import { Legend } from '../legend';
-import { Field } from '../field';
+import { Radio } from '../radio';
 
 /**
  * `RadioGroup` groups related radios in a `fieldset` with the `radiogroup`
@@ -19,17 +20,18 @@ import { Field } from '../field';
  * only called when focus leaves the group, and not when it moves between the
  * radios inside it.
  *
- * Errors belong to the group as a whole. `error` marks the `fieldset` as
- * invalid with `aria-invalid`, and becomes the native validation message of
- * every radio, which keeps the form from being submitted. Show the message
- * yourself and point to it with `aria-describedby`, which describes the
- * `fieldset` rather than its radios. Inside a field, such as the one
- * `RadioField` renders, the group takes the field's error and descriptions.
+ * `RadioGroup` does not show error messages. To show one, mark the group as
+ * invalid with `aria-invalid`, and point it to the message with
+ * `aria-describedby`. Both are set on the `fieldset`, as errors belong to the
+ * group as a whole rather than to its radios. Inside a field, such as the one
+ * `RadioField` renders, the group also takes the field's `aria-invalid` and
+ * descriptions. `RadioField` does all of this for you, and also announces the
+ * message.
  *
  * Select a radio and then move focus out of the group to see `onChange` and
  * `onBlur` in the **Actions** panel.
  */
-export default {
+const meta = {
   title: 'Atom/RadioGroup',
   component: RadioGroup,
   parameters: {
@@ -48,41 +50,39 @@ export default {
     onBlur: {
       description: 'Called when focus leaves the group.',
     },
-    error: {
-      description:
-        'An error message, which marks the group as invalid and keeps the form from being submitted.',
-      type: 'string',
-    },
   },
-} satisfies Meta;
+  args: {
+    onChange: fn(),
+    onBlur: fn(),
+  },
+  render: (args) => (
+    <RadioGroup {...args}>
+      <Legend>Bicycle brand</Legend>
+      <Field>
+        <Radio value="trek" />
+        <Label>Trek</Label>
+      </Field>
+      <Field>
+        <Radio value="specialized" />
+        <Label>Specialized</Label>
+      </Field>
+      <Field>
+        <Radio value="cannondale" />
+        <Label>Cannondale</Label>
+      </Field>
+      <Field>
+        <Radio value="canyon" />
+        <Label>Canyon</Label>
+      </Field>
+    </RadioGroup>
+  ),
+} satisfies Meta<typeof RadioGroup>;
 
-const Template: StoryFn = (args) => (
-  <RadioGroup {...args}>
-    <Legend>Bicycle brand</Legend>
-    <Field>
-      <Radio value="trek" />
-      <Label>Trek</Label>
-    </Field>
-    <Field>
-      <Radio value="specialized" />
-      <Label>Specialized</Label>
-    </Field>
-    <Field>
-      <Radio value="cannondale" />
-      <Label>Cannondale</Label>
-    </Field>
-    <Field>
-      <Radio value="canyon" />
-      <Label>Canyon</Label>
-    </Field>
-  </RadioGroup>
-);
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Component = Template.bind({});
-Component.storyName = 'RadioGroup';
-Component.args = {
-  ...Component.args,
-  name: 'bike-manufacturer',
-  onChange: action('value changed'),
-  onBlur: action('blur event triggered'),
+export const Default: Story = {
+  args: {
+    name: 'bike-manufacturer',
+  },
 };

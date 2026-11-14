@@ -10,13 +10,10 @@ type RadioGroupContextValue = {
    * radio's own props take precedence.
    */
   readonly getGroupProps: <T extends GroupMemberProps>(props: T) => T;
-  /** The group's error, which keeps its radios from being submitted. */
-  readonly error: string | undefined;
 };
 
 export const RadioGroupContext = createContext<RadioGroupContextValue>({
   getGroupProps: (props) => props,
-  error: undefined,
 });
 
 export function useRadioGroup(): RadioGroupContextValue {

@@ -8,6 +8,11 @@ import { BaseField } from '../base_field';
 export type InputFieldProps = {
   /** The text of the label. */
   label: string;
+  /**
+   * An error message to show and announce, which also marks the input as
+   * invalid.
+   */
+  error?: string;
   /** Renders another input component in place of `Input`. */
   as?: ComponentType<{ ref?: Ref<HTMLInputElement> }>;
   ref?: Ref<HTMLInputElement>;

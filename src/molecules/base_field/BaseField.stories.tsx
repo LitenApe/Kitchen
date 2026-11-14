@@ -1,4 +1,5 @@
-import { Meta, StoryFn } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+
 import { BaseField } from '.';
 import { Input } from '../../atoms/input';
 import { Label } from '../../atoms/label';
@@ -11,13 +12,19 @@ import { Label } from '../../atoms/label';
  * When `error` is set, the message is shown after the field's children in an
  * `Alert`, which screen readers announce. The `Alert` is rendered even while
  * there is no error, so screen readers already know about it when a message
- * arrives. The control is also marked as invalid, and described by the
- * message through `aria-describedby`, alongside any descriptions it already
- * has.
+ * arrives. The control is also marked as invalid with `aria-invalid`, and
+ * described by the message through `aria-describedby`, alongside any
+ * descriptions it already has.
+ *
+ * Unlike the browser's own checks, such as `required`, an error does not stop
+ * the form from being submitted. Errors which are only cleared when the form
+ * is submitted again, such as the ones a form action returns, therefore never
+ * lock the form. It does mean that focus does not move to the field, so move
+ * focus to the first invalid field yourself after a failed submit.
  *
  * Set `error` from **Controls** to see the message appear.
  */
-export default {
+const meta = {
   title: 'Molecule/BaseField',
   component: BaseField,
   parameters: {
@@ -32,18 +39,30 @@ export default {
       type: 'string',
     },
   },
-} satisfies Meta;
+  render: (args) => (
+    <BaseField {...args}>
+      <Label>Test Label</Label>
+      <Input />
+    </BaseField>
+  ),
+} satisfies Meta<typeof BaseField>;
 
-const Template: StoryFn = (args) => (
-  <BaseField {...args}>
-    <Label>Test Label</Label>
-    <Input />
-  </BaseField>
-);
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Component = Template.bind({});
-Component.storyName = 'BaseField';
-Component.args = {
-  ...Component.args,
-  error: '',
+export const Default: Story = {
+  args: {
+    error: '',
+  },
+};
+
+export const WithError: Story = {
+  args: {
+    error: 'Fill in this field',
+  },
+  // axe checks the story once `play` has finished, so this waits for the
+  // message, which the `Alert` holds back after it mounts
+  play: async ({ canvas }) => {
+    await canvas.findByText('Fill in this field');
+  },
 };

@@ -1,4 +1,5 @@
-import { Meta, StoryFn } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+
 import { Alert } from '.';
 
 /**
@@ -18,7 +19,7 @@ import { Alert } from '.';
  * the moment it arrives, render the `Alert` ahead of time and only change its
  * content.
  */
-export default {
+const meta = {
   title: 'Atom/Alert',
   component: Alert,
   parameters: {
@@ -35,9 +36,19 @@ export default {
       type: 'string',
     },
   },
-} satisfies Meta;
+} satisfies Meta<typeof Alert<'p'>>;
 
-const Template: StoryFn = (args) => <Alert as="p" {...args} />;
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Component = Template.bind({});
-Component.args = { ...Component.args, children: 'Alert message' };
+export const Default: Story = {
+  args: {
+    as: 'p',
+    children: 'Alert message',
+  },
+  // axe checks the story once `play` has finished, so this waits for the
+  // message, which the `Alert` holds back after it mounts
+  play: async ({ canvas }) => {
+    await canvas.findByText('Alert message');
+  },
+};

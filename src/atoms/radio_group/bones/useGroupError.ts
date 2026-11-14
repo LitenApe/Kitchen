@@ -1,25 +1,24 @@
 import { joinIds } from '../../../utils/functions/joinIds';
 import { useField } from '../../field';
+import type { GroupAttributes } from './splitGroupProps';
 
-type GroupError = {
-  error?: string;
-  'aria-describedby'?: string;
-};
+type GroupError = Pick<GroupAttributes, 'aria-invalid' | 'aria-describedby'>;
 
 /**
- * The error of a group, and the ids of what describes it. A group inside a
- * field, such as the one `RadioField` renders, also takes the field's error
- * and descriptions, as they belong to the group as a whole rather than to any
- * one of its radios.
+ * Whether a group is invalid, and the ids of what describes it. A group inside
+ * a field, such as the one `RadioField` renders, also takes the field's
+ * `aria-invalid` and descriptions, as they belong to the group as a whole
+ * rather than to any one of its radios. The group's own `aria-invalid` takes
+ * precedence over the field's.
  *
- * @param own the group's own error and descriptions
- * @returns the error and descriptions of the group
+ * @param own the group's own `aria-invalid` and descriptions
+ * @returns the `aria-invalid` and descriptions of the group
  */
 export function useGroupError(own: GroupError): GroupError {
   const field = useField().getFieldProps<GroupError>({});
 
   return {
-    error: own.error ?? field.error,
+    'aria-invalid': own['aria-invalid'] ?? field['aria-invalid'],
     'aria-describedby': joinIds(
       field['aria-describedby'],
       own['aria-describedby']
