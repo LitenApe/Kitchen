@@ -50,50 +50,12 @@ describe('Radio general behavior', () => {
     await expect.element(element).toHaveAttribute('id');
   });
 
-  test('is never marked as invalid itself', async () => {
-    await render(<Radio />);
-    await expect
-      .element(page.getByRole('radio'))
-      .not.toHaveAttribute('aria-invalid');
-  });
-
-  test("takes its group's error as its validation message", async () => {
-    await render(
-      <RadioGroupContext
-        value={{ getGroupProps: (props) => props, error: 'Choose an option' }}
-      >
-        <Radio />
-      </RadioGroupContext>
-    );
-    const radio = page.getByRole('radio');
-
-    await expect.element(radio).not.toHaveAttribute('aria-invalid');
-    expect(radio.element()).toHaveProperty(
-      'validationMessage',
-      'Choose an option'
-    );
-  });
-
-  test('keeps its validation message when given a ref', async () => {
-    const ref = createRef<HTMLInputElement>();
-    await render(
-      <RadioGroupContext
-        value={{ getGroupProps: (props) => props, error: 'Choose an option' }}
-      >
-        <Radio ref={ref} />
-      </RadioGroupContext>
-    );
-
-    expect(ref.current?.validationMessage).toBe('Choose an option');
-  });
-
   test('takes the props its group shares, where its own take precedence', async () => {
     const group = {
       getGroupProps: <T extends object>(props: T) => ({
         name: 'group',
         ...props,
       }),
-      error: undefined,
     };
     await render(
       <RadioGroupContext value={group}>
@@ -105,19 +67,6 @@ describe('Radio general behavior', () => {
 
     await expect.element(first).toHaveAttribute('name', 'group');
     await expect.element(second).toHaveAttribute('name', 'own');
-  });
-
-  test('ignores an error shared by "Field", as it belongs to the group', async () => {
-    await render(
-      <Field error="Choose an option">
-        <Radio />
-      </Field>
-    );
-    const radio = page.getByRole('radio');
-
-    await expect.element(radio).not.toHaveAttribute('error');
-    await expect.element(radio).not.toHaveAttribute('aria-invalid');
-    expect(radio.element()).toHaveProperty('validationMessage', '');
   });
 
   test('stays a radio when "Field" shares another type', async () => {

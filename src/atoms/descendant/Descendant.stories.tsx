@@ -1,6 +1,13 @@
-import { Meta, StoryFn } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+
 import { Descendant, useDescendant } from '.';
 import styles from './Descendant.stories.module.css';
+
+/** A paragraph which shows the position it has been given. */
+function Position() {
+  const { index, ref } = useDescendant<HTMLParagraphElement>();
+  return <p ref={ref}>Position of element: {index}</p>;
+}
 
 /**
  * `Descendant` lets a set of related elements know their position among each
@@ -27,7 +34,7 @@ import styles from './Descendant.stories.module.css';
  * below, each paragraph shows the position it has been given, even though the
  * paragraphs are nested at different depths.
  */
-export default {
+const meta = {
   title: 'Atom/Descendant',
   component: Descendant,
   parameters: {
@@ -35,34 +42,30 @@ export default {
       subtitle: 'Tracks the order of related elements for focus navigation',
     },
   },
-} satisfies Meta;
-
-function Position() {
-  const { index, ref } = useDescendant<HTMLParagraphElement>();
-  return <p ref={ref}>Position of element: {index}</p>;
-}
-
-const Template: StoryFn = (args) => (
-  <Descendant {...args}>
-    <Position />
-    <div className={styles.nested}>
+  render: (args) => (
+    <Descendant {...args}>
       <Position />
-    </div>
-    <div className={styles.deeper}>
-      <div>
+      <div className={styles.nested}>
         <Position />
       </div>
-    </div>
-    <div className={styles.deepest}>
-      <div>
+      <div className={styles.deeper}>
         <div>
           <Position />
         </div>
       </div>
-    </div>
-    <Position />
-  </Descendant>
-);
+      <div className={styles.deepest}>
+        <div>
+          <div>
+            <Position />
+          </div>
+        </div>
+      </div>
+      <Position />
+    </Descendant>
+  ),
+} satisfies Meta<typeof Descendant>;
 
-export const Component = Template.bind({});
-Component.args = { ...Component.args };
+export default meta;
+type Story = StoryObj<typeof meta>;
+
+export const Default: Story = {};

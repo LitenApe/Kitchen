@@ -1,3 +1,4 @@
+import { storybookTest } from '@storybook/addon-vitest/vitest-plugin';
 import react from '@vitejs/plugin-react';
 import { playwright } from '@vitest/browser-playwright';
 import { defineConfig } from 'vitest/config';
@@ -57,6 +58,16 @@ export default defineConfig({
         test: {
           name: 'visual',
           include: ['src/visual.browser.test.tsx'],
+          browser: chromium(),
+        },
+      },
+      {
+        // Storybook Test turns every story into a test, which renders the
+        // story and checks it for accessibility violations.
+        extends: true,
+        plugins: [storybookTest()],
+        test: {
+          name: 'storybook',
           browser: chromium(),
         },
       },

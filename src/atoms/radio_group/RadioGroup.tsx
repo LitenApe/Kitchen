@@ -11,35 +11,26 @@ import { useGroupBlur } from './bones/useGroupBlur';
 import { useGroupError } from './bones/useGroupError';
 
 /**
- * Apart from `children`, `ref`, `error` and the `aria-` props which name,
- * describe or validate the group, which all belong to the `fieldset`, the
- * props are shared with every radio in the group.
+ * Apart from `children`, `ref` and the `aria-` props which name, describe or
+ * validate the group, which all belong to the `fieldset`, the props are
+ * shared with every radio in the group.
  */
 export type RadioGroupProps = {
   children?: ReactNode;
   ref?: Ref<HTMLFieldSetElement>;
-  /**
-   * An error message, which marks the group as invalid and keeps its radios
-   * from being submitted. Show the message yourself, and point to it with
-   * `aria-describedby`.
-   */
-  error?: string;
 } & Omit<ComponentPropsWithoutRef<'input'>, 'children'>;
 
 function RadioGroup({
   children,
   ref,
   onBlur,
-  error: ownError,
   ...props
 }: RadioGroupProps): JSX.Element {
   const { group, shared } = splitGroupProps(props);
   const { groupRef, handleBlur } = useGroupBlur<HTMLFieldSetElement>(onBlur);
   const fieldsetRef = useMergedRefs(ref, groupRef);
-  const { error, 'aria-describedby': describedBy } = useGroupError({
-    error: ownError,
-    'aria-describedby': group['aria-describedby'],
-  });
+  const { 'aria-invalid': invalid, 'aria-describedby': describedBy } =
+    useGroupError(group);
 
   function getGroupProps<T extends GroupMemberProps>(radioProps: T): T {
     const ownBlur: GroupMemberProps['onBlur'] = radioProps.onBlur;
@@ -51,13 +42,14 @@ function RadioGroup({
   }
 
   return (
-    <RadioGroupContext value={{ getGroupProps, error }}>
+    <RadioGroupContext value={{ getGroupProps }}>
       <fieldset
         role="radiogroup"
         ref={fieldsetRef}
         {...group}
-        // an error marks the group as invalid, rather than its radios
-        aria-invalid={group['aria-invalid'] ?? Boolean(error)}
+        // a surrounding field can also mark and describe the group, rather
+        // than its radios
+        aria-invalid={invalid}
         aria-describedby={describedBy}
       >
         {children}

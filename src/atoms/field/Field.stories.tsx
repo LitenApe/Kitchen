@@ -1,7 +1,8 @@
-import { Meta, StoryFn } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+
+import { Field } from '.';
 import { Input } from '../input';
 import { Label } from '../label';
-import { Field } from '.';
 
 /**
  * `Field` groups a form control with its label. It generates an `id` and
@@ -13,7 +14,7 @@ import { Field } from '.';
  *
  * This links a label to its control without wiring up ids by hand. Props set
  * directly on a component take precedence over the ones shared by the field,
- * so a field-wide prop such as `error` or `onChange` can still be overridden
+ * so a field-wide prop such as `disabled` or `onChange` can still be overridden
  * for a single control. `aria-describedby` is the exception: the field's and
  * the control's are combined, so that a description shared by the field, such
  * as an error message, is never lost.
@@ -21,7 +22,7 @@ import { Field } from '.';
  * `Field` does not render an element of its own. Use `BaseField` when you also
  * want an error message to be shown.
  */
-export default {
+const meta = {
   title: 'Atom/Field',
   component: Field,
   parameters: {
@@ -29,16 +30,15 @@ export default {
       subtitle: 'Links a label to its form control',
     },
   },
-} satisfies Meta;
+  render: (args) => (
+    <Field {...args}>
+      <Label>label</Label>
+      <Input />
+    </Field>
+  ),
+} satisfies Meta<typeof Field>;
 
-const Template: StoryFn = ({ children, ...args }) => (
-  <Field {...args}>{children}</Field>
-);
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Component = Template.bind({});
-Component.args = {
-  children: [
-    <Label key="field-label">label</Label>,
-    <Input key="field-input" />,
-  ],
-};
+export const Default: Story = {};

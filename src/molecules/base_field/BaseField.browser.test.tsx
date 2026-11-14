@@ -1,4 +1,5 @@
-import { type Locator, page } from 'vitest/browser';
+import type { FormEvent } from 'react';
+import { type Locator, page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
 
 import { BaseField } from '.';
@@ -55,6 +56,38 @@ describe('BaseField default behavior', () => {
 
     const input = page.getByRole('textbox');
     await expect.element(input).toHaveAttribute('aria-invalid', 'true');
+  });
+
+  test('input is valid without an error', async () => {
+    await render(
+      <BaseField>
+        <Label>Some label</Label>
+        <Input />
+      </BaseField>
+    );
+
+    await expect.element(page.getByRole('textbox')).toBeValid();
+  });
+
+  test('an error marks the input as invalid without stopping the submit', async () => {
+    // keeps the browser from leaving the page when the form is submitted
+    const onSubmit = vi.fn((event: FormEvent) => event.preventDefault());
+    await render(
+      <form onSubmit={onSubmit}>
+        <BaseField error="some error">
+          <Label>Some label</Label>
+          <Input />
+        </BaseField>
+        <button type="submit">Submit</button>
+      </form>
+    );
+
+    await expect
+      .element(page.getByRole('textbox'))
+      .toHaveAttribute('aria-invalid', 'true');
+    await userEvent.click(page.getByRole('button', { name: 'Submit' }));
+
+    expect(onSubmit).toHaveBeenCalledTimes(1);
   });
 
   test('has aria-describedby when error exist', async () => {

@@ -1,4 +1,5 @@
-import { Meta, StoryFn } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+
 import { Radio } from '.';
 import { Field } from '../field';
 import { Label } from '../label';
@@ -10,10 +11,9 @@ import { Label } from '../label';
  * radio inside it.
  *
  * Inside a `Field`, `Radio` is linked to its `Label`. A radio cannot be
- * invalid on its own, so it takes no `error`. Set `error` on its `RadioGroup`
- * instead, which marks the group as invalid.
+ * invalid on its own, so mark its `RadioGroup` as invalid instead.
  */
-export default {
+const meta = {
   title: 'Atom/Radio',
   component: Radio,
   parameters: {
@@ -21,14 +21,15 @@ export default {
       subtitle: 'Lets users pick one option from a set',
     },
   },
-} satisfies Meta;
+  render: (args) => (
+    <Field>
+      <Radio {...args} />
+      <Label>Radio label</Label>
+    </Field>
+  ),
+} satisfies Meta<typeof Radio>;
 
-const Template: StoryFn = (args) => (
-  <Field {...args}>
-    <Radio />
-    <Label>Radio label</Label>
-  </Field>
-);
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Component = Template.bind({});
-Component.args = { ...Component.args };
+export const Default: Story = {};

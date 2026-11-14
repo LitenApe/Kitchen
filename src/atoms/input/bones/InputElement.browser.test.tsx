@@ -21,32 +21,11 @@ describe('InputElement general behavior', () => {
       .toHaveAttribute('type', 'email');
   });
 
-  test('is valid without an error', async () => {
-    await render(<InputElement />);
-    const input = page.getByRole('textbox');
-
-    await expect.element(input).toHaveAttribute('aria-invalid', 'false');
-    await expect.element(input).toBeValid();
-  });
-
-  test('an error marks it as invalid, with the error as its message', async () => {
-    await render(<InputElement error="Enter a value" />);
-    const input = page.getByRole('textbox');
-
-    await expect.element(input).toHaveAttribute('aria-invalid', 'true');
-    await expect.element(input).not.toHaveAttribute('error');
-    expect(input.element()).toHaveProperty(
-      'validationMessage',
-      'Enter a value'
-    );
-  });
-
-  test('keeps its error message when given a ref', async () => {
+  test('attaches its ref to the input', async () => {
     const ref = createRef<HTMLInputElement>();
-    await render(<InputElement ref={ref} error="Enter a value" />);
+    await render(<InputElement ref={ref} />);
 
     expect(ref.current).toBe(page.getByRole('textbox').element());
-    expect(ref.current?.validationMessage).toBe('Enter a value');
   });
 
   test('is described by an affix next to its own descriptions', async () => {

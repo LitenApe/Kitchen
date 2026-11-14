@@ -19,6 +19,11 @@ export type SelectFieldProps = {
   label: string;
   /** The choices, as option data or as components which render options. */
   options: Array<OptionData | ComponentType>;
+  /**
+   * An error message to show and announce, which also marks the select as
+   * invalid.
+   */
+  error?: string;
 } & Omit<SelectProps, 'children'>;
 
 function SelectField({

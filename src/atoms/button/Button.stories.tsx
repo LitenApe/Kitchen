@@ -1,4 +1,5 @@
-import { Meta, StoryFn } from '@storybook/react-vite';
+import type { Meta, StoryObj } from '@storybook/react-vite';
+
 import { Button } from '.';
 
 /**
@@ -15,7 +16,7 @@ import { Button } from '.';
  * A natively disabled button is skipped when tabbing. A disabled `a` does not
  * navigate either.
  */
-export default {
+const meta = {
   title: 'Atom/Button',
   component: Button,
   parameters: {
@@ -39,9 +40,13 @@ export default {
       type: 'boolean',
     },
   },
-} satisfies Meta;
+} satisfies Meta<typeof Button>;
 
-const Template: StoryFn = (args) => <Button {...args} />;
+export default meta;
+type Story = StoryObj<typeof meta>;
 
-export const Component = Template.bind({});
-Component.args = { ...Component.args, children: 'label' };
+export const Default: Story = {
+  args: {
+    children: 'label',
+  },
+};

@@ -16,8 +16,6 @@ type SharedControlProps =
   | ComponentPropsWithoutRef<'textarea'>;
 
 export type FieldProps = {
-  /** An error message, which marks the controls in the field as invalid. */
-  error?: string;
   children?: ReactNode;
 } & SharedControlProps;
 
