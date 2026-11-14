@@ -50,21 +50,21 @@ As mentioned in the introduction, the project is still in alpha, which means tha
 ### Early alpha
 
 - [x] Individual form components
-  - [x] Input
-  - [x] Textarea
+  - [x] Button
   - [x] Checkbox
+  - [x] Field
+  - [x] Fieldset
+  - [x] Input
+  - [x] Label
+  - [x] Legend
   - [x] Radio
   - [x] Radio Group
   - [x] Select
-  - [x] Label
-  - [x] Fieldset
-  - [x] Legend
-  - [x] Field
-  - [x] Button
+  - [x] Textarea
 - [x] Layout components
   - [x] Accordion
-  - [x] Backdrop
   - [x] Alert
+  - [x] Backdrop
 - [x] Utility components
   - [x] DangerousHTML
   - [x] Descendants
@@ -73,18 +73,14 @@ As mentioned in the introduction, the project is still in alpha, which means tha
 ### Alpha
 
 - [x] FormFields
-  - [x] InputField
   - [x] CheckboxField
+  - [x] InputField
   - [x] RadioField
   - [x] SelectField
 - [x] Layout components
   - [x] AccordionGroup
 - [x] Utility components
   - [x] BaseField
-- [x] Other tasks
-  - [x] Add tests for InputField
-  - [x] Add tests for RadioField
-  - [x] Add tests for SelectField
 
 ### Beta
 
