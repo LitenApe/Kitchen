@@ -1,4 +1,0 @@
-import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{t}from"./jsx-runtime-MKhVqBIO.js";import{n,t as r}from"./legend-D9VIhRGp.js";var i,a,o,s,c;function l(){return(l=e((()=>{r(),i=t(),a={title:`Atom/Legend`,component:n,parameters:{docs:{subtitle:`Names a group of form controls`,description:{component:"A legend is the caption of a `fieldset`. It gives a group of related form\ncontrols, such as the radios in a `RadioGroup`, their accessible name. It\nmust be the first child of the `fieldset` it describes."}}}},o=({children:e,...t})=>(0,i.jsx)(n,{...t,children:e}),s=o.bind({}),s.args={...s.args,children:`I'm a legend`},c=[`Legend`],s.parameters={...s.parameters,docs:{...s.parameters?.docs,source:{originalSource:`({
-  children,
-  ...args
-}) => <Component {...args}>{children}</Component>`,...s.parameters?.docs?.source}}}})))()}l();export{s as Legend,c as __namedExportsOrder,a as default};

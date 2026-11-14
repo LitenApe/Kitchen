@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";function t(e){let t=e[`aria-disabled`];return e.disabled===!0||t===!0||t===`true`}function n(){return(n=e((()=>{})))()}export{t as n,n as t};

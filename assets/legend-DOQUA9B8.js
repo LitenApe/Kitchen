@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{t}from"./jsx-runtime-MKhVqBIO.js";function n(e){return(0,r.jsx)(`legend`,{...e})}var r;function i(){return(i=e((()=>{r=t()})))()}function a(){return(a=e((()=>{i()})))()}export{n,i as r,a as t};

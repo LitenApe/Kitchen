@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{t}from"./jsx-runtime-MKhVqBIO.js";import{n,t as r}from"./base_input-nwaBs3Yy.js";function i(e){return(0,a.jsx)(n,{...e,type:`checkbox`})}var a;function o(){return(o=e((()=>{r(),a=t()})))()}function s(){return(s=e((()=>{o()})))()}export{i as n,o as r,s as t};

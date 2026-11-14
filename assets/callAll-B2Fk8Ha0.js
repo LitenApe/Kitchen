@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";import{n as t}from"./isDefined-BsJ_g28Y.js";function n(...e){let n=e.filter(t);return(...e)=>{n.forEach(t=>t(...e))}}function r(){return(r=e((()=>{})))()}export{r as n,n as t};

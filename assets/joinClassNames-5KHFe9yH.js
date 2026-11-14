@@ -1,0 +1,1 @@
+import{n as e}from"./rolldown-runtime-sJBDdmOt.js";function t(...e){let t=e.filter(e=>typeof e==`string`&&e!==``);return t.length===0?void 0:t.join(` `)}function n(){return(n=e((()=>{})))()}export{t as n,n as t};
