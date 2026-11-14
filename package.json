@@ -1,6 +1,6 @@
 {
   "name": "kitchen",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "private": true,
   "type": "module",
   "scripts": {
@@ -12,18 +12,18 @@
     "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,css}\""
   },
   "prettier": {
+    "arrowParens": "always",
+    "bracketSameLine": false,
+    "bracketSpacing": true,
+    "endOfLine": "lf",
+    "jsxSingleQuote": false,
     "printWidth": 80,
-    "tabWidth": 2,
-    "useTabs": false,
+    "quoteProps": "as-needed",
     "semi": true,
     "singleQuote": true,
-    "quoteProps": "as-needed",
-    "jsxSingleQuote": false,
+    "tabWidth": 2,
     "trailingComma": "es5",
-    "bracketSpacing": true,
-    "bracketSameLine": false,
-    "arrowParens": "always",
-    "endOfLine": "lf"
+    "useTabs": false
   },
   "dependencies": {
     "react": "^19.3.1",
