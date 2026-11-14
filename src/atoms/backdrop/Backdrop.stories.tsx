@@ -8,7 +8,9 @@ import { Backdrop as Component } from '.';
  *
  * The backdrop is fixed to the viewport and placed above the page content
  * (`z-index: 1000`). It is only rendered while `visible` is set. Anything
- * passed as `children` is rendered inside the backdrop.
+ * passed as `children` is rendered inside the backdrop. Its look can be
+ * adjusted with `className` or `style`, which are applied on top of its own
+ * styling.
  */
 export default {
   title: 'Atom/Backdrop',
@@ -24,7 +26,7 @@ export default {
       type: 'boolean',
     },
   },
-} as Meta;
+} satisfies Meta;
 
 const Template: StoryFn = (args) => <Component {...args} />;
 

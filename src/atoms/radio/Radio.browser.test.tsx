@@ -2,6 +2,7 @@ import { createRef } from 'react';
 import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
 import { Field } from '../field';
+import { RadioGroupContext } from '../radio_group/bones/RadioGroupContext';
 import Radio from './Radio';
 
 describe('Radio general behavior', () => {
@@ -47,5 +48,29 @@ describe('Radio general behavior', () => {
     );
     const element = page.getByRole('radio');
     await expect.element(element).toHaveAttribute('id');
+  });
+
+  test('is never marked as invalid itself', async () => {
+    await render(<Radio />);
+    await expect
+      .element(page.getByRole('radio'))
+      .not.toHaveAttribute('aria-invalid');
+  });
+
+  test("takes its group's error as its validation message", async () => {
+    await render(
+      <RadioGroupContext
+        value={{ getGroupProps: (props) => props, error: 'Choose an option' }}
+      >
+        <Radio />
+      </RadioGroupContext>
+    );
+    const radio = page.getByRole('radio');
+
+    await expect.element(radio).not.toHaveAttribute('aria-invalid');
+    expect(radio.element()).toHaveProperty(
+      'validationMessage',
+      'Choose an option'
+    );
   });
 });

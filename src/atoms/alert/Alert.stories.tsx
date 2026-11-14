@@ -11,10 +11,12 @@ import { Alert as Component } from '.';
  * interrupts whatever the screen reader is reading. Pass `aria-live="polite"`
  * to wait until the screen reader has finished instead.
  *
- * The content is inserted shortly after the element has mounted. Screen
- * readers only announce changes to live regions which already exist, so a
- * message rendered at the same time as its container would go unnoticed. The
- * message is announced again whenever its content changes.
+ * Screen readers only announce changes to live regions they already know
+ * about, so a message rendered together with its container could go
+ * unnoticed. `Alert` therefore holds its content back for 100 ms after it
+ * mounts, and shows every later change straight away. To announce a message
+ * the moment it arrives, render the `Alert` ahead of time and only change its
+ * content.
  */
 export default {
   title: 'Atom/Alert',
@@ -33,7 +35,7 @@ export default {
       type: 'string',
     },
   },
-} as Meta;
+} satisfies Meta;
 
 const Template: StoryFn = (args) => <Component as="p" {...args} />;
 

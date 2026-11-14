@@ -119,8 +119,11 @@ describe('AccordionGroup general behavior', () => {
 
     await userEvent.click(buttons[1]);
     expect(mock).toHaveBeenCalledTimes(1);
-    expect(mock.mock.calls[0][1]).toBe(1);
-    expect(mock.mock.calls[0][2]).toBe(true);
+    expect(mock).toHaveBeenLastCalledWith(
+      expect.objectContaining({ type: 'click' }),
+      1,
+      true
+    );
 
     await rerender(
       <AccordionGroup onClick={mock} open={1}>
@@ -138,8 +141,11 @@ describe('AccordionGroup general behavior', () => {
 
     await userEvent.click(buttons[1]);
     expect(mock).toHaveBeenCalledTimes(2);
-    expect(mock.mock.calls[1][1]).toBe(1);
-    expect(mock.mock.calls[1][2]).toBe(false);
+    expect(mock).toHaveBeenLastCalledWith(
+      expect.objectContaining({ type: 'click' }),
+      1,
+      false
+    );
   });
 
   test('onClick is suppressed when onClick handler is supplied but open is not', async () => {
@@ -165,6 +171,10 @@ describe('AccordionGroup general behavior', () => {
     expect(mock).not.toHaveBeenCalled();
     await userEvent.click(buttons[1]);
     expect(mock).not.toHaveBeenCalled();
+    await expect.element(buttons[1]).toHaveAttribute('aria-expanded', 'false');
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining('AccordionGroup received a change handler')
+    );
 
     warn.mockRestore();
   });
@@ -189,7 +199,63 @@ describe('AccordionGroup general behavior', () => {
 
     const testContainer = page.getByTestId('test-container');
     await expect.element(testContainer).not.toBeInTheDocument();
+    expect(page.getByRole('button').all()).toHaveLength(3);
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining('only accepts Accordion elements')
+    );
 
     warn.mockRestore();
+  });
+
+  test('follows "open" when controlled', async () => {
+    const { rerender } = await render(
+      <AccordionGroup open={0} onClick={vi.fn()}>
+        <Accordion>
+          <AccordionHeader></AccordionHeader>
+        </Accordion>
+        <Accordion>
+          <AccordionHeader></AccordionHeader>
+        </Accordion>
+      </AccordionGroup>
+    );
+    const buttons = page.getByRole('button').all();
+    await expect.element(buttons[0]).toHaveAttribute('aria-expanded', 'true');
+
+    await rerender(
+      <AccordionGroup open={1} onClick={vi.fn()}>
+        <Accordion>
+          <AccordionHeader></AccordionHeader>
+        </Accordion>
+        <Accordion>
+          <AccordionHeader></AccordionHeader>
+        </Accordion>
+      </AccordionGroup>
+    );
+
+    await expect.element(buttons[0]).toHaveAttribute('aria-expanded', 'false');
+    await expect.element(buttons[1]).toHaveAttribute('aria-expanded', 'true');
+  });
+
+  test("an accordion's own onClick is invoked as well", async () => {
+    const mock = vi.fn();
+    await render(
+      <AccordionGroup>
+        <Accordion onClick={mock}>
+          <AccordionHeader></AccordionHeader>
+        </Accordion>
+        <Accordion>
+          <AccordionHeader></AccordionHeader>
+        </Accordion>
+      </AccordionGroup>
+    );
+    const buttons = page.getByRole('button').all();
+
+    await userEvent.click(buttons[0]);
+
+    expect(mock).toHaveBeenCalledExactlyOnceWith(
+      expect.objectContaining({ type: 'click' }),
+      true
+    );
+    await expect.element(buttons[0]).toHaveAttribute('aria-expanded', 'true');
   });
 });

@@ -26,7 +26,7 @@ export default {
       description: 'The element to render the HTML into. Defaults to `div`.',
     },
   },
-} as Meta;
+} satisfies Meta;
 
 const Template: StoryFn = (args) => <Component content="" {...args} />;
 

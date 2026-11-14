@@ -1,7 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react-vite';
-import { createRef } from 'react';
 import { Descendant as Component, useDescendant } from '.';
-import { useMount } from '../../utils/hooks/useMount';
+import styles from './Descendant.stories.module.css';
 
 /**
  * `Descendant` lets a set of related elements know their position among each
@@ -15,9 +14,8 @@ import { useMount } from '../../utils/hooks/useMount';
  * - a PIN with one input per digit, where typing a digit moves to the next
  *   input and Backspace moves back to the previous one
  *
- * Wrap the elements in `Descendant` and call `useDescendant` in each of them.
- * Once an element has mounted, register its ref with `register`, and the
- * hook provides:
+ * Wrap the elements in `Descendant`, call `useDescendant` in each of them and
+ * attach the `ref` it returns to the element. The hook then provides:
  *
  * - `index`: the element's position, counted in document order regardless of
  *   how deeply it is nested
@@ -37,42 +35,32 @@ export default {
       subtitle: 'Tracks the order of related elements for focus navigation',
     },
   },
-} as Meta;
+} satisfies Meta;
 
-function TestComponent({ pos }: { pos: number }) {
-  const ref = createRef<HTMLParagraphElement>();
-  const { index, register } = useDescendant();
-
-  useMount(() => {
-    register(ref);
-  });
-
-  return (
-    <p ref={ref} data-id={pos}>
-      Position of element: {index}
-    </p>
-  );
+function Position() {
+  const { index, ref } = useDescendant<HTMLParagraphElement>();
+  return <p ref={ref}>Position of element: {index}</p>;
 }
 
 const Template: StoryFn = (args) => (
   <Component {...args}>
-    <TestComponent pos={0} />
-    <div style={{ padding: 5 }}>
-      <TestComponent pos={1} />
+    <Position />
+    <div className={styles.nested}>
+      <Position />
     </div>
-    <div style={{ padding: 10 }}>
+    <div className={styles.deeper}>
       <div>
-        <TestComponent pos={2} />
+        <Position />
       </div>
     </div>
-    <div style={{ padding: 20 }}>
+    <div className={styles.deepest}>
       <div>
         <div>
-          <TestComponent pos={3} />
+          <Position />
         </div>
       </div>
     </div>
-    <TestComponent pos={4} />
+    <Position />
   </Component>
 );
 

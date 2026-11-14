@@ -1,3 +1,3 @@
 export { default as Input } from './Input';
 export type { InputProps } from './Input';
-export type { PermittedTags } from './types';
+export type { AffixProps } from './types';

@@ -49,7 +49,7 @@ export default {
       type: 'function',
     },
   },
-} as Meta;
+} satisfies Meta;
 
 const Template: StoryFn = ({ children, ...args }) => (
   <Component {...args}>{children}</Component>

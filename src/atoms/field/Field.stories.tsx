@@ -14,7 +14,9 @@ import { Field as Component } from '.';
  * This links a label to its control without wiring up ids by hand. Props set
  * directly on a component take precedence over the ones shared by the field,
  * so a field-wide prop such as `error` or `onChange` can still be overridden
- * for a single control.
+ * for a single control. `aria-describedby` is the exception: the field's and
+ * the control's are combined, so that a description shared by the field, such
+ * as an error message, is never lost.
  *
  * `Field` does not render an element of its own. Use `BaseField` when you also
  * want an error message to be shown.
@@ -27,7 +29,7 @@ export default {
       subtitle: 'Links a label to its form control',
     },
   },
-} as Meta;
+} satisfies Meta;
 
 const Template: StoryFn = ({ children, ...args }) => (
   <Component {...args}>{children}</Component>

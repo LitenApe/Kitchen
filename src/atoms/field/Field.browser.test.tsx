@@ -1,6 +1,8 @@
 import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
 import { Field, FieldContext } from '.';
+import { BaseInput } from '../base_input';
+import { Label } from '../label';
 
 describe('Field general behaviour', () => {
   test('renders without crashing', async () => {
@@ -18,12 +20,12 @@ describe('Field general behaviour', () => {
       </Field>
     );
     const input = page.getByTestId('test');
-    expect(input.element().id).not.toBeUndefined();
+    expect(input.element().id).not.toBe('');
   });
 
-  test('Field prefixes provided id with "form-field"', async () => {
+  test('Field provides its own id when given one', async () => {
     await render(
-      <Field>
+      <Field id="custom-id">
         <FieldContext.Consumer>
           {({ getFieldProps }) => (
             <input {...getFieldProps({})} data-testid="test" />
@@ -32,7 +34,7 @@ describe('Field general behaviour', () => {
       </Field>
     );
     const input = page.getByTestId('test');
-    expect(input.element().id).toMatch(/form-field/);
+    expect(input.element().id).toBe('custom-id');
   });
 
   test('Props is forwarded', async () => {
@@ -54,5 +56,46 @@ describe('Field general behaviour', () => {
     await userEvent.type(input, testInput);
 
     expect(mock).toHaveBeenCalledTimes(testInput.length);
+  });
+
+  test("a control's own props take precedence over the field's", async () => {
+    await render(
+      <Field name="field">
+        <FieldContext.Consumer>
+          {({ getFieldProps }) => (
+            <input {...getFieldProps({ name: 'own' })} data-testid="test" />
+          )}
+        </FieldContext.Consumer>
+      </Field>
+    );
+
+    await expect
+      .element(page.getByTestId('test'))
+      .toHaveAttribute('name', 'own');
+  });
+
+  test('links its label to its control', async () => {
+    await render(
+      <Field>
+        <Label>Name</Label>
+        <BaseInput />
+      </Field>
+    );
+
+    expect(page.getByLabelText('Name').element()).toBe(
+      page.getByRole('textbox').element()
+    );
+  });
+
+  test("keeps its aria-describedby next to a control's own", async () => {
+    await render(
+      <Field aria-describedby="error">
+        <BaseInput aria-describedby="hint" />
+      </Field>
+    );
+
+    await expect
+      .element(page.getByRole('textbox'))
+      .toHaveAttribute('aria-describedby', 'error hint');
   });
 });

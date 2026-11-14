@@ -8,8 +8,8 @@
     "build-storybook": "storybook build",
     "test": "vitest",
     "typecheck": "tsc --noEmit",
-    "lint": "prettier --check \"src/**/*.(j|t)s(x)?\"",
-    "format": "prettier --write \"src/**/*.(j|t)s(x)?\""
+    "lint": "prettier --check \"src/**/*.{js,jsx,ts,tsx,css}\"",
+    "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx,css}\""
   },
   "prettier": {
     "printWidth": 80,

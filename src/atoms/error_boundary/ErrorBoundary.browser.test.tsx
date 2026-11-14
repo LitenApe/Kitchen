@@ -39,6 +39,9 @@ describe('ErrorBoundary default behavior', () => {
     await expect
       .element(page.getByText('fallback component rendered'))
       .toBeInTheDocument();
+    await expect
+      .element(page.getByText('test content'))
+      .not.toBeInTheDocument();
 
     error.mockRestore();
   });
@@ -53,8 +56,10 @@ describe('ErrorBoundary default behavior', () => {
       </ErrorBoundary>
     );
 
-    expect(mock).toHaveBeenCalledTimes(1);
-    expect(mock.mock.calls[0]).toHaveLength(2);
+    expect(mock).toHaveBeenCalledExactlyOnceWith(
+      new Error('test error'),
+      expect.objectContaining({ componentStack: expect.any(String) })
+    );
 
     error.mockRestore();
   });

@@ -1,9 +1,18 @@
-import { page } from 'vitest/browser';
+import { type Locator, page } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
 
 import { BaseField } from '.';
 import { Input } from '../../atoms/input';
 import { Label } from '../../atoms/label';
+
+/** Finds the alert in which BaseField shows its error message. */
+function getAlert(container: HTMLElement): Locator {
+  const alert = container.querySelector('[aria-live="assertive"]');
+  if (alert === null) {
+    throw new Error('BaseField did not render an alert');
+  }
+  return page.elementLocator(alert);
+}
 
 describe('BaseField default behavior', () => {
   test('renders without crashing', async () => {
@@ -15,7 +24,7 @@ describe('BaseField default behavior', () => {
     );
   });
 
-  test('dont render alert unless error is sent inn', async () => {
+  test('keeps its alert mounted, and empty until an error is set', async () => {
     const { rerender, container } = await render(
       <BaseField>
         <Label>Some label</Label>
@@ -23,8 +32,8 @@ describe('BaseField default behavior', () => {
       </BaseField>
     );
 
-    const errorNotMounted = container.querySelector('[aria-live="polite"]');
-    expect(errorNotMounted).toBeNull();
+    const alert = getAlert(container);
+    await expect.element(alert).toBeEmptyDOMElement();
 
     await rerender(
       <BaseField error="some error">
@@ -33,8 +42,7 @@ describe('BaseField default behavior', () => {
       </BaseField>
     );
 
-    const errorMounted = container.querySelector('[aria-live="assertive"]');
-    expect(errorMounted).not.toBeNull();
+    await expect.element(alert).toHaveTextContent('some error');
   });
 
   test('input is invalid if error is sent in', async () => {
@@ -70,7 +78,7 @@ describe('BaseField default behavior', () => {
     const error = container.querySelector('[aria-live="assertive"]');
     expect(error).not.toBeNull();
 
-    const errorId = (error as Element).getAttribute('id');
+    const errorId = error?.getAttribute('id');
     await expect.element(input).toHaveAttribute('aria-describedby', errorId);
   });
 
@@ -111,5 +119,19 @@ describe('BaseField default behavior', () => {
     expect(descriptions).toContain(alert?.id);
     expect(descriptions).toContain(postfix?.id);
     expect(descriptions).toContain('anotherId');
+  });
+
+  test('the error still describes a control with a description of its own', async () => {
+    const { container } = await render(
+      <BaseField error="some error">
+        <Label>Some label</Label>
+        <Input aria-describedby="hint" />
+      </BaseField>
+    );
+
+    const alert = container.querySelector('[aria-live="assertive"]');
+    await expect
+      .element(page.getByRole('textbox'))
+      .toHaveAttribute('aria-describedby', `${alert?.id} hint`);
   });
 });

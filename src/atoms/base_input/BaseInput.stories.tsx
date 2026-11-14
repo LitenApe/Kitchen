@@ -13,7 +13,8 @@ import { Label } from '../label';
  * - takes its `id` and any shared props from a surrounding `Field`, so the
  *   `Label` in the same field is linked to it
  * - marks itself as invalid with `aria-invalid` when `error` is set, and uses
- *   the error as the browser's native validation message
+ *   the error as the browser's native validation message. A radio only takes
+ *   the validation message, as its group is the one marked as invalid.
  */
 export default {
   title: 'Atom/BaseInput',
@@ -63,7 +64,7 @@ export default {
       type: 'string',
     },
   },
-} as Meta;
+} satisfies Meta;
 
 // `as` goes to the input itself, since the field would only pass it on as an
 // HTML attribute

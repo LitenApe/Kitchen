@@ -1,65 +1,73 @@
 import {
+  type RefCallback,
   createContext,
-  MutableRefObject,
+  use,
   useCallback,
-  useContext,
-  useRef,
+  useState,
 } from 'react';
-import { isNull } from '../../../utils/functions/isNull';
-import { useDestroy } from '../../../utils/hooks/useDestroy';
-import { DescendantManager } from './DescendantManager';
 
-type ManagerType = InstanceType<typeof DescendantManager>;
+import { getNextIndex, getPreviousIndex } from './utils';
 
-type Context = {
-  register: ManagerType['register'];
-  unregister: ManagerType['unregister'];
-  manager: InstanceType<typeof DescendantManager>;
-  descendants?: number;
+export type DescendantContextValue = {
+  /** The registered elements, in document order. */
+  readonly elements: ReadonlyArray<HTMLElement>;
+  readonly register: (element: HTMLElement) => void;
+  readonly unregister: (element: HTMLElement) => void;
 };
 
-export const DescendantContext = createContext<Context | null>(null);
+export const DescendantContext = createContext<DescendantContextValue | null>(
+  null
+);
 
-export function useDescendant() {
-  const context = useContext(DescendantContext);
-  const ref = useRef<HTMLElement | null>(null);
+type Descendant<T extends HTMLElement> = {
+  /** The element's position among the descendants, or -1 until it is registered. */
+  index: number;
+  /** Attach to the element to register it as a descendant. */
+  ref: RefCallback<T>;
+  /** The next descendant. Wraps around to the first unless `loop` is false. */
+  next: (loop?: boolean) => HTMLElement | undefined;
+  /** The previous descendant. Wraps around to the last unless `loop` is false. */
+  prev: (loop?: boolean) => HTMLElement | undefined;
+};
 
-  if (isNull(context)) {
+function useDescendantContext(): DescendantContextValue {
+  const context = use(DescendantContext);
+
+  if (context === null) {
     throw new Error('Component must be wrapped by Descendant');
   }
 
-  useDestroy(() => {
-    context.unregister(ref.current);
-  });
+  return context;
+}
 
-  const register = useCallback(
-    (node: MutableRefObject<HTMLElement | null>) => {
-      context.register(node.current);
-      ref.current = node.current;
+/**
+ * Registers an element as a descendant of the surrounding `Descendant`, which
+ * gives it a position in document order and access to its neighbours.
+ */
+export function useDescendant<T extends HTMLElement>(): Descendant<T> {
+  const { elements, register, unregister } = useDescendantContext();
+  const [element, setElement] = useState<T | null>(null);
+
+  const ref = useCallback<RefCallback<T>>(
+    (node) => {
+      if (node === null) {
+        return;
+      }
+
+      register(node);
+      setElement(node);
+      return () => unregister(node);
     },
-    [context, ref]
+    [register, unregister]
   );
 
-  const index = context.manager.getIndex(ref.current);
-
-  const next = useCallback(
-    (loop: boolean = true): HTMLElement | undefined => {
-      return context.manager.next(index, loop);
-    },
-    [context, index]
-  );
-
-  const prev = useCallback(
-    (loop: boolean = true) => {
-      return context.manager.prev(index, loop);
-    },
-    [context, index]
-  );
+  const index = element === null ? -1 : elements.indexOf(element);
 
   return {
     index,
-    register,
-    next,
-    prev,
+    ref,
+    next: (loop = true) => elements[getNextIndex(index, elements.length, loop)],
+    prev: (loop = true) =>
+      elements[getPreviousIndex(index, elements.length, loop)],
   };
 }

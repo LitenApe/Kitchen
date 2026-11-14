@@ -10,7 +10,9 @@ import { Label } from '../label';
  * radio inside it.
  *
  * `Radio` is a `BaseInput` with `type="radio"`, so inside a `Field` it is
- * linked to its `Label`, and it supports `error` in the same way.
+ * linked to its `Label`. A radio cannot be invalid on its own, so it takes no
+ * `error`. Set `error` on its `RadioGroup` instead, which marks the group as
+ * invalid.
  */
 export default {
   title: 'Atom/Radio',
@@ -20,7 +22,7 @@ export default {
       subtitle: 'Lets users pick one option from a set',
     },
   },
-} as Meta;
+} satisfies Meta;
 
 const Template: StoryFn = (args) => (
   <Field {...args}>

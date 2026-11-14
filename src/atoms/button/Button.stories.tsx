@@ -12,7 +12,8 @@ import { Button as Component } from '.';
  * Setting `disabled` or `aria-disabled` makes the button ignore clicks. Both
  * are rendered as `aria-disabled` instead of the `disabled` attribute, which
  * keeps the button in the tab order so keyboard users can still discover it.
- * A natively disabled button is skipped when tabbing.
+ * A natively disabled button is skipped when tabbing. A disabled `a` does not
+ * navigate either.
  */
 export default {
   title: 'Atom/Button',
@@ -38,7 +39,7 @@ export default {
       type: 'boolean',
     },
   },
-} as Meta;
+} satisfies Meta;
 
 const Template: StoryFn = (args) => <Component {...args} />;
 

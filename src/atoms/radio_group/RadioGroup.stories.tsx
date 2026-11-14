@@ -12,9 +12,19 @@ import { Field } from '../field';
  * own `Field` and `Label`.
  *
  * Props passed to the group, such as `name`, `onChange` or `required`, are
- * shared with every `Radio` inside it rather than set on the `fieldset`.
- * `onBlur` is only called when focus leaves the group, and not when it moves
- * between the radios inside it.
+ * shared with every `Radio` inside it rather than set on the `fieldset`. The
+ * `aria-` props which name, describe or validate the group, such as
+ * `aria-label`, `aria-labelledby` or `aria-required`, are set on the
+ * `fieldset` instead, as they belong to the group as a whole. `onBlur` is
+ * only called when focus leaves the group, and not when it moves between the
+ * radios inside it.
+ *
+ * Errors belong to the group as a whole. `error` marks the `fieldset` as
+ * invalid with `aria-invalid`, and becomes the native validation message of
+ * every radio, which keeps the form from being submitted. Show the message
+ * yourself and point to it with `aria-describedby`, which describes the
+ * `fieldset` rather than its radios. Inside a field, such as the one
+ * `RadioField` renders, the group takes the field's error and descriptions.
  *
  * Select a radio and then move focus out of the group to see `onChange` and
  * `onBlur` in the **Actions** panel.
@@ -38,8 +48,13 @@ export default {
     onBlur: {
       description: 'Called when focus leaves the group.',
     },
+    error: {
+      description:
+        'An error message, which marks the group as invalid and keeps the form from being submitted.',
+      type: 'string',
+    },
   },
-} as Meta;
+} satisfies Meta;
 
 const Template: StoryFn = (args) => (
   <Component {...args}>

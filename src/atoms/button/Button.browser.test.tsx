@@ -99,4 +99,55 @@ describe('Button general behavior', () => {
     await expect.element(button).not.toHaveAttribute('disabled');
     await expect.element(button).toHaveAttribute('aria-disabled', 'true');
   });
+
+  test('click handler is invoked when rendered as anchor', async () => {
+    const mock = vi.fn();
+    await render(
+      <Button as="a" onClick={mock}>
+        Test
+      </Button>
+    );
+
+    await userEvent.click(page.getByText('Test'));
+
+    expect(mock).toHaveBeenCalledTimes(1);
+  });
+
+  test('disabled suppresses click event when rendered as anchor', async () => {
+    const mock = vi.fn();
+    await render(
+      <Button as="a" onClick={mock} disabled>
+        Test
+      </Button>
+    );
+    const link = page.getByText('Test');
+
+    await expect.element(link).toHaveAttribute('aria-disabled', 'true');
+    await expect.element(link).not.toHaveAttribute('disabled');
+    await userEvent.click(link, { force: true });
+    expect(mock).not.toHaveBeenCalled();
+  });
+
+  test('refs are attached to the anchor when rendered as anchor', async () => {
+    const ref = createRef<HTMLAnchorElement>();
+    await render(
+      <Button as="a" ref={ref}>
+        Test
+      </Button>
+    );
+
+    expect(ref.current).toBe(page.getByText('Test').element());
+  });
+
+  test('disabled keeps an anchor from navigating', async () => {
+    await render(
+      <Button as="a" href="#navigated" disabled>
+        Test
+      </Button>
+    );
+
+    await userEvent.click(page.getByText('Test'), { force: true });
+
+    expect(window.location.hash).not.toBe('#navigated');
+  });
 });

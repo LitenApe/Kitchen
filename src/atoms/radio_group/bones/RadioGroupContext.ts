@@ -1,15 +1,24 @@
-import { ComponentPropsWithoutRef, createContext, useContext } from 'react';
+import { type FocusEventHandler, createContext, use } from 'react';
 
-interface Context {
-  readonly getGroupProps: <T extends ComponentPropsWithoutRef<'input'>>(
-    props: T
-  ) => T;
-}
+export type GroupMemberProps = {
+  onBlur?: FocusEventHandler<HTMLInputElement>;
+};
 
-export const RadioGroupContext = createContext<Context>({
+type RadioGroupContextValue = {
+  /**
+   * Merges the props shared by the group with a radio's own props, where the
+   * radio's own props take precedence.
+   */
+  readonly getGroupProps: <T extends GroupMemberProps>(props: T) => T;
+  /** The group's error, which keeps its radios from being submitted. */
+  readonly error: string | undefined;
+};
+
+export const RadioGroupContext = createContext<RadioGroupContextValue>({
   getGroupProps: (props) => props,
+  error: undefined,
 });
 
-export function useRadioGroup() {
-  return useContext(RadioGroupContext);
+export function useRadioGroup(): RadioGroupContextValue {
+  return use(RadioGroupContext);
 }
