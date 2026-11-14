@@ -1,8 +1,8 @@
 import { Meta, StoryFn } from '@storybook/react-vite';
 import {
-  Select as Component,
-  Option as ComponentOption,
-  OptionGroup as ComponentOptionGroup,
+  Select,
+  Option,
+  OptionGroup,
 } from '.';
 import { Field } from '../field';
 import { Label } from '../label';
@@ -18,7 +18,7 @@ import { Label } from '../label';
  */
 export default {
   title: 'Atom/Select',
-  component: Component,
+  component: Select,
   parameters: {
     docs: {
       subtitle: 'Lets users pick from a list of options',
@@ -40,31 +40,29 @@ export default {
 const Template: StoryFn = ({ children, ...args }) => (
   <Field>
     <Label>Choose a camera manufacturer</Label>
-    <Component {...args}>{children}</Component>
+    <Select {...args}>{children}</Select>
   </Field>
 );
 
-export const Select = Template.bind({});
-Select.args = {
-  ...Select.args,
-  children: (
-    <>
-      <ComponentOptionGroup label="China">
-        <ComponentOption value="dji">DJI</ComponentOption>
-      </ComponentOptionGroup>
-      <ComponentOptionGroup label="Denmark">
-        <ComponentOption value="phase-one">Phase One</ComponentOption>
-      </ComponentOptionGroup>
-      <ComponentOptionGroup label="Japanese">
-        <ComponentOption value="fujifilm">Fujifilm</ComponentOption>
-        <ComponentOption value="canon">Canon</ComponentOption>
-        <ComponentOption value="nikon">Nikon</ComponentOption>
-      </ComponentOptionGroup>
-      <ComponentOptionGroup label="German">
-        <ComponentOption value="leica">Leica</ComponentOption>
-      </ComponentOptionGroup>
-    </>
-  ),
+export const Component = Template.bind({});
+Component.args = {
+  ...Component.args,
+  children: [
+      <OptionGroup key="China" label="China">
+        <Option value="dji">DJI</Option>
+      </OptionGroup>,
+      <OptionGroup key="Denmark" label="Denmark">
+        <Option value="phase-one">Phase One</Option>
+      </OptionGroup>,
+      <OptionGroup key="Japan" label="Japanese">
+        <Option value="fujifilm">Fujifilm</Option>
+        <Option value="canon">Canon</Option>
+        <Option value="nikon">Nikon</Option>
+      </OptionGroup>,
+      <OptionGroup key="German" label="German">
+        <Option value="leica">Leica</Option>
+      </OptionGroup>
+  ]
 };
 
 /**
@@ -72,10 +70,10 @@ Select.args = {
  * reports when the option is chosen, and its content is the text shown to the
  * user.
  */
-export const Option = Template.bind({});
-Option.args = {
-  ...Option.args,
-  children: <ComponentOption>An option</ComponentOption>,
+export const ComponentOption = Template.bind({});
+ComponentOption.args = {
+  ...ComponentOption.args,
+  children: <Option>An option</Option>,
 };
 
 /**
@@ -83,9 +81,9 @@ Option.args = {
  * `label` and cannot be selected itself. This example shows an empty group,
  * and the `Select` story above shows groups with options in them.
  */
-export const OptionGroup = Template.bind({});
-OptionGroup.storyName = 'OptionGroup';
-OptionGroup.args = {
-  ...OptionGroup.args,
-  children: <ComponentOptionGroup label="Option Group" />,
+export const ComponentOptionGroup = Template.bind({});
+ComponentOptionGroup.storyName = 'OptionGroup';
+ComponentOptionGroup.args = {
+  ...ComponentOptionGroup.args,
+  children: <OptionGroup label="Option Group" />,
 };

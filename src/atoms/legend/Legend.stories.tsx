@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react-vite';
-import { Legend as Component } from '.';
+import { Legend } from '.';
 
 /**
  * A legend is the caption of a `fieldset`. It gives a group of related form
@@ -8,7 +8,7 @@ import { Legend as Component } from '.';
  */
 export default {
   title: 'Atom/Legend',
-  component: Component,
+  component: Legend,
   parameters: {
     docs: {
       subtitle: 'Names a group of form controls',
@@ -17,8 +17,8 @@ export default {
 } satisfies Meta;
 
 const Template: StoryFn = ({ children, ...args }) => (
-  <Component {...args}>{children}</Component>
+  <Legend {...args}>{children}</Legend>
 );
 
-export const Legend = Template.bind({});
-Legend.args = { ...Legend.args, children: "I'm a legend" };
+export const Component = Template.bind({});
+Component.args = { ...Component.args, children: "I'm a legend" };

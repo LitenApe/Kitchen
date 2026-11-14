@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react-vite';
 
-import { InputField as Component } from '.';
+import { InputField } from '.';
 
 /**
  * `InputField` is a ready-made text input with a label and an error message,
@@ -13,7 +13,7 @@ import { InputField as Component } from '.';
  */
 export default {
   title: 'Molecule/InputField',
-  component: Component,
+  component: InputField,
   parameters: {
     docs: {
       subtitle: 'A text input with a label and an error message',
@@ -32,12 +32,12 @@ export default {
   },
 } satisfies Meta;
 
-const Template: StoryFn = (args) => <Component label="field label" {...args} />;
+const Template: StoryFn = (args) => <InputField label="field label" {...args} />;
 
-export const InputField = Template.bind({});
-InputField.storyName = 'InputField';
-InputField.args = {
-  ...InputField.args,
+export const Component = Template.bind({});
+Component.storyName = 'InputField';
+Component.args = {
+  ...Component.args,
   error: '',
   label: 'field label',
 };

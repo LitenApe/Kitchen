@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react-vite';
-import { CheckboxField as Component } from '.';
+import { CheckboxField } from '.';
 
 /**
  * `CheckboxField` is a ready-made checkbox with a label and an error message,
@@ -11,7 +11,7 @@ import { CheckboxField as Component } from '.';
  */
 export default {
   title: 'Molecule/CheckboxField',
-  component: Component,
+  component: CheckboxField,
   parameters: {
     docs: {
       subtitle: 'A checkbox with a label and an error message',
@@ -30,12 +30,12 @@ export default {
   },
 } satisfies Meta;
 
-const Template: StoryFn = (args) => <Component label="field label" {...args} />;
+const Template: StoryFn = (args) => <CheckboxField label="field label" {...args} />;
 
-export const CheckboxField = Template.bind({});
-CheckboxField.storyName = 'CheckboxField';
-CheckboxField.args = {
-  ...CheckboxField.args,
+export const Component = Template.bind({});
+Component.storyName = 'CheckboxField';
+Component.args = {
+  ...Component.args,
   error: '',
   label: 'field label',
 };

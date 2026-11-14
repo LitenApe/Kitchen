@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react-vite';
-import { AccordionGroup as Component } from '.';
+import { AccordionGroup } from '.';
 import {
   Accordion,
   AccordionHeader,
@@ -27,7 +27,7 @@ import {
  */
 export default {
   title: 'Molecule/AccordionGroup',
-  component: Component,
+  component: AccordionGroup,
   parameters: {
     docs: {
       subtitle: 'A set of accordions where only one is open at a time',
@@ -52,7 +52,7 @@ export default {
 } satisfies Meta;
 
 const Template: StoryFn = (args) => (
-  <Component {...args}>
+  <AccordionGroup {...args}>
     <Accordion>
       <AccordionHeader>Content 1</AccordionHeader>
       <AccordionPanel>
@@ -104,13 +104,13 @@ const Template: StoryFn = (args) => (
         nisi eu adipisicing id culpa in incididunt dolore dolor non culpa
       </AccordionPanel>
     </Accordion>
-  </Component>
+  </AccordionGroup>
 );
 
-export const AccordionGroup = Template.bind({});
-AccordionGroup.storyName = 'AccordionGroup';
-AccordionGroup.args = {
-  ...AccordionGroup.args,
+export const Component = Template.bind({});
+Component.storyName = 'AccordionGroup';
+Component.args = {
+  ...Component.args,
   initial: 1,
   // an explicit `undefined` stops Storybook from injecting an action for
   // `onClick`, which would make the group controlled and ignore clicks

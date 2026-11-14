@@ -3,9 +3,10 @@ import {
   composeStory,
   setProjectAnnotations,
 } from '@storybook/react-vite';
+
 import { page } from 'vitest/browser';
-import { render } from 'vitest-browser-react';
 import preview from '../.storybook/preview';
+import { render } from 'vitest-browser-react';
 
 /**
  * Visual regression tests. Every story is rendered and compared against a

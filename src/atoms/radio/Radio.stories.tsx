@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react-vite';
-import { Radio as Component } from '.';
+import { Radio } from '.';
 import { Field } from '../field';
 import { Label } from '../label';
 
@@ -15,7 +15,7 @@ import { Label } from '../label';
  */
 export default {
   title: 'Atom/Radio',
-  component: Component,
+  component: Radio,
   parameters: {
     docs: {
       subtitle: 'Lets users pick one option from a set',
@@ -25,10 +25,10 @@ export default {
 
 const Template: StoryFn = (args) => (
   <Field {...args}>
-    <Component />
+    <Radio />
     <Label>Radio label</Label>
   </Field>
 );
 
-export const Radio = Template.bind({});
-Radio.args = { ...Radio.args };
+export const Component = Template.bind({});
+Component.args = { ...Component.args };

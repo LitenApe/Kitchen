@@ -1,6 +1,6 @@
 import type { JSX } from 'react';
 import { Meta, StoryFn } from '@storybook/react-vite';
-import { ErrorBoundary as Component } from '.';
+import { ErrorBoundary } from '.';
 
 /**
  * An error boundary catches errors thrown while its children render, and
@@ -18,7 +18,7 @@ import { ErrorBoundary as Component } from '.';
  */
 export default {
   title: 'Atom/ErrorBoundary',
-  component: Component,
+  component: ErrorBoundary,
   parameters: {
     docs: {
       subtitle: 'Shows a fallback when its children fail to render',
@@ -41,13 +41,13 @@ function ErrorThrower(): JSX.Element {
 }
 
 const Template: StoryFn = ({ children, ...rest }) => (
-  <Component fallback={() => <p>Fallback component rendered</p>} {...rest}>
+  <ErrorBoundary fallback={() => <p>Fallback component rendered</p>} {...rest}>
     <ErrorThrower />
-  </Component>
+  </ErrorBoundary>
 );
 
-export const ErrorBoundary = Template.bind({});
-ErrorBoundary.storyName = 'ErrorBoundary';
-ErrorBoundary.args = {
-  ...ErrorBoundary.args,
+export const Component = Template.bind({});
+Component.storyName = 'ErrorBoundary';
+Component.args = {
+  ...Component.args,
 };

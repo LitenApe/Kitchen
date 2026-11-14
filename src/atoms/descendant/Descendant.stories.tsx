@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react-vite';
-import { Descendant as Component, useDescendant } from '.';
+import { Descendant, useDescendant } from '.';
 import styles from './Descendant.stories.module.css';
 
 /**
@@ -29,7 +29,7 @@ import styles from './Descendant.stories.module.css';
  */
 export default {
   title: 'Atom/Descendant',
-  component: Component,
+  component: Descendant,
   parameters: {
     docs: {
       subtitle: 'Tracks the order of related elements for focus navigation',
@@ -43,7 +43,7 @@ function Position() {
 }
 
 const Template: StoryFn = (args) => (
-  <Component {...args}>
+  <Descendant {...args}>
     <Position />
     <div className={styles.nested}>
       <Position />
@@ -61,8 +61,8 @@ const Template: StoryFn = (args) => (
       </div>
     </div>
     <Position />
-  </Component>
+  </Descendant>
 );
 
-export const Descendant = Template.bind({});
-Descendant.args = { ...Descendant.args };
+export const Component = Template.bind({});
+Component.args = { ...Component.args };

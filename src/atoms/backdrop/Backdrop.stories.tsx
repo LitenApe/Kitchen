@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react-vite';
-import { Backdrop as Component } from '.';
+import { Backdrop } from '.';
 
 /**
  * A backdrop is a full-screen overlay which dims the page behind it. It is
@@ -14,7 +14,7 @@ import { Backdrop as Component } from '.';
  */
 export default {
   title: 'Atom/Backdrop',
-  component: Component,
+  component: Backdrop,
   parameters: {
     docs: {
       subtitle: 'Dims the page to highlight what needs attention',
@@ -28,7 +28,7 @@ export default {
   },
 } satisfies Meta;
 
-const Template: StoryFn = (args) => <Component {...args} />;
+const Template: StoryFn = (args) => <Backdrop {...args} />;
 
-export const Backdrop = Template.bind({});
-Backdrop.args = { ...Backdrop.args, visible: true };
+export const Component = Template.bind({});
+Component.args = { ...Component.args, visible: true };
