@@ -68,7 +68,6 @@ As mentioned in the introduction, the project is still in alpha, which means tha
   - [x] DangerousHTML
   - [x] Descendants
   - [x] ErrorBoundary
-  - [x] BaseInput
 
 ### Alpha
 

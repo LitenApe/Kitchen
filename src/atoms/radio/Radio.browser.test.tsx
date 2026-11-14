@@ -73,4 +73,62 @@ describe('Radio general behavior', () => {
       'Choose an option'
     );
   });
+
+  test('keeps its validation message when given a ref', async () => {
+    const ref = createRef<HTMLInputElement>();
+    await render(
+      <RadioGroupContext
+        value={{ getGroupProps: (props) => props, error: 'Choose an option' }}
+      >
+        <Radio ref={ref} />
+      </RadioGroupContext>
+    );
+
+    expect(ref.current?.validationMessage).toBe('Choose an option');
+  });
+
+  test('takes the props its group shares, where its own take precedence', async () => {
+    const group = {
+      getGroupProps: <T extends object>(props: T) => ({
+        name: 'group',
+        ...props,
+      }),
+      error: undefined,
+    };
+    await render(
+      <RadioGroupContext value={group}>
+        <Radio value="1" />
+        <Radio value="2" name="own" />
+      </RadioGroupContext>
+    );
+    const [first, second] = page.getByRole('radio').all();
+
+    await expect.element(first).toHaveAttribute('name', 'group');
+    await expect.element(second).toHaveAttribute('name', 'own');
+  });
+
+  test('ignores an error shared by "Field", as it belongs to the group', async () => {
+    await render(
+      <Field error="Choose an option">
+        <Radio />
+      </Field>
+    );
+    const radio = page.getByRole('radio');
+
+    await expect.element(radio).not.toHaveAttribute('error');
+    await expect.element(radio).not.toHaveAttribute('aria-invalid');
+    expect(radio.element()).toHaveProperty('validationMessage', '');
+  });
+
+  test('stays a radio when "Field" shares another type', async () => {
+    await render(
+      <Field type="text">
+        <Radio />
+      </Field>
+    );
+
+    await expect
+      .element(page.getByRole('radio'))
+      .toHaveAttribute('type', 'radio');
+  });
 });

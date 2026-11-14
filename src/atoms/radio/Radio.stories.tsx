@@ -9,10 +9,9 @@ import { Label } from '../label';
  * `RadioGroup`, which shares the `name` and its event handlers with every
  * radio inside it.
  *
- * `Radio` is a `BaseInput` with `type="radio"`, so inside a `Field` it is
- * linked to its `Label`. A radio cannot be invalid on its own, so it takes no
- * `error`. Set `error` on its `RadioGroup` instead, which marks the group as
- * invalid.
+ * Inside a `Field`, `Radio` is linked to its `Label`. A radio cannot be
+ * invalid on its own, so it takes no `error`. Set `error` on its `RadioGroup`
+ * instead, which marks the group as invalid.
  */
 export default {
   title: 'Atom/Radio',

@@ -7,9 +7,10 @@ import { action } from 'storybook/actions';
 
 /**
  * `Input` lets users enter text. It renders an `input` with `type="text"` by
- * default, or a `textarea` for longer text through `as`. It is built on
- * `BaseInput`, so inside a `Field` it is linked to its `Label`, and it
- * supports `error` in the same way.
+ * default, or a `textarea` for longer text through `as`. Inside a `Field`, it
+ * is linked to its `Label`. Setting `error` marks it as invalid with
+ * `aria-invalid`, and uses the error as the browser's native validation
+ * message.
  *
  * A `prefix` or `postfix`, such as a currency symbol or a unit, can be shown
  * before or after the input. It is linked to the input through

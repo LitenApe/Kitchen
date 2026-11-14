@@ -1,3 +1,4 @@
+import { createRef } from 'react';
 import { page } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
 
@@ -139,5 +140,87 @@ describe('Input default behavior', () => {
     const postfix = page.getByText('😁');
 
     await expect.element(postfix).toHaveAttribute('id', postfixId);
+  });
+
+  test('does not pass "as" on as an attribute', async () => {
+    await render(<Input as="textarea" />);
+    await expect.element(page.getByRole('textbox')).not.toHaveAttribute('as');
+  });
+
+  test('its own id takes precedence over the one from "Field"', async () => {
+    await render(
+      <Field>
+        <Input id="own" />
+      </Field>
+    );
+
+    await expect
+      .element(page.getByRole('textbox'))
+      .toHaveAttribute('id', 'own');
+  });
+
+  test('takes props from "Field", where its own props take precedence', async () => {
+    await render(
+      <Field name="field" placeholder="field" error="Enter a value">
+        <Input placeholder="own" />
+      </Field>
+    );
+    const input = page.getByRole('textbox');
+
+    await expect.element(input).toHaveAttribute('name', 'field');
+    await expect.element(input).toHaveAttribute('placeholder', 'own');
+    await expect.element(input).toHaveAttribute('aria-invalid', 'true');
+  });
+
+  test('attaches its ref to the input', async () => {
+    const ref = createRef<HTMLInputElement>();
+    await render(<Input ref={ref} />);
+
+    expect(ref.current).toBe(page.getByRole('textbox').element());
+  });
+
+  test('attaches its ref to the textarea', async () => {
+    const ref = createRef<HTMLTextAreaElement>();
+    await render(<Input as="textarea" ref={ref} />);
+
+    expect(ref.current).toBe(page.getByRole('textbox').element());
+  });
+
+  test('is valid without an error', async () => {
+    await render(<Input />);
+    const input = page.getByRole('textbox');
+
+    await expect.element(input).toHaveAttribute('aria-invalid', 'false');
+    await expect.element(input).toBeValid();
+  });
+
+  test('an error marks it as invalid, with the error as its message', async () => {
+    await render(<Input error="Enter a value" />);
+    const input = page.getByRole('textbox');
+
+    await expect.element(input).toHaveAttribute('aria-invalid', 'true');
+    await expect.element(input).not.toHaveAttribute('error');
+    expect(input.element()).toHaveProperty(
+      'validationMessage',
+      'Enter a value'
+    );
+  });
+
+  test('an error marks a textarea as invalid as well', async () => {
+    await render(<Input as="textarea" error="Enter a value" />);
+    const textarea = page.getByRole('textbox');
+
+    await expect.element(textarea).toHaveAttribute('aria-invalid', 'true');
+    expect(textarea.element()).toHaveProperty(
+      'validationMessage',
+      'Enter a value'
+    );
+  });
+
+  test('keeps its error message when given a ref', async () => {
+    const ref = createRef<HTMLInputElement>();
+    await render(<Input ref={ref} error="Enter a value" />);
+
+    expect(ref.current?.validationMessage).toBe('Enter a value');
   });
 });

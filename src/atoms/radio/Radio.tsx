@@ -1,6 +1,8 @@
 import type { ComponentPropsWithRef, JSX } from 'react';
 
-import { BaseInput } from '../base_input';
+import { useCustomValidity } from '../../utils/hooks/useCustomValidity';
+import { useMergedRefs } from '../../utils/hooks/useMergedRefs';
+import { useField } from '../field';
 import { useRadioGroup } from '../radio_group';
 
 /**
@@ -9,11 +11,26 @@ import { useRadioGroup } from '../radio_group';
  */
 export type RadioProps = Omit<ComponentPropsWithRef<'input'>, 'type'>;
 
-function Radio(props: RadioProps): JSX.Element {
-  const { getGroupProps, error } = useRadioGroup();
+/** A field may also share an error, which a radio leaves to its group. */
+type FieldRadioProps = RadioProps & { error?: string };
 
-  // the group's error keeps the form from being submitted
-  return <BaseInput {...getGroupProps(props)} error={error} type="radio" />;
+/**
+ * A radio, which takes the props its `RadioGroup` shares, and its id and other
+ * props from a surrounding `Field`.
+ */
+function Radio(ownProps: RadioProps): JSX.Element {
+  const { getGroupProps, error } = useRadioGroup();
+  const {
+    error: _fieldError,
+    ref,
+    ...props
+  } = useField().getFieldProps<FieldRadioProps>(getGroupProps(ownProps));
+  // the group's error keeps the form from being submitted, while only the
+  // group is marked as invalid
+  const validityRef = useCustomValidity<HTMLInputElement>(error);
+  const radioRef = useMergedRefs(validityRef, ref);
+
+  return <input {...props} type="radio" ref={radioRef} />;
 }
 
 export default Radio;

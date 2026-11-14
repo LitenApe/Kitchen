@@ -64,4 +64,45 @@ describe('Checkbox general behavior', () => {
       .element(page.getByTestId('test-component'))
       .toHaveAttribute('id');
   });
+
+  test('is valid without an error', async () => {
+    await render(<Checkbox data-testid="test-component" />);
+
+    await expect
+      .element(page.getByTestId('test-component'))
+      .toHaveAttribute('aria-invalid', 'false');
+  });
+
+  test('keeps its error message when given a ref', async () => {
+    const ref = createRef<HTMLInputElement>();
+    await render(<Checkbox ref={ref} error="Accept the terms" />);
+
+    expect(ref.current?.validationMessage).toBe('Accept the terms');
+  });
+
+  test('takes props from "Field", where its own props take precedence', async () => {
+    await render(
+      <Field name="field" value="field" error="Accept the terms">
+        <Checkbox data-testid="test-component" value="own" />
+      </Field>
+    );
+    const checkbox = page.getByTestId('test-component');
+
+    await expect.element(checkbox).toHaveAttribute('name', 'field');
+    await expect.element(checkbox).toHaveAttribute('value', 'own');
+    await expect.element(checkbox).toHaveAttribute('aria-invalid', 'true');
+    await expect.element(checkbox).not.toHaveAttribute('error');
+  });
+
+  test('stays a checkbox when "Field" shares another type', async () => {
+    await render(
+      <Field type="text">
+        <Checkbox data-testid="test-component" />
+      </Field>
+    );
+
+    await expect
+      .element(page.getByTestId('test-component'))
+      .toHaveAttribute('type', 'checkbox');
+  });
 });
