@@ -9,7 +9,7 @@ import { Field as Component } from '.';
  * inside it:
  *
  * - `Label` uses the `id` for its `htmlFor`
- * - `Input`, `Checkbox`, `Radio` and `Select` use it as their `id`
+ * - `Input`, `Textarea`, `Checkbox`, `Radio` and `Select` use it as their `id`
  *
  * This links a label to its control without wiring up ids by hand. Props set
  * directly on a component take precedence over the ones shared by the field,

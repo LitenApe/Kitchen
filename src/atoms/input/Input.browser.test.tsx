@@ -16,22 +16,10 @@ describe('Input default behavior', () => {
     expect(element.element().nodeName).toBe('INPUT');
   });
 
-  test('renders as "textarea" when specified', async () => {
-    await render(<Input as="textarea" />);
-    const element = page.getByRole('textbox');
-    expect(element.element().nodeName).toBe('TEXTAREA');
-  });
-
   test('has type "text" by default', async () => {
     await render(<Input />);
     const element = page.getByRole('textbox');
     await expect.element(element).toHaveAttribute('type', 'text');
-  });
-
-  test('has no type if rendered as textarea', async () => {
-    await render(<Input as="textarea" />);
-    const element = page.getByRole('textbox');
-    await expect.element(element).not.toHaveAttribute('type');
   });
 
   test('has type "tel" when specified', async () => {
@@ -142,11 +130,6 @@ describe('Input default behavior', () => {
     await expect.element(postfix).toHaveAttribute('id', postfixId);
   });
 
-  test('does not pass "as" on as an attribute', async () => {
-    await render(<Input as="textarea" />);
-    await expect.element(page.getByRole('textbox')).not.toHaveAttribute('as');
-  });
-
   test('its own id takes precedence over the one from "Field"', async () => {
     await render(
       <Field>
@@ -179,13 +162,6 @@ describe('Input default behavior', () => {
     expect(ref.current).toBe(page.getByRole('textbox').element());
   });
 
-  test('attaches its ref to the textarea', async () => {
-    const ref = createRef<HTMLTextAreaElement>();
-    await render(<Input as="textarea" ref={ref} />);
-
-    expect(ref.current).toBe(page.getByRole('textbox').element());
-  });
-
   test('is valid without an error', async () => {
     await render(<Input />);
     const input = page.getByRole('textbox');
@@ -201,17 +177,6 @@ describe('Input default behavior', () => {
     await expect.element(input).toHaveAttribute('aria-invalid', 'true');
     await expect.element(input).not.toHaveAttribute('error');
     expect(input.element()).toHaveProperty(
-      'validationMessage',
-      'Enter a value'
-    );
-  });
-
-  test('an error marks a textarea as invalid as well', async () => {
-    await render(<Input as="textarea" error="Enter a value" />);
-    const textarea = page.getByRole('textbox');
-
-    await expect.element(textarea).toHaveAttribute('aria-invalid', 'true');
-    expect(textarea.element()).toHaveProperty(
       'validationMessage',
       'Enter a value'
     );

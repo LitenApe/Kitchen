@@ -6,10 +6,10 @@ import { Label } from '../label';
 import { action } from 'storybook/actions';
 
 /**
- * `Input` lets users enter text. It renders an `input` with `type="text"` by
- * default, or a `textarea` for longer text through `as`. Inside a `Field`, it
- * is linked to its `Label`. Setting `error` marks it as invalid with
- * `aria-invalid`, and uses the error as the browser's native validation
+ * `Input` lets users enter a single line of text. It renders an `input` with
+ * `type="text"` by default. Use `Textarea` for longer text instead. Inside a
+ * `Field`, it is linked to its `Label`. Setting `error` marks it as invalid
+ * with `aria-invalid`, and uses the error as the browser's native validation
  * message.
  *
  * A `prefix` or `postfix`, such as a currency symbol or a unit, can be shown
@@ -26,11 +26,6 @@ export default {
     },
   },
   argTypes: {
-    as: {
-      description: 'The element to render. Defaults to `input`.',
-      options: ['input', 'textarea'],
-      control: { type: 'select' },
-    },
     type: {
       description: 'The type of input to render. Defaults to `text`.',
       options: [
@@ -71,7 +66,6 @@ const Template: StoryFn = (args) => (
 export const Input = Template.bind({});
 Input.args = {
   ...Input.args,
-  as: 'input',
   type: 'text',
   onChange: action('input change'),
 };

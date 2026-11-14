@@ -51,6 +51,7 @@ As mentioned in the introduction, the project is still in alpha, which means tha
 
 - [x] Individual form components
   - [x] Input
+  - [x] Textarea
   - [x] Checkbox
   - [x] Radio
   - [x] Radio Group
@@ -80,10 +81,10 @@ As mentioned in the introduction, the project is still in alpha, which means tha
   - [x] AccordionGroup
 - [x] Utility components
   - [x] BaseField
-- [ ] Other tasks
-  - [ ] Add tests for InputField
-  - [ ] Add tests for RadioField
-  - [ ] Add tests for SelectField
+- [x] Other tasks
+  - [x] Add tests for InputField
+  - [x] Add tests for RadioField
+  - [x] Add tests for SelectField
 
 ### Beta
 
