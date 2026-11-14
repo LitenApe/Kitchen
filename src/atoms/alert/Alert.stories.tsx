@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react-vite';
-import { Alert as Component } from '.';
+import { Alert } from '.';
 
 /**
  * An alert displays a brief, important message which draws the user's
@@ -20,7 +20,7 @@ import { Alert as Component } from '.';
  */
 export default {
   title: 'Atom/Alert',
-  component: Component,
+  component: Alert,
   parameters: {
     docs: {
       subtitle: 'Announces important messages to screen readers',
@@ -37,7 +37,7 @@ export default {
   },
 } satisfies Meta;
 
-const Template: StoryFn = (args) => <Component as="p" {...args} />;
+const Template: StoryFn = (args) => <Alert as="p" {...args} />;
 
-export const Alert = Template.bind({});
-Alert.args = { ...Alert.args, children: 'Alert message' };
+export const Component = Template.bind({});
+Component.args = { ...Component.args, children: 'Alert message' };

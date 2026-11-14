@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react-vite';
-import { Label as Component } from '.';
+import { Label } from '.';
 
 /**
  * A label gives a form control its accessible name. Clicking it also focuses
@@ -11,7 +11,7 @@ import { Label as Component } from '.';
  */
 export default {
   title: 'Atom/Label',
-  component: Component,
+  component: Label,
   parameters: {
     docs: {
       subtitle: 'Names a form control',
@@ -20,8 +20,8 @@ export default {
 } satisfies Meta;
 
 const Template: StoryFn = ({ children, ...args }) => (
-  <Component {...args}>{children}</Component>
+  <Label {...args}>{children}</Label>
 );
 
-export const Label = Template.bind({});
-Label.args = { ...Label.args, children: "I'm a label" };
+export const Component = Template.bind({});
+Component.args = { ...Component.args, children: "I'm a label" };

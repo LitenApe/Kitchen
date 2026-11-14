@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react-vite';
-import { SelectField as Component } from '.';
+import { SelectField } from '.';
 
 /**
  * `SelectField` is a ready-made select with a label and an error message,
@@ -13,7 +13,7 @@ import { SelectField as Component } from '.';
  */
 export default {
   title: 'Molecule/SelectField',
-  component: Component,
+  component: SelectField,
   parameters: {
     docs: {
       subtitle: 'A select with a label and an error message',
@@ -37,13 +37,13 @@ export default {
 } satisfies Meta;
 
 const Template: StoryFn = (args) => (
-  <Component label="field label" options={[]} {...args} />
+  <SelectField label="field label" options={[]} {...args} />
 );
 
-export const SelectField = Template.bind({});
-SelectField.storyName = 'SelectField';
-SelectField.args = {
-  ...SelectField.args,
+export const Component = Template.bind({});
+Component.storyName = 'SelectField';
+Component.args = {
+  ...Component.args,
   error: '',
   label: 'Choose a camera manufacturer',
   options: [

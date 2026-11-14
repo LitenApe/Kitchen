@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react-vite';
 
-import { Input as Component } from '.';
+import { Input } from '.';
 import { Field } from '../field';
 import { Label } from '../label';
 import { action } from 'storybook/actions';
@@ -19,7 +19,7 @@ import { action } from 'storybook/actions';
  */
 export default {
   title: 'Atom/Input',
-  component: Component,
+  component: Input,
   parameters: {
     docs: {
       subtitle: 'Lets users enter text',
@@ -59,13 +59,13 @@ export default {
 const Template: StoryFn = (args) => (
   <Field>
     <Label>Input label</Label>
-    <Component {...args} />
+    <Input {...args} />
   </Field>
 );
 
-export const Input = Template.bind({});
-Input.args = {
-  ...Input.args,
+export const Component = Template.bind({});
+Component.args = {
+  ...Component.args,
   type: 'text',
   onChange: action('input change'),
 };

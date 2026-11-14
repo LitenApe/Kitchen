@@ -1,7 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react-vite';
 import { Input } from '../input';
 import { Label } from '../label';
-import { Field as Component } from '.';
+import { Field } from '.';
 
 /**
  * `Field` groups a form control with its label. It generates an `id` and
@@ -23,7 +23,7 @@ import { Field as Component } from '.';
  */
 export default {
   title: 'Atom/Field',
-  component: Component,
+  component: Field,
   parameters: {
     docs: {
       subtitle: 'Links a label to its form control',
@@ -32,11 +32,11 @@ export default {
 } satisfies Meta;
 
 const Template: StoryFn = ({ children, ...args }) => (
-  <Component {...args}>{children}</Component>
+  <Field {...args}>{children}</Field>
 );
 
-export const Field = Template.bind({});
-Field.args = {
+export const Component = Template.bind({});
+Component.args = {
   children: [
     <Label key="field-label">label</Label>,
     <Input key="field-input" />,

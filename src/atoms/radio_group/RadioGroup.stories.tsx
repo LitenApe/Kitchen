@@ -1,6 +1,6 @@
 import { Meta, StoryFn } from '@storybook/react-vite';
 import { action } from 'storybook/actions';
-import { RadioGroup as Component } from '.';
+import { RadioGroup } from '.';
 import { Radio } from '../radio';
 import { Label } from '../label';
 import { Legend } from '../legend';
@@ -31,7 +31,7 @@ import { Field } from '../field';
  */
 export default {
   title: 'Atom/RadioGroup',
-  component: Component,
+  component: RadioGroup,
   parameters: {
     docs: {
       subtitle: 'Groups radios which share a name and event handlers',
@@ -57,7 +57,7 @@ export default {
 } satisfies Meta;
 
 const Template: StoryFn = (args) => (
-  <Component {...args}>
+  <RadioGroup {...args}>
     <Legend>Bicycle brand</Legend>
     <Field>
       <Radio value="trek" />
@@ -75,13 +75,13 @@ const Template: StoryFn = (args) => (
       <Radio value="canyon" />
       <Label>Canyon</Label>
     </Field>
-  </Component>
+  </RadioGroup>
 );
 
-export const RadioGroup = Template.bind({});
-RadioGroup.storyName = 'RadioGroup';
-RadioGroup.args = {
-  ...RadioGroup.args,
+export const Component = Template.bind({});
+Component.storyName = 'RadioGroup';
+Component.args = {
+  ...Component.args,
   name: 'bike-manufacturer',
   onChange: action('value changed'),
   onBlur: action('blur event triggered'),

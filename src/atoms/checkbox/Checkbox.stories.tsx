@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react-vite';
-import { Checkbox as Component } from '.';
+import { Checkbox } from '.';
 import { Field } from '../field';
 import { Label } from '../label';
 
@@ -14,7 +14,7 @@ import { Label } from '../label';
  */
 export default {
   title: 'Atom/Checkbox',
-  component: Component,
+  component: Checkbox,
   parameters: {
     docs: { subtitle: 'Lets users turn an option on or off' },
   },
@@ -22,10 +22,10 @@ export default {
 
 const Template: StoryFn = (args) => (
   <Field {...args}>
-    <Component />
+    <Checkbox />
     <Label>Checkbox label</Label>
   </Field>
 );
 
-export const Checkbox = Template.bind({});
-Checkbox.args = { ...Checkbox.args };
+export const Component = Template.bind({});
+Component.args = { ...Component.args };

@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react-vite';
-import { BaseField as Component } from '.';
+import { BaseField } from '.';
 import { Input } from '../../atoms/input';
 import { Label } from '../../atoms/label';
 
@@ -19,7 +19,7 @@ import { Label } from '../../atoms/label';
  */
 export default {
   title: 'Molecule/BaseField',
-  component: Component,
+  component: BaseField,
   parameters: {
     docs: {
       subtitle: 'A field which shows an error message',
@@ -35,15 +35,15 @@ export default {
 } satisfies Meta;
 
 const Template: StoryFn = (args) => (
-  <Component {...args}>
+  <BaseField {...args}>
     <Label>Test Label</Label>
     <Input />
-  </Component>
+  </BaseField>
 );
 
-export const BaseField = Template.bind({});
-BaseField.storyName = 'BaseField';
-BaseField.args = {
-  ...BaseField.args,
+export const Component = Template.bind({});
+Component.storyName = 'BaseField';
+Component.args = {
+  ...Component.args,
   error: '',
 };

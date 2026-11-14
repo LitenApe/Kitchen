@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react-vite';
-import { Button as Component } from '.';
+import { Button } from '.';
 
 /**
  * A button lets users trigger an action, such as submitting a form, opening
@@ -17,7 +17,7 @@ import { Button as Component } from '.';
  */
 export default {
   title: 'Atom/Button',
-  component: Component,
+  component: Button,
   parameters: {
     docs: {
       subtitle: 'Lets users trigger events and actions',
@@ -41,7 +41,7 @@ export default {
   },
 } satisfies Meta;
 
-const Template: StoryFn = (args) => <Component {...args} />;
+const Template: StoryFn = (args) => <Button {...args} />;
 
-export const Button = Template.bind({});
-Button.args = { ...Button.args, children: 'label' };
+export const Component = Template.bind({});
+Component.args = { ...Component.args, children: 'label' };

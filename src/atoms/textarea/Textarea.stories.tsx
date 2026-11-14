@@ -1,7 +1,7 @@
 import { Meta, StoryFn } from '@storybook/react-vite';
 import { action } from 'storybook/actions';
 
-import { Textarea as Component } from '.';
+import { Textarea } from '.';
 import { Field } from '../field';
 import { Label } from '../label';
 
@@ -15,7 +15,7 @@ import { Label } from '../label';
  */
 export default {
   title: 'Atom/Textarea',
-  component: Component,
+  component: Textarea,
   parameters: {
     docs: {
       subtitle: 'Lets users enter longer text',
@@ -37,12 +37,12 @@ export default {
 const Template: StoryFn = (args) => (
   <Field>
     <Label>Textarea label</Label>
-    <Component {...args} />
+    <Textarea {...args} />
   </Field>
 );
 
-export const Textarea = Template.bind({});
-Textarea.args = {
-  ...Textarea.args,
+export const Component = Template.bind({});
+Component.args = {
+  ...Component.args,
   onChange: action('textarea change'),
 };

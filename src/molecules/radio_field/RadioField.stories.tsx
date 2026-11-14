@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react-vite';
-import { RadioField as Component } from '.';
+import { RadioField } from '.';
 
 /**
  * `RadioField` is a ready-made group of radios with a legend and an error
@@ -15,7 +15,7 @@ import { RadioField as Component } from '.';
  */
 export default {
   title: 'Molecule/RadioField',
-  component: Component,
+  component: RadioField,
   parameters: {
     docs: {
       subtitle: 'A group of radios with a legend and an error message',
@@ -47,13 +47,13 @@ export default {
 } satisfies Meta;
 
 const Template: StoryFn = (args) => (
-  <Component label="field label" options={[]} name="os" {...args} />
+  <RadioField label="field label" options={[]} name="os" {...args} />
 );
 
-export const RadioField = Template.bind({});
-RadioField.storyName = 'RadioField';
-RadioField.args = {
-  ...RadioField.args,
+export const Component = Template.bind({});
+Component.storyName = 'RadioField';
+Component.args = {
+  ...Component.args,
   error: '',
   label: 'Preferred Operating System',
   options: [

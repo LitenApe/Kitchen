@@ -1,9 +1,9 @@
 import { action } from 'storybook/actions';
 import { Meta, StoryFn } from '@storybook/react-vite';
 import {
-  Accordion as Component,
-  AccordionHeader as Heading,
-  AccordionPanel as Panel,
+  Accordion,
+  AccordionHeader,
+  AccordionPanel,
 } from '.';
 
 /**
@@ -27,7 +27,7 @@ import {
  */
 export default {
   title: 'Atom/Accordion',
-  component: Component,
+  component: Accordion,
   parameters: {
     docs: {
       subtitle: 'A heading which shows or hides a section of content',
@@ -52,18 +52,17 @@ export default {
 } satisfies Meta;
 
 const Template: StoryFn = ({ children, ...args }) => (
-  <Component {...args}>{children}</Component>
+  <Accordion {...args}>{children}</Accordion>
 );
 
-export const Accordion = Template.bind({});
-Accordion.args = {
-  ...Accordion.args,
+export const Component = Template.bind({});
+Component.args = {
+  ...Component.args,
   open: true,
   onClick: action('toggle'),
-  children: (
-    <>
-      <Heading>Accordion Heading</Heading>
-      <Panel>
+  children: [
+      <AccordionHeader key="heading">Accordion Heading</AccordionHeader>,
+      <AccordionPanel key="panel">
         <h4>What is Lorem Ipsum?</h4>
         <p>
           Lorem ipsum occaecat sunt esse ut aliquip in magna irure dolor
@@ -96,9 +95,8 @@ Accordion.args = {
           exercitation tempor amet adipisicing ex quis nulla consequat voluptate
           enim qui velit ut id occaecat velit ut tempor veniam nulla
         </p>
-      </Panel>
-    </>
-  ),
+      </AccordionPanel>
+  ]
 };
 
 /**
@@ -112,10 +110,10 @@ Accordion.args = {
  *
  * This example is uncontrolled, so clicking it toggles `aria-expanded`.
  */
-export const AccordionHeader = Template.bind({});
-AccordionHeader.storyName = 'AccordionHeader';
-AccordionHeader.args = {
-  children: <Heading>Accordion Heading</Heading>,
+export const Header = Template.bind({});
+Header.storyName = 'AccordionHeader';
+Header.args = {
+  children: <AccordionHeader>Accordion Heading</AccordionHeader>,
   // an explicit `undefined` stops Storybook from injecting an action for
   // `onClick`, which would make the accordion controlled and ignore clicks
   onClick: undefined,
@@ -129,12 +127,12 @@ AccordionHeader.args = {
  *
  * Change `open` from **Controls** to show or hide the content.
  */
-export const AccordionPanel = Template.bind({});
-AccordionPanel.storyName = 'AccordionPanel';
-AccordionPanel.args = {
+export const Panel = Template.bind({});
+Panel.storyName = 'AccordionPanel';
+Panel.args = {
   open: true,
   children: (
-    <Panel>
+    <AccordionPanel>
       <h4>What is Lorem Ipsum?</h4>
       <p>
         What is Lorem Ipsum? Lorem Ipsum is simply dummy text of the printing
@@ -160,6 +158,6 @@ AccordionPanel.args = {
         infancy. Various versions have evolved over the years, sometimes by
         accident, sometimes on purpose (injected humour and the like).
       </p>
-    </Panel>
+    </AccordionPanel>
   ),
 };
