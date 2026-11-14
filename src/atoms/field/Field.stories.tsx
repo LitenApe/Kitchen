@@ -1,5 +1,5 @@
 import { Meta, StoryFn } from '@storybook/react-vite';
-import { BaseInput } from '../base_input';
+import { Input } from '../input';
 import { Label } from '../label';
 import { Field as Component } from '.';
 
@@ -9,7 +9,7 @@ import { Field as Component } from '.';
  * inside it:
  *
  * - `Label` uses the `id` for its `htmlFor`
- * - `Input`, `Checkbox`, `Radio`, `Select` and `BaseInput` use it as their `id`
+ * - `Input`, `Checkbox`, `Radio` and `Select` use it as their `id`
  *
  * This links a label to its control without wiring up ids by hand. Props set
  * directly on a component take precedence over the ones shared by the field,
@@ -39,6 +39,6 @@ export const Field = Template.bind({});
 Field.args = {
   children: [
     <Label key="field-label">label</Label>,
-    <BaseInput key="field-input" />,
+    <Input key="field-input" />,
   ],
 };

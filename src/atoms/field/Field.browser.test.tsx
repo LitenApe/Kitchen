@@ -1,7 +1,7 @@
 import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
 import { Field, FieldContext } from '.';
-import { BaseInput } from '../base_input';
+import { Input } from '../input';
 import { Label } from '../label';
 
 describe('Field general behaviour', () => {
@@ -78,7 +78,7 @@ describe('Field general behaviour', () => {
     await render(
       <Field>
         <Label>Name</Label>
-        <BaseInput />
+        <Input />
       </Field>
     );
 
@@ -90,7 +90,7 @@ describe('Field general behaviour', () => {
   test("keeps its aria-describedby next to a control's own", async () => {
     await render(
       <Field aria-describedby="error">
-        <BaseInput aria-describedby="hint" />
+        <Input aria-describedby="hint" />
       </Field>
     );
 
