@@ -1,18 +1,21 @@
-import { createContext, useContext, MouseEvent } from 'react';
-import { isNull } from '../../../utils/functions/isNull';
+import { type MouseEvent, createContext, use } from 'react';
 
-interface Context {
+type AccordionContextValue = {
+  /** Links the header to the panel it controls. */
   readonly id: string;
   readonly open: boolean;
+  /** Requests the accordion to open or close. */
   readonly onClick: (event: MouseEvent) => void;
-}
+};
 
-export const AccordionContext = createContext<Context | null>(null);
+export const AccordionContext = createContext<AccordionContextValue | null>(
+  null
+);
 
-export function useAccordion(): Context {
-  const context = useContext(AccordionContext);
+export function useAccordion(): AccordionContextValue {
+  const context = use(AccordionContext);
 
-  if (isNull(context)) {
+  if (context === null) {
     throw new Error('Component must be wrapped by "Accordion"');
   }
 

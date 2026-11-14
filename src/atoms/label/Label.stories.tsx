@@ -17,7 +17,7 @@ export default {
       subtitle: 'Names a form control',
     },
   },
-} as Meta;
+} satisfies Meta;
 
 const Template: StoryFn = ({ children, ...args }) => (
   <Component {...args}>{children}</Component>

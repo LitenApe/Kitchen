@@ -34,7 +34,7 @@ export default {
         "Called with the error and React's error info when an error is caught.",
     },
   },
-} as Meta;
+} satisfies Meta;
 
 function ErrorThrower(): JSX.Element {
   throw new Error('Error thrown to trigger fallback');

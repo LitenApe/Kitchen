@@ -17,7 +17,7 @@ export default {
   parameters: {
     docs: { subtitle: 'Lets users turn an option on or off' },
   },
-} as Meta;
+} satisfies Meta;
 
 const Template: StoryFn = (args) => (
   <Field {...args}>

@@ -49,7 +49,7 @@ export default {
       type: 'number',
     },
   },
-} as Meta;
+} satisfies Meta;
 
 const Template: StoryFn = (args) => (
   <Component {...args}>

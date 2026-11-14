@@ -1,0 +1,9 @@
+.affix {
+  display: inline-flex;
+}
+
+/* The affix follows the input in the markup, so it is moved in front of it. */
+.before {
+  flex-direction: row-reverse;
+  justify-content: flex-end;
+}

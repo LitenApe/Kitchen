@@ -42,4 +42,17 @@ describe('DangerousHTML default behavior', () => {
     expect(ref.current).not.toBeNull();
     await expect.element(ref.current).toHaveTextContent('test-text');
   });
+
+  test('replaces its HTML when the content changes', async () => {
+    const { rerender } = await render(
+      <DangerousHTML content="<p>first</p>" data-testid="test-container" />
+    );
+    await rerender(
+      <DangerousHTML content="<p>second</p>" data-testid="test-container" />
+    );
+    const container = page.getByTestId('test-container');
+
+    await expect.element(container).toHaveTextContent('second');
+    await expect.element(container).not.toHaveTextContent('first');
+  });
 });

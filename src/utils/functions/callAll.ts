@@ -1,18 +1,20 @@
 import { isDefined } from './isDefined';
 
+type Callback<Args extends unknown[]> = (...args: Args) => unknown;
+
 /**
- * Calls all supplied functions with the same arguments.
- * Mainly used for cases where multiple functions needs to
- * be invoked with the same arguments.
+ * Combines several callbacks into one which calls each of them with the same
+ * arguments, skipping any which are missing. Useful when a component and its
+ * user both want to handle the same event.
  *
- * @param fns {Array<Function | undefined | null>} all the function we want to invoke
- * @returns {Function} returns a function which can be invoked to call all the previous funtions with supplied arguments
+ * @param callbacks the callbacks to combine
+ * @returns a callback which calls every given callback in order
  */
-export function callAll(
-  ...fns: Array<Function | undefined | null>
-): (...args: Array<unknown>) => void {
-  const callable = fns.filter(isDefined);
-  return function (...args: Array<unknown>): void {
-    callable.forEach((fn) => fn(...args));
+export function callAll<Args extends unknown[]>(
+  ...callbacks: Array<Callback<Args> | undefined | null>
+): (...args: Args) => void {
+  const definedCallbacks = callbacks.filter(isDefined);
+  return (...args) => {
+    definedCallbacks.forEach((callback) => callback(...args));
   };
 }

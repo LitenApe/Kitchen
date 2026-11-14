@@ -1,3 +1,4 @@
+import { createRef } from 'react';
 import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
 import { CheckboxField } from '.';
@@ -35,5 +36,20 @@ describe('CheckboxField default behaviour', () => {
     await expect
       .element(checkbox)
       .toHaveAttribute('aria-describedby', errorBox.element().id);
+  });
+
+  test('error marks the checkbox as invalid', async () => {
+    await render(<CheckboxField label="field" error="This is an error" />);
+
+    await expect
+      .element(page.getByLabelText('field'))
+      .toHaveAttribute('aria-invalid', 'true');
+  });
+
+  test('ref is attached to the checkbox', async () => {
+    const ref = createRef<HTMLInputElement>();
+    await render(<CheckboxField label="field" ref={ref} />);
+
+    expect(ref.current).toBe(page.getByLabelText('field').element());
   });
 });

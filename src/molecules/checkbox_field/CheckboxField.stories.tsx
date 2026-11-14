@@ -28,7 +28,7 @@ export default {
       type: 'string',
     },
   },
-} as Meta;
+} satisfies Meta;
 
 const Template: StoryFn = (args) => <Component label="field label" {...args} />;
 

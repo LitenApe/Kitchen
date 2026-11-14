@@ -1,12 +1,18 @@
-import type { JSX } from 'react';
-export type PermittedTags = 'input' | 'textarea';
+import type { ReactElement } from 'react';
 
-export interface WithPostfix {
-  postfix?: string | JSX.Element;
-  prefix?: never;
-}
+type Affix = string | ReactElement;
 
-export interface WithPrefix {
-  prefix?: string | JSX.Element;
+type WithPrefix = {
+  /** Shown before the input, such as a currency symbol. */
+  prefix?: Affix;
   postfix?: never;
-}
+};
+
+type WithPostfix = {
+  /** Shown after the input, such as a unit. */
+  postfix?: Affix;
+  prefix?: never;
+};
+
+/** An input can have either a prefix or a postfix, but not both. */
+export type AffixProps = WithPrefix | WithPostfix;

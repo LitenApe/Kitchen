@@ -16,6 +16,14 @@ import preview from '../.storybook/preview';
 type StoriesModule = Parameters<typeof composeStories>[0];
 type ComposedStory = ReturnType<typeof composeStory>;
 
+// the glob can't infer each module's stories, so they are checked at runtime
+function isComposedStory(
+  entry: [string, unknown]
+): entry is [string, ComposedStory] {
+  const story = entry[1];
+  return typeof story === 'function' && 'id' in story;
+}
+
 setProjectAnnotations(preview);
 
 // gives deferred content, such as the Alert's delayed message, time to settle
@@ -28,10 +36,9 @@ const modules = import.meta.glob<StoriesModule>('./**/*.stories.tsx', {
 describe.each(
   Object.values(modules).map((module) => [module.default.title, module])
 )('%s', (_, module) => {
-  // the glob can't infer each module's stories, so type them explicitly
-  const stories = Object.entries(composeStories(module)) as Array<
-    [string, ComposedStory]
-  >;
+  const stories = Object.entries(composeStories(module)).filter(
+    isComposedStory
+  );
 
   test.each(stories)('%s', async (_, Story) => {
     const screen = await render(<Story />);

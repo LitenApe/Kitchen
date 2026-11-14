@@ -9,8 +9,9 @@ import { RadioField as Component } from '.';
  * `label` becomes the legend of the group, and `options` lists the choices
  * as `{ label, value }` objects, which may also include other props for their
  * radio. Every radio shares the same `name`, and `required` makes choosing
- * one of them mandatory. When `error` is set, the message is shown after the
- * group.
+ * one of them mandatory, which screen readers announce for the group as a
+ * whole. When `error` is set, the message is shown after the group, and the
+ * group is marked as invalid and described by it.
  */
 export default {
   title: 'Molecule/RadioField',
@@ -38,11 +39,12 @@ export default {
       type: 'boolean',
     },
     error: {
-      description: 'An error message to show after the group.',
+      description:
+        'An error message to show after the group. Marks the group as invalid.',
       type: 'string',
     },
   },
-} as Meta;
+} satisfies Meta;
 
 const Template: StoryFn = (args) => (
   <Component label="field label" options={[]} name="os" {...args} />

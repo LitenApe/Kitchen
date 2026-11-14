@@ -35,7 +35,7 @@ export default {
       type: 'string',
     },
   },
-} as Meta;
+} satisfies Meta;
 
 const Template: StoryFn = ({ children, ...args }) => (
   <Field>

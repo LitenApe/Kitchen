@@ -9,9 +9,11 @@ import { Label } from '../../atoms/label';
  * `SelectField`, and can be used directly to build other kinds of fields.
  *
  * When `error` is set, the message is shown after the field's children in an
- * `Alert`, so screen readers announce it. The control is also marked as
- * invalid, and described by the message through `aria-describedby`, alongside
- * any descriptions it already has.
+ * `Alert`, which screen readers announce. The `Alert` is rendered even while
+ * there is no error, so screen readers already know about it when a message
+ * arrives. The control is also marked as invalid, and described by the
+ * message through `aria-describedby`, alongside any descriptions it already
+ * has.
  *
  * Set `error` from **Controls** to see the message appear.
  */
@@ -30,7 +32,7 @@ export default {
       type: 'string',
     },
   },
-} as Meta;
+} satisfies Meta;
 
 const Template: StoryFn = (args) => (
   <Component {...args}>

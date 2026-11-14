@@ -1,3 +1,4 @@
+import { createRef } from 'react';
 import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
 import { Option, OptionGroup, Select } from '.';
@@ -53,7 +54,8 @@ describe('Select default behavior', () => {
 
     const options = page
       .getByRole('option')
-      .elements() as Array<HTMLOptionElement>;
+      .elements()
+      .filter((element) => element instanceof HTMLOptionElement);
 
     const dropdown = page.getByTestId('test-component');
     await userEvent.selectOptions(dropdown, ['phase-one']);
@@ -81,8 +83,48 @@ describe('Select default behavior', () => {
 
     const options = page
       .getByRole('option')
-      .elements() as Array<HTMLOptionElement>;
+      .elements()
+      .filter((element) => element instanceof HTMLOptionElement);
     expect(options[0].selected).toBe(true);
     expect(options[1].selected).toBe(true);
+  });
+
+  test('is valid without an error', async () => {
+    await render(<Select data-testid="test-component" />);
+    const dropdown = page.getByTestId('test-component');
+
+    await expect.element(dropdown).toHaveAttribute('aria-invalid', 'false');
+    await expect.element(dropdown).toBeValid();
+  });
+
+  test('an error marks it as invalid, with the error as its message', async () => {
+    await render(<Select data-testid="test-component" error="Pick a camera" />);
+    const dropdown = page.getByTestId('test-component');
+
+    await expect.element(dropdown).toHaveAttribute('aria-invalid', 'true');
+    await expect.element(dropdown).not.toHaveAttribute('error');
+    expect(dropdown.element()).toHaveProperty(
+      'validationMessage',
+      'Pick a camera'
+    );
+  });
+
+  test('keeps its error message when given a ref', async () => {
+    const ref = createRef<HTMLSelectElement>();
+    await render(<Select ref={ref} error="Pick a camera" />);
+
+    expect(ref.current?.validationMessage).toBe('Pick a camera');
+  });
+
+  test('takes props from "Field", where its own props take precedence', async () => {
+    await render(
+      <Field name="field" error="Pick a camera">
+        <Select data-testid="test-component" name="own" />
+      </Field>
+    );
+    const dropdown = page.getByTestId('test-component');
+
+    await expect.element(dropdown).toHaveAttribute('name', 'own');
+    await expect.element(dropdown).toHaveAttribute('aria-invalid', 'true');
   });
 });

@@ -57,8 +57,42 @@ describe('Input default behavior', () => {
     await expect.element(postfix).toHaveAttribute('id', postfixId);
   });
 
+  test('shows the prefix before the input', async () => {
+    await render(<Input prefix="€" />);
+    const input = page.getByRole('textbox').element().getBoundingClientRect();
+    const prefix = page.getByText('€').element().getBoundingClientRect();
+
+    expect(prefix.right).toBeLessThanOrEqual(input.left);
+  });
+
+  test('shows the postfix after the input', async () => {
+    await render(<Input postfix="kg" />);
+    const input = page.getByRole('textbox').element().getBoundingClientRect();
+    const postfix = page.getByText('kg').element().getBoundingClientRect();
+
+    expect(postfix.left).toBeGreaterThanOrEqual(input.right);
+  });
+
+  test('keeps its own aria-describedby next to the affix', async () => {
+    await render(<Input prefix="€" aria-describedby="hint" />);
+    const describedBy = page
+      .getByRole('textbox')
+      .element()
+      .getAttribute('aria-describedby');
+
+    expect(describedBy).toBe(`hint ${page.getByText('€').element().id}`);
+  });
+
+  test('passes aria-describedby on unchanged without an affix', async () => {
+    await render(<Input aria-describedby="hint" />);
+
+    await expect
+      .element(page.getByRole('textbox'))
+      .toHaveAttribute('aria-describedby', 'hint');
+  });
+
   test('renders JSX prefix', async () => {
-    await render(<Input postfix={<span data-testid="test-container" />} />);
+    await render(<Input prefix={<span data-testid="test-container" />} />);
     const element = page.getByTestId('test-container');
     await expect.element(element).toBeInTheDocument();
   });

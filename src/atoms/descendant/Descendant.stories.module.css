@@ -1,0 +1,12 @@
+/* The wrappers indent their paragraphs further the deeper they are nested. */
+.nested {
+  padding: 5px;
+}
+
+.deeper {
+  padding: 10px;
+}
+
+.deepest {
+  padding: 20px;
+}

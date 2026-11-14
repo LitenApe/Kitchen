@@ -28,9 +28,9 @@ jobs:
         run: npm run typecheck
 
       # Reference screenshots are platform specific and only exist for
-      # Windows so far, so the visual regression tests are skipped on Linux.
+      # Windows so far, so the visual project is skipped on Linux.
       - name: Run tests with coverage
-        run: npm run test -- --run --coverage --exclude "src/visual.browser.test.tsx"
+        run: npm run test -- --run --coverage --project node --project browser
 
       - name: Build Storybook
         run: npm run build-storybook
