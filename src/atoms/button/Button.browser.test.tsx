@@ -1,153 +1,116 @@
-import { createRef } from 'react';
+import { type SubmitEvent, createRef } from 'react';
 import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
 import Button from './Button';
 
+/** Keeps a submit from navigating away from the test page. */
+function preventSubmit(event: SubmitEvent) {
+  event.preventDefault();
+}
+
 describe('Button general behavior', () => {
   test('renders button text', async () => {
     await render(<Button>Test</Button>);
-    await expect.element(page.getByText('Test')).toBeInTheDocument();
+    await expect
+      .element(page.getByRole('button', { name: 'Test' }))
+      .toBeVisible();
   });
 
   test('click handler is invoked', async () => {
     const mockOnClick = vi.fn();
     await render(<Button onClick={mockOnClick}>Test</Button>);
-    const button = page.getByText('Test');
 
     expect(mockOnClick).toHaveBeenCalledTimes(0);
-    await userEvent.click(button);
+    await userEvent.click(page.getByRole('button', { name: 'Test' }));
     expect(mockOnClick).toHaveBeenCalledTimes(1);
   });
 
-  test('is type of "button" by default', async () => {
-    await render(<Button>Test</Button>);
-    const button = page.getByText('Test');
+  test('does not submit a surrounding form by default', async () => {
+    const onSubmit = vi.fn(preventSubmit);
+    await render(
+      <form onSubmit={onSubmit}>
+        <Button>Test</Button>
+      </form>
+    );
+    const button = page.getByRole('button', { name: 'Test' });
+
+    await userEvent.click(button);
+
+    expect(onSubmit).not.toHaveBeenCalled();
     await expect.element(button).toHaveAttribute('type', 'button');
   });
 
-  test('type can be overriden', async () => {
-    await render(<Button type="submit">Test</Button>);
-    const button = page.getByText('Test');
-    await expect.element(button).toHaveAttribute('type', 'submit');
+  // a component which forwards its props passes `type` on as undefined
+  test('does not submit a surrounding form when its type is undefined', async () => {
+    const onSubmit = vi.fn(preventSubmit);
+    await render(
+      <form onSubmit={onSubmit}>
+        <Button type={undefined}>Test</Button>
+      </form>
+    );
+    const button = page.getByRole('button', { name: 'Test' });
+
+    await userEvent.click(button);
+
+    expect(onSubmit).not.toHaveBeenCalled();
+    await expect.element(button).toHaveAttribute('type', 'button');
   });
 
-  test('renders as button element by default', async () => {
-    await render(<Button>Test</Button>);
-    const button = page.getByText('Test');
-    expect(button.element().nodeName).toEqual('BUTTON');
-  });
+  test('submits a surrounding form when its type is "submit"', async () => {
+    const onSubmit = vi.fn(preventSubmit);
+    await render(
+      <form onSubmit={onSubmit}>
+        <Button type="submit">Test</Button>
+      </form>
+    );
 
-  test('renders as anchor element when overriden', async () => {
-    await render(<Button as="a">Test</Button>);
-    const button = page.getByText('Test');
-    expect(button.element().nodeName).toEqual('A');
-  });
+    await userEvent.click(page.getByRole('button', { name: 'Test' }));
 
-  test('has no type when rendered as anchor', async () => {
-    await render(<Button as="a">Test</Button>);
-    const button = page.getByText('Test');
-    await expect.element(button).not.toHaveAttribute('type');
+    expect(onSubmit).toHaveBeenCalledTimes(1);
   });
 
   test('refs are attached to DOM element', async () => {
     const ref = createRef<HTMLButtonElement>();
     await render(<Button ref={ref}>Test</Button>);
 
-    expect(ref.current).not.toBeNull();
-    await expect.element(ref.current).toHaveTextContent('Test');
+    expect(ref.current).toBe(
+      page.getByRole('button', { name: 'Test' }).element()
+    );
   });
 
-  // aria-disabled buttons are not actionable for Playwright,
-  // so the click has to be forced to reach the handler
-  test('disabled suppresses click event', async () => {
-    const mock = vi.fn();
+  // disabled buttons are not actionable for Playwright,
+  // so the click has to be forced to reach the button
+  test('disabled keeps the button from being clicked or submitting', async () => {
+    const onClick = vi.fn();
+    const onSubmit = vi.fn(preventSubmit);
     await render(
-      <Button onClick={mock} disabled>
-        test
-      </Button>
+      <form onSubmit={onSubmit}>
+        <Button type="submit" disabled onClick={onClick}>
+          Test
+        </Button>
+      </form>
     );
-    const button = page.getByRole('button');
+    const button = page.getByRole('button', { name: 'Test' });
 
-    expect(mock).not.toHaveBeenCalled();
+    await expect.element(button).toBeDisabled();
     await userEvent.click(button, { force: true });
-    expect(mock).not.toHaveBeenCalled();
+
+    expect(onClick).not.toHaveBeenCalled();
+    expect(onSubmit).not.toHaveBeenCalled();
   });
 
-  test('aria-disabled suppresses click event', async () => {
-    const mock = vi.fn();
+  test('aria-disabled is passed on without ignoring clicks', async () => {
+    const onClick = vi.fn();
     await render(
-      <Button onClick={mock} aria-disabled>
-        test
+      <Button aria-disabled onClick={onClick}>
+        Test
       </Button>
     );
-    const button = page.getByRole('button');
+    const button = page.getByRole('button', { name: 'Test' });
 
-    expect(mock).not.toHaveBeenCalled();
+    await expect.element(button).toHaveAttribute('aria-disabled', 'true');
     await userEvent.click(button, { force: true });
-    expect(mock).not.toHaveBeenCalled();
-  });
 
-  test('aria-disabled is used when button is disabled', async () => {
-    const { rerender } = await render(<Button disabled>test</Button>);
-    const button = page.getByRole('button');
-
-    await expect.element(button).not.toHaveAttribute('disabled');
-    await expect.element(button).toHaveAttribute('aria-disabled', 'true');
-
-    await rerender(<Button aria-disabled>test</Button>);
-
-    await expect.element(button).not.toHaveAttribute('disabled');
-    await expect.element(button).toHaveAttribute('aria-disabled', 'true');
-  });
-
-  test('click handler is invoked when rendered as anchor', async () => {
-    const mock = vi.fn();
-    await render(
-      <Button as="a" onClick={mock}>
-        Test
-      </Button>
-    );
-
-    await userEvent.click(page.getByText('Test'));
-
-    expect(mock).toHaveBeenCalledTimes(1);
-  });
-
-  test('disabled suppresses click event when rendered as anchor', async () => {
-    const mock = vi.fn();
-    await render(
-      <Button as="a" onClick={mock} disabled>
-        Test
-      </Button>
-    );
-    const link = page.getByText('Test');
-
-    await expect.element(link).toHaveAttribute('aria-disabled', 'true');
-    await expect.element(link).not.toHaveAttribute('disabled');
-    await userEvent.click(link, { force: true });
-    expect(mock).not.toHaveBeenCalled();
-  });
-
-  test('refs are attached to the anchor when rendered as anchor', async () => {
-    const ref = createRef<HTMLAnchorElement>();
-    await render(
-      <Button as="a" ref={ref}>
-        Test
-      </Button>
-    );
-
-    expect(ref.current).toBe(page.getByText('Test').element());
-  });
-
-  test('disabled keeps an anchor from navigating', async () => {
-    await render(
-      <Button as="a" href="#navigated" disabled>
-        Test
-      </Button>
-    );
-
-    await userEvent.click(page.getByText('Test'), { force: true });
-
-    expect(window.location.hash).not.toBe('#navigated');
+    expect(onClick).toHaveBeenCalledTimes(1);
   });
 });

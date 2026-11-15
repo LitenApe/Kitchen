@@ -6,16 +6,16 @@ import { Button } from '.';
  * A button lets users trigger an action, such as submitting a form, opening
  * a dialog or cancelling an operation.
  *
- * `Button` renders a `button` by default, or an `a` through `as` when the
- * action navigates somewhere, in which case it also needs an `href`. A
- * `button` defaults to `type="button"`, so it does not submit a surrounding
- * form by accident. Set `type="submit"` on a button which should.
+ * `Button` renders a `button` and passes every prop on to it. Unlike a plain
+ * `button`, it defaults to `type="button"`, so it does not submit a
+ * surrounding form by accident, even when `type` is passed as `undefined`.
+ * Set `type="submit"` on a button which should.
  *
- * Setting `disabled` or `aria-disabled` makes the button ignore clicks. Both
- * are rendered as `aria-disabled` instead of the `disabled` attribute, which
- * keeps the button in the tab order so keyboard users can still discover it.
- * A natively disabled button is skipped when tabbing. A disabled `a` does not
- * navigate either.
+ * `disabled` and `aria-disabled` are passed on unchanged. A `disabled` button
+ * cannot be focused or clicked, and does not submit its form. A button which
+ * should stay focusable while it is unavailable can use `aria-disabled`
+ * instead, but then has to ignore clicks itself, as `aria-disabled` stops
+ * neither clicks nor form submissions.
  */
 const meta = {
   title: 'Atom/Button',
@@ -32,19 +32,9 @@ const meta = {
       type: 'string',
       table: { type: { summary: 'ReactNode' } },
     },
-    as: {
-      description:
-        'The element to render. Use `a`, together with an `href`, for a button which navigates somewhere.',
-      options: ['button', 'a'],
-      control: { type: 'select' },
-      table: {
-        type: { summary: "'button' | 'a'" },
-        defaultValue: { summary: "'button'" },
-      },
-    },
     type: {
       description:
-        'What a `button` does in a form. Unlike in HTML, it only submits the form when set to `submit`.',
+        'What the button does in a form. Unlike in HTML, it only submits the form when set to `submit`.',
       options: ['button', 'submit', 'reset'],
       control: { type: 'select' },
       table: {
@@ -54,9 +44,15 @@ const meta = {
     },
     disabled: {
       description:
-        'Ignores clicks while keeping the button focusable. Rendered as `aria-disabled`.',
+        'Disables the button, so that it cannot be focused or clicked, and does not submit its form.',
       type: 'boolean',
       table: { type: { summary: 'boolean' } },
+    },
+    'aria-disabled': {
+      description:
+        'Marks the button as unavailable while keeping it focusable. Clicks still reach `onClick`, so ignore them yourself.',
+      type: 'boolean',
+      table: { type: { summary: "boolean | 'true' | 'false'" } },
     },
   },
 } satisfies Meta<typeof Button>;
