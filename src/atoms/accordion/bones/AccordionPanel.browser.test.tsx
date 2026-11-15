@@ -29,24 +29,47 @@ describe('AccordionPanel general behavior', () => {
 
   test('shows its children only while its accordion is open', async () => {
     const { rerender } = await render(
+      inAccordion(<AccordionPanel>Details</AccordionPanel>, false)
+    );
+    const details = page.getByText('Details');
+    await expect.element(details).not.toBeVisible();
+
+    await rerender(inAccordion(<AccordionPanel>Details</AccordionPanel>, true));
+    await expect.element(details).toBeVisible();
+  });
+
+  // its padding and border would otherwise show as an empty box
+  test('takes up no space while its accordion is closed', async () => {
+    await render(
       inAccordion(
-        <AccordionPanel data-testid="panel">Details</AccordionPanel>,
-        false
+        <AccordionPanel
+          data-testid="panel"
+          style={{ padding: '16px', border: '2px solid' }}
+        >
+          Details
+        </AccordionPanel>
       )
     );
     const panel = page.getByTestId('panel');
-    await expect.element(panel).toHaveAttribute('aria-hidden', 'true');
-    await expect.element(panel).toBeEmptyDOMElement();
 
-    await rerender(
+    await expect.element(panel).not.toBeVisible();
+    expect(panel.element().getBoundingClientRect().height).toBe(0);
+  });
+
+  // the `hidden` attribute only hides an element through the browser's own
+  // styles, which a display of its own would override
+  test('stays hidden while closed when given a display of its own', async () => {
+    await render(
       inAccordion(
-        <AccordionPanel data-testid="panel">Details</AccordionPanel>,
-        true
+        <AccordionPanel data-testid="panel" style={{ display: 'flex' }}>
+          Details
+        </AccordionPanel>
       )
     );
-    await expect.element(panel).toHaveAttribute('aria-hidden', 'false');
-    await expect.element(panel).toHaveTextContent('Details');
-    await expect.element(page.getByText('Details')).toBeVisible();
+    const panel = page.getByTestId('panel');
+
+    await expect.element(panel).not.toBeVisible();
+    expect(panel.element().getBoundingClientRect().height).toBe(0);
   });
 
   test('passes other props to its element', async () => {
@@ -67,5 +90,30 @@ describe('AccordionPanel general behavior', () => {
     await userEvent.click(page.getByRole('button'));
 
     await expect.element(page.getByText('Details')).toBeVisible();
+  });
+
+  test('keeps the state of its content while its accordion is closed', async () => {
+    await render(
+      <Accordion initial>
+        <AccordionHeader>Shipping</AccordionHeader>
+        <AccordionPanel>
+          <input aria-label="Address" />
+        </AccordionPanel>
+      </Accordion>
+    );
+    const header = page.getByRole('button', { name: 'Shipping' });
+    // a hidden input has no role, as it is left out of the accessibility tree
+    const address = page.getByRole('textbox', {
+      name: 'Address',
+      includeHidden: true,
+    });
+    await userEvent.fill(address, 'Main Street 1');
+
+    await userEvent.click(header);
+    await expect.element(address).not.toBeVisible();
+
+    await userEvent.click(header);
+    await expect.element(address).toBeVisible();
+    await expect.element(address).toHaveValue('Main Street 1');
   });
 });
