@@ -10,9 +10,10 @@ import { RadioField } from '.';
  * `label` becomes the legend of the group, and `options` lists the choices
  * as `{ label, value }` objects, which may also include other props for their
  * radio. Every radio shares the same `name`, and `required` makes choosing
- * one of them mandatory, which screen readers announce for the group as a
- * whole. When `error` is set, the message is shown after the group, and the
- * group is marked as invalid and described by it.
+ * one of them mandatory. It is set on every radio, as screen readers only
+ * announce it on the radios which have it, and the group is marked as
+ * required as well. When `error` is set, the message is shown after the
+ * group, and the group is marked as invalid and described by it.
  *
  * Other props, such as `onChange` or `disabled`, do not reach the radios,
  * because of the problem described under Project Status in the README. Set

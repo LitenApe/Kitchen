@@ -3,17 +3,19 @@ import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
 
 import { Field } from '../field';
+import { Label } from '../label';
+import { Legend } from '../legend';
 import Radio from '../radio/Radio';
 import RadioGroup from './RadioGroup';
 
 describe('Radios general behavior', () => {
   test('renders without crashing', async () => {
-    await render(<RadioGroup />);
+    await render(<RadioGroup name="size" />);
   });
 
   test('renders children', async () => {
     await render(
-      <RadioGroup>
+      <RadioGroup name="size">
         <Radio value="1" />
         <Radio value="2" />
       </RadioGroup>
@@ -73,6 +75,24 @@ describe('Radios general behavior', () => {
     );
   });
 
+  test('shares required, disabled and form with its radios', async () => {
+    await render(
+      <>
+        <form id="order" />
+        <RadioGroup name="size" required disabled form="order">
+          <Radio value="small" />
+          <Radio value="large" />
+        </RadioGroup>
+      </>
+    );
+
+    for (const radio of page.getByRole('radio').all()) {
+      await expect.element(radio).toBeRequired();
+      await expect.element(radio).toBeDisabled();
+      await expect.element(radio).toHaveAttribute('form', 'order');
+    }
+  });
+
   test('onBlur is not invoked when focus remains inside of group', async () => {
     const mock = vi.fn();
     await render(
@@ -110,12 +130,57 @@ describe('Radios general behavior', () => {
 
   test('renders a fieldset with the radiogroup role', async () => {
     await render(
-      <RadioGroup>
+      <RadioGroup name="size">
         <Radio value="1" />
       </RadioGroup>
     );
 
     expect(page.getByRole('radiogroup').element().nodeName).toBe('FIELDSET');
+  });
+
+  test('sets its own attributes, such as id, className and style, on the fieldset', async () => {
+    await render(
+      <RadioGroup
+        name="size"
+        id="size"
+        className="options"
+        style={{ margin: 0 }}
+        data-section="sizes"
+      >
+        <Field>
+          <Radio value="small" />
+          <Label>Small</Label>
+        </Field>
+      </RadioGroup>
+    );
+    const group = page.getByRole('radiogroup');
+
+    await expect.element(group).toHaveAttribute('id', 'size');
+    await expect.element(group).toHaveClass('options');
+    await expect.element(group).toHaveStyle({ margin: '0px' });
+    await expect.element(group).toHaveAttribute('data-section', 'sizes');
+
+    // the radio keeps the id of its field, so its label still names it
+    const radio = page.getByRole('radio', { name: 'Small' });
+    await expect.element(radio).toBeVisible();
+    await expect.element(radio).not.toHaveClass('options');
+  });
+
+  test('sets other event handlers on the fieldset, where they also receive the events of its radios', async () => {
+    const onClick = vi.fn();
+    await render(
+      <RadioGroup name="size" onClick={onClick}>
+        <Legend>Size</Legend>
+        <Radio value="small" />
+      </RadioGroup>
+    );
+
+    // only the fieldset hears a click on its legend
+    await userEvent.click(page.getByText('Size'));
+    expect(onClick).toHaveBeenCalledTimes(1);
+
+    await userEvent.click(page.getByRole('radio'));
+    expect(onClick).toHaveBeenCalledTimes(2);
   });
 
   test("a radio's own props take precedence over the group's", async () => {
@@ -181,7 +246,7 @@ describe('Radios general behavior', () => {
 
   test('aria-invalid marks the group as invalid, rather than its radios', async () => {
     await render(
-      <RadioGroup aria-invalid>
+      <RadioGroup name="size" aria-invalid>
         <Radio value="1" />
         <Radio value="2" />
       </RadioGroup>
@@ -197,7 +262,7 @@ describe('Radios general behavior', () => {
 
   test('aria-describedby describes the group rather than its radios', async () => {
     await render(
-      <RadioGroup aria-describedby="hint">
+      <RadioGroup name="size" aria-describedby="hint">
         <Radio value="1" />
       </RadioGroup>
     );
@@ -213,7 +278,7 @@ describe('Radios general behavior', () => {
   test('takes aria-invalid and the description of a surrounding field', async () => {
     await render(
       <Field aria-invalid aria-describedby="message">
-        <RadioGroup>
+        <RadioGroup name="size">
           <Radio value="1" />
         </RadioGroup>
       </Field>
@@ -226,7 +291,7 @@ describe('Radios general behavior', () => {
 
   test('aria-label and aria-required apply to the group rather than its radios', async () => {
     await render(
-      <RadioGroup aria-label="Size" aria-required>
+      <RadioGroup name="size" aria-label="Size" aria-required>
         <Radio value="1" />
       </RadioGroup>
     );
@@ -244,7 +309,7 @@ describe('Radios general behavior', () => {
     await render(
       <>
         <p id="size-label">Size</p>
-        <RadioGroup aria-labelledby="size-label">
+        <RadioGroup name="size" aria-labelledby="size-label">
           <Radio value="1" />
         </RadioGroup>
       </>

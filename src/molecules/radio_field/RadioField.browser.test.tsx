@@ -93,6 +93,19 @@ describe('RadioField general behavior', () => {
       .toHaveAttribute('aria-required', 'true');
   });
 
+  // screen readers only announce `required` on the radios which have it
+  test('marks every radio as required when required', async () => {
+    await render(
+      <RadioField name="size" label="Size" options={options} required />
+    );
+
+    for (const { label } of options) {
+      const radio = page.getByRole('radio', { name: label });
+      await expect.element(radio).toBeVisible();
+      await expect.element(radio).toBeRequired();
+    }
+  });
+
   test("passes each option's own props on to its radio", async () => {
     await render(
       <RadioField
