@@ -1,4 +1,4 @@
-import { sortNodes } from './utils';
+import { getCommonAncestor, sortNodes } from './utils';
 
 // nodes are sorted by their position in the document
 const container = document.createElement('div');
@@ -53,5 +53,31 @@ describe('sortNodes', () => {
     expect(() => sortNodes([attached, detached])).toThrow(
       'Cannot sort the given nodes'
     );
+  });
+});
+
+describe('getCommonAncestor', () => {
+  test('returns the closest element which contains every node', () => {
+    const list = createElement('list');
+    const first = createElement('first', list);
+    const group = createElement('group', list);
+    const second = createElement('second', group);
+
+    expect(getCommonAncestor([first, second])).toBe(list);
+  });
+
+  test('returns one of the nodes when it contains the others', () => {
+    const outer = createElement('outer');
+    const inner = createElement('inner', outer);
+
+    expect(getCommonAncestor([outer, inner])).toBe(outer);
+  });
+
+  test('returns null for nodes which share no ancestor, or no nodes', () => {
+    const attached = createElement('attached');
+    const detached = document.createElement('div');
+
+    expect(getCommonAncestor([attached, detached])).toBeNull();
+    expect(getCommonAncestor([])).toBeNull();
   });
 });
