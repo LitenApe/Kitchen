@@ -34,9 +34,9 @@ describe('AccordionGroup general behavior', () => {
     const thirdContent = page.getByText('Third content');
 
     expect(page.getByRole('button').all()).toHaveLength(3);
-    await expect.element(firstContent).not.toBeInTheDocument();
-    await expect.element(secondContent).not.toBeInTheDocument();
-    await expect.element(thirdContent).not.toBeInTheDocument();
+    await expect.element(firstContent).not.toBeVisible();
+    await expect.element(secondContent).not.toBeVisible();
+    await expect.element(thirdContent).not.toBeVisible();
   });
 
   test('initial open accordion is open when specified', async () => {
@@ -61,8 +61,8 @@ describe('AccordionGroup general behavior', () => {
     const thirdContent = page.getByText('Third content');
 
     await expect.element(secondContent).toBeVisible();
-    await expect.element(firstContent).not.toBeInTheDocument();
-    await expect.element(thirdContent).not.toBeInTheDocument();
+    await expect.element(firstContent).not.toBeVisible();
+    await expect.element(thirdContent).not.toBeVisible();
   });
 
   test('only one accordion is open at the time', async () => {
@@ -86,31 +86,31 @@ describe('AccordionGroup general behavior', () => {
     const secondContent = page.getByText('Second content');
     const thirdContent = page.getByText('Third content');
 
-    await expect.element(firstContent).not.toBeInTheDocument();
-    await expect.element(secondContent).not.toBeInTheDocument();
-    await expect.element(thirdContent).not.toBeInTheDocument();
+    await expect.element(firstContent).not.toBeVisible();
+    await expect.element(secondContent).not.toBeVisible();
+    await expect.element(thirdContent).not.toBeVisible();
 
     // the content which changes is checked first, so the checks after it
     // run once the group has updated
     await userEvent.click(page.getByRole('button', { name: 'Third' }));
     await expect.element(thirdContent).toBeVisible();
-    await expect.element(firstContent).not.toBeInTheDocument();
-    await expect.element(secondContent).not.toBeInTheDocument();
+    await expect.element(firstContent).not.toBeVisible();
+    await expect.element(secondContent).not.toBeVisible();
 
     await userEvent.click(page.getByRole('button', { name: 'First' }));
     await expect.element(firstContent).toBeVisible();
-    await expect.element(secondContent).not.toBeInTheDocument();
-    await expect.element(thirdContent).not.toBeInTheDocument();
+    await expect.element(secondContent).not.toBeVisible();
+    await expect.element(thirdContent).not.toBeVisible();
 
     await userEvent.click(page.getByRole('button', { name: 'Second' }));
     await expect.element(secondContent).toBeVisible();
-    await expect.element(firstContent).not.toBeInTheDocument();
-    await expect.element(thirdContent).not.toBeInTheDocument();
+    await expect.element(firstContent).not.toBeVisible();
+    await expect.element(thirdContent).not.toBeVisible();
 
     await userEvent.click(page.getByRole('button', { name: 'Second' }));
-    await expect.element(secondContent).not.toBeInTheDocument();
-    await expect.element(firstContent).not.toBeInTheDocument();
-    await expect.element(thirdContent).not.toBeInTheDocument();
+    await expect.element(secondContent).not.toBeVisible();
+    await expect.element(firstContent).not.toBeVisible();
+    await expect.element(thirdContent).not.toBeVisible();
   });
 
   test('onClick is called with index of clicked button and requested new state', async () => {
@@ -144,7 +144,7 @@ describe('AccordionGroup general behavior', () => {
       true
     );
     // the accordion only opens once "open" changes
-    await expect.element(secondContent).not.toBeInTheDocument();
+    await expect.element(secondContent).not.toBeVisible();
 
     await rerender(
       <AccordionGroup onClick={mock} open={1}>
@@ -197,9 +197,7 @@ describe('AccordionGroup general behavior', () => {
     expect(mock).not.toHaveBeenCalled();
     await userEvent.click(page.getByRole('button', { name: 'Second' }));
     expect(mock).not.toHaveBeenCalled();
-    await expect
-      .element(page.getByText('Second content'))
-      .not.toBeInTheDocument();
+    await expect.element(page.getByText('Second content')).not.toBeVisible();
     expect(warn).toHaveBeenCalledWith(
       expect.stringContaining('AccordionGroup received a change handler')
     );
@@ -300,9 +298,7 @@ describe('AccordionGroup general behavior', () => {
     );
 
     await expect.element(thirdContent).toBeVisible();
-    await expect
-      .element(page.getByText('Second content'))
-      .not.toBeInTheDocument();
+    await expect.element(page.getByText('Second content')).not.toBeVisible();
   });
 
   test('follows "open" when controlled', async () => {
@@ -321,7 +317,7 @@ describe('AccordionGroup general behavior', () => {
     const firstContent = page.getByText('First content');
     const secondContent = page.getByText('Second content');
     await expect.element(firstContent).toBeVisible();
-    await expect.element(secondContent).not.toBeInTheDocument();
+    await expect.element(secondContent).not.toBeVisible();
 
     await rerender(
       <AccordionGroup open={1} onClick={vi.fn()}>
@@ -337,7 +333,7 @@ describe('AccordionGroup general behavior', () => {
     );
 
     await expect.element(secondContent).toBeVisible();
-    await expect.element(firstContent).not.toBeInTheDocument();
+    await expect.element(firstContent).not.toBeVisible();
   });
 
   test("an accordion's own onClick is invoked as well", async () => {

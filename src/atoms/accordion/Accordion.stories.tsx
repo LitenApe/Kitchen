@@ -113,10 +113,12 @@ export const Header: Story = {
 };
 
 /**
- * `AccordionPanel` is a `section` which holds the content. It is labelled by
- * its header, and hidden from assistive technologies with `aria-hidden` while
- * the accordion is closed. The content is only rendered while the accordion
- * is open.
+ * `AccordionPanel` is a `section` which holds the content, and is labelled by
+ * its header. While the accordion is closed, the panel is hidden with the
+ * `hidden` attribute, even if it is given a `display` of its own. Its content
+ * is rendered even while the accordion is closed, so it keeps its state, such
+ * as what was typed into it. Like any hidden content, the browser's
+ * find-in-page can't find it while it is closed.
  *
  * Change `open` from **Controls** to show or hide the content.
  */
