@@ -19,25 +19,19 @@ function Input(ownProps: InputProps): JSX.Element {
   const inputProps = useField().getFieldProps(ownProps);
   const { prefix, postfix, ...props } = inputProps;
   const affixId = useId();
+  const layout = getInputLayout(inputProps);
 
-  switch (getInputLayout(inputProps)) {
-    case InputLayout.Plain:
-      return <InputElement {...props} />;
-
-    case InputLayout.Prefixed:
-      return (
-        <Affix id={affixId} content={prefix} placement="before">
-          <InputElement {...props} affixId={affixId} />
-        </Affix>
-      );
-
-    case InputLayout.Postfixed:
-      return (
-        <Affix id={affixId} content={postfix} placement="after">
-          <InputElement {...props} affixId={affixId} />
-        </Affix>
-      );
-  }
+  // the input is wrapped even without an affix, as React would otherwise
+  // replace it whenever an affix comes or goes, which loses its focus and
+  // what was typed into it
+  return (
+    <Affix id={affixId} layout={layout} content={prefix ?? postfix}>
+      <InputElement
+        {...props}
+        affixId={layout === InputLayout.Plain ? undefined : affixId}
+      />
+    </Affix>
+  );
 }
 
 export default Input;

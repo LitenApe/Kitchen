@@ -2,6 +2,11 @@
   display: inline-flex;
 }
 
+/* Without an affix, the input is laid out as if it were not wrapped. */
+.plain {
+  display: contents;
+}
+
 /* The affix follows the input in the markup, so it is moved in front of it. */
 .before {
   flex-direction: row-reverse;

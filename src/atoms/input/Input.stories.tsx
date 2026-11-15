@@ -12,10 +12,14 @@ import { Label } from '../label';
  * `Label`, and also takes the props which the field shares.
  *
  * A `prefix` or `postfix`, such as a currency symbol or a unit, can be shown
- * before or after the input, in which case the two are wrapped in a `div`.
- * The affix is linked to the input through `aria-describedby`, so screen
- * readers read it together with the input. Only one of the two can be used at
- * a time.
+ * before or after the input. The affix is linked to the input through
+ * `aria-describedby`, so screen readers read it together with the input. Only
+ * one of the two can be used at a time.
+ *
+ * The input is always wrapped in a `span`, so it keeps its focus and what was
+ * typed into it when an affix comes or goes. Without an affix, the `span`
+ * takes no part in the layout. As the input is not a direct child of the
+ * element around `Input`, style it through its own `className`.
  *
  * `Input` does not show error messages. To show one, mark the input as invalid
  * with `aria-invalid`, and point it to the message with `aria-describedby`.
