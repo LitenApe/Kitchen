@@ -1,9 +1,23 @@
-import { createRef } from 'react';
-import { page } from 'vitest/browser';
+import { createRef, useState } from 'react';
+import { renderToString } from 'react-dom/server';
+import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
 
 import { Field } from '../field';
 import { Input } from '.';
+
+/** An input which shows how many characters it holds once it holds any. */
+function CountedInput() {
+  const [value, setValue] = useState('');
+
+  return (
+    <Input
+      value={value}
+      onChange={(event) => setValue(event.target.value)}
+      postfix={value === '' ? undefined : `${value.length} characters`}
+    />
+  );
+}
 
 describe('Input default behavior', () => {
   test('renders without crashing', async () => {
@@ -160,5 +174,57 @@ describe('Input default behavior', () => {
     await render(<Input ref={ref} />);
 
     expect(ref.current).toBe(page.getByRole('textbox').element());
+  });
+
+  // the HTML parser ends a paragraph where a div starts, which would move a
+  // server rendered input out of its paragraph
+  test('stays inside a paragraph when rendered on the server', async () => {
+    const container = document.createElement('div');
+    container.innerHTML = renderToString(
+      <p>
+        Weight <Input postfix="kg" />
+      </p>
+    );
+    document.body.append(container);
+    onTestFinished(() => container.remove());
+
+    const input = page.getByRole('textbox');
+    await expect.element(input).toBeVisible();
+    expect(container.querySelector('p')?.contains(input.element())).toBe(true);
+  });
+});
+
+// React replaces an element whose parent element changes, which would lose the
+// focus of the input and what was typed into it
+describe('Input with an affix which comes and goes', () => {
+  test('keeps its focus when a postfix appears while typing', async () => {
+    await render(<CountedInput />);
+    const input = page.getByRole('textbox');
+
+    await userEvent.click(input);
+    await userEvent.keyboard('abc');
+
+    await expect.element(input).toBeVisible();
+    await expect.element(input).toHaveFocus();
+    await expect.element(input).toHaveValue('abc');
+    await expect.element(page.getByText('3 characters')).toBeVisible();
+  });
+
+  test('keeps what was typed when its affix is added, replaced or removed', async () => {
+    const { rerender } = await render(<Input />);
+    const input = page.getByRole('textbox');
+    await userEvent.fill(input, '42');
+
+    await rerender(<Input prefix="€" />);
+    await expect.element(page.getByText('€')).toBeVisible();
+    await expect.element(input).toHaveValue('42');
+
+    await rerender(<Input postfix="EUR" />);
+    await expect.element(page.getByText('EUR')).toBeVisible();
+    await expect.element(input).toHaveValue('42');
+
+    await rerender(<Input />);
+    await expect.element(input).toBeVisible();
+    await expect.element(input).toHaveValue('42');
   });
 });

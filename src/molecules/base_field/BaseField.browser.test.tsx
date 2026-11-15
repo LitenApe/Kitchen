@@ -159,10 +159,11 @@ describe('BaseField default behavior', () => {
     expect(descriptions?.split(' ')).toHaveLength(3);
 
     const alert = container.querySelector('[aria-live="assertive"]');
-    const postfix = container.querySelector('span');
+    const postfix = page.getByText('😁');
 
+    await expect.element(postfix).toBeVisible();
     expect(descriptions).toContain(alert?.id);
-    expect(descriptions).toContain(postfix?.id);
+    expect(descriptions?.split(' ')).toContain(postfix.element().id);
     expect(descriptions).toContain('anotherId');
   });
 
