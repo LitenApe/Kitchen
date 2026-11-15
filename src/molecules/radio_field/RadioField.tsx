@@ -1,10 +1,10 @@
-import type { JSX } from 'react';
+import type { ComponentPropsWithoutRef, JSX, Ref } from 'react';
 
 import { Field } from '../../atoms/field';
 import { Label } from '../../atoms/label';
 import { Legend } from '../../atoms/legend';
 import { Radio, type RadioProps } from '../../atoms/radio';
-import { RadioGroup, type RadioGroupProps } from '../../atoms/radio_group';
+import { RadioGroup } from '../../atoms/radio_group';
 import { BaseField } from '../base_field';
 
 type RadioOption = Omit<RadioProps, 'children' | 'value' | 'name'> & {
@@ -27,7 +27,10 @@ export type RadioFieldProps = {
    * invalid.
    */
   error?: string;
-} & Omit<RadioGroupProps, 'children' | 'name'>;
+  ref?: Ref<HTMLFieldSetElement>;
+  // every other prop is passed on to the `BaseField`, which takes the props
+  // of an input rather than those of a group
+} & Omit<ComponentPropsWithoutRef<'input'>, 'children' | 'name'>;
 
 function RadioField({
   label,
@@ -39,21 +42,21 @@ function RadioField({
 }: RadioFieldProps): JSX.Element {
   return (
     <BaseField {...props}>
-      {/* only the first radio is natively required, so the group tells
-          screen readers that choosing one of them is required */}
-      <RadioGroup ref={ref} aria-required={required}>
+      {/* the group shares `required` with every radio, as screen readers
+          only announce it on the radios which have it, and `aria-required`
+          tells them that the group as a whole is required */}
+      <RadioGroup
+        ref={ref}
+        name={name}
+        required={required}
+        aria-required={required}
+      >
         <Legend>{label}</Legend>
-        {options.map(({ label: optionLabel, ...radioProps }, index) => (
+        {options.map(({ label: optionLabel, ...radioProps }) => (
           // every radio has a field of its own, which links it to its label
           <Field key={radioProps.value}>
             <div>
-              <Radio
-                {...radioProps}
-                // one required radio makes choosing any of them mandatory,
-                // unless the option sets `required` itself
-                required={radioProps.required ?? (required && index === 0)}
-                name={name}
-              />
+              <Radio {...radioProps} />
               <Label>{optionLabel}</Label>
             </div>
           </Field>

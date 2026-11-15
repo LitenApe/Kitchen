@@ -7,8 +7,8 @@ import { Label } from '../label';
 /**
  * A radio button lets users pick exactly one option from a set. Radios form a
  * set by sharing the same `name`, so they are usually placed in a
- * `RadioGroup`, which shares the `name` and its event handlers with every
- * radio inside it.
+ * `RadioGroup`, which shares its `name` and `onChange` with every radio
+ * inside it.
  *
  * `Radio` renders an `input` of type `radio`, and passes every prop on to it.
  * Its own props take precedence over the ones its group shares, unless they

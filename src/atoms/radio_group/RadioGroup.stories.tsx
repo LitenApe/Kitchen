@@ -12,14 +12,16 @@ import { Radio } from '../radio';
  * role. Start it with a `Legend` to name the group, and give each radio its
  * own `Field` and `Label`.
  *
- * Props passed to the group, such as `name`, `onChange` or `required`, are
- * shared with every `Radio` inside it rather than set on the `fieldset`, and
- * a radio's own props take precedence over them unless they are `undefined`.
- * The `aria-` props which name, describe or validate the group, such as
- * `aria-label`, `aria-labelledby` or `aria-required`, are set on the
- * `fieldset` instead, as they belong to the group as a whole. `onBlur` is
- * only called when focus leaves the group, and not when it moves between the
- * radios inside it.
+ * `name`, `onChange`, `required`, `disabled` and `form` are shared with every
+ * `Radio` inside it, and a radio's own props take precedence over them unless
+ * they are `undefined`. `name` is required, as radios only behave as one
+ * group, where choosing one clears the others, when they share a name. Every
+ * other prop, such as `id`, `className`, `style` or the `aria-` props which
+ * name, describe or validate the group, is set on the `fieldset`. That
+ * includes event handlers such as `onClick`, which also receive the events of
+ * the radios, as these bubble up to the `fieldset`. `onBlur` is the exception:
+ * it is only called when focus leaves the group, and not when it moves between
+ * the radios inside it.
  *
  * `RadioGroup` does not show error messages. To show one, mark the group as
  * invalid with `aria-invalid`, and point it to the message with
@@ -37,15 +39,14 @@ const meta = {
   component: RadioGroup,
   parameters: {
     docs: {
-      subtitle: 'Groups radios which share a name and event handlers',
+      subtitle: 'Groups radios which share a name',
     },
   },
   // the categories show which props the group keeps and which it shares
   argTypes: {
     children: { control: false, table: { category: 'Group' } },
     name: {
-      description: 'The name of every radio in the group.',
-      type: 'string',
+      type: { name: 'string', required: true },
       table: {
         category: 'Shared with every radio',
         type: { summary: 'string' },
@@ -58,14 +59,6 @@ const meta = {
         type: { summary: '(event: ChangeEvent<HTMLInputElement>) => void' },
       },
     },
-    onBlur: {
-      description:
-        'Called when focus leaves the group, but not when it moves between its radios.',
-      table: {
-        category: 'Group',
-        type: { summary: '(event: FocusEvent<HTMLInputElement>) => void' },
-      },
-    },
     required: {
       description: 'Makes choosing one of the radios mandatory.',
       type: 'boolean',
@@ -73,6 +66,44 @@ const meta = {
         category: 'Shared with every radio',
         type: { summary: 'boolean' },
       },
+    },
+    disabled: {
+      description: 'Disables every radio in the group.',
+      type: 'boolean',
+      table: {
+        category: 'Shared with every radio',
+        type: { summary: 'boolean' },
+      },
+    },
+    form: {
+      description:
+        'The id of the form which the radios belong to, for a group placed outside it.',
+      control: false,
+      table: {
+        category: 'Shared with every radio',
+        type: { summary: 'string' },
+      },
+    },
+    onBlur: {
+      table: {
+        category: 'Group',
+        type: { summary: '(event: FocusEvent<HTMLInputElement>) => void' },
+      },
+    },
+    id: {
+      description: 'The id of the `fieldset`.',
+      control: false,
+      table: { category: 'Group', type: { summary: 'string' } },
+    },
+    className: {
+      description: 'Class names for the `fieldset`.',
+      control: false,
+      table: { category: 'Group', type: { summary: 'string' } },
+    },
+    style: {
+      description: 'Inline styles for the `fieldset`.',
+      control: false,
+      table: { category: 'Group', type: { summary: 'CSSProperties' } },
     },
     'aria-invalid': {
       description:

@@ -1,8 +1,12 @@
+import type { ComponentPropsWithoutRef } from 'react';
+
 import { joinIds } from '../../../utils/functions/joinIds';
 import { useField } from '../../field';
-import type { GroupAttributes } from './splitGroupProps';
 
-type GroupError = Pick<GroupAttributes, 'aria-invalid' | 'aria-describedby'>;
+type GroupError = Pick<
+  ComponentPropsWithoutRef<'fieldset'>,
+  'aria-invalid' | 'aria-describedby'
+>;
 
 /**
  * Whether a group is invalid, and the ids of what describes it. A group inside

@@ -1,49 +1,44 @@
 import type { ComponentPropsWithoutRef } from 'react';
 
-/** The props which name, describe or validate a group as a whole. */
-export type GroupAttributes = Pick<
-  ComponentPropsWithoutRef<'fieldset'>,
-  | 'aria-label'
-  | 'aria-labelledby'
-  | 'aria-describedby'
-  | 'aria-required'
-  | 'aria-invalid'
-  | 'aria-errormessage'
->;
+/** The props which a group shares with every radio inside it. */
+export type SharedRadioProps = Pick<
+  ComponentPropsWithoutRef<'input'>,
+  'onChange' | 'required' | 'disabled' | 'form'
+> & {
+  /**
+   * The name which every radio in the group submits its value under. Radios
+   * only behave as one group, where choosing one clears the others, when they
+   * share a name.
+   */
+  name: string;
+};
 
 type SplitGroupProps<T> = {
-  /** The attributes of the group's own element. */
-  group: GroupAttributes;
-  /** The props to share with every member of the group. */
-  shared: Omit<T, keyof GroupAttributes>;
+  /** The props to share with every radio in the group. */
+  shared: SharedRadioProps;
+  /** The props of the group's own element. */
+  group: Omit<T, keyof SharedRadioProps>;
 };
 
 /**
- * Separates the props which name, describe or validate a group as a whole
- * from the props it shares with its members. ARIA puts these on the group,
- * as a radio, for example, cannot be required or invalid on its own.
+ * Separates the props which make the radios of a group one form control,
+ * which are shared with every radio, from the props of the group's own
+ * element, such as its `id`, `className`, `style` and the `aria-` props which
+ * name, describe or validate the group.
  *
  * @param props the props given to the group
- * @returns the group's own attributes, and the props to share
+ * @returns the props to share with the radios, and the group's own props
  */
-export function splitGroupProps<T extends GroupAttributes>({
-  'aria-label': label,
-  'aria-labelledby': labelledBy,
-  'aria-describedby': describedBy,
-  'aria-required': required,
-  'aria-invalid': invalid,
-  'aria-errormessage': errorMessage,
-  ...shared
+export function splitGroupProps<T extends SharedRadioProps>({
+  name,
+  onChange,
+  required,
+  disabled,
+  form,
+  ...group
 }: T): SplitGroupProps<T> {
   return {
-    group: {
-      'aria-label': label,
-      'aria-labelledby': labelledBy,
-      'aria-describedby': describedBy,
-      'aria-required': required,
-      'aria-invalid': invalid,
-      'aria-errormessage': errorMessage,
-    },
-    shared,
+    shared: { name, onChange, required, disabled, form },
+    group,
   };
 }
