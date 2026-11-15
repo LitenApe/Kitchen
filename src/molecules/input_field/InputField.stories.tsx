@@ -8,9 +8,10 @@ import { InputField } from '.';
  *
  * Set the text of the label with `label`. Every other prop, such as `value`,
  * `onChange` or `postfix`, is passed on to the input, which also receives the
- * `ref`. Use `as` to render another input component in place of `Input`. When
- * `error` is set, the message is shown after the input, and the input is
- * marked as invalid and described by it.
+ * `ref`. Use `as` to render another input component in place of `Input`.
+ * Like `Input`, that component has to take its props from the field through
+ * `useField`. When `error` is set, the message is shown after the input, and
+ * the input is marked as invalid and described by it.
  */
 const meta = {
   title: 'Molecule/InputField',
@@ -21,14 +22,13 @@ const meta = {
     },
   },
   argTypes: {
-    label: {
-      description: 'The text of the label.',
-      type: 'string',
+    as: {
+      control: false,
+      table: { defaultValue: { summary: 'Input' } },
     },
-    error: {
-      description:
-        'An error message to show and announce. Marks the input as invalid.',
-      type: 'string',
+    ref: {
+      control: false,
+      table: { type: { summary: 'Ref<HTMLInputElement>' } },
     },
   },
 } satisfies Meta<typeof InputField>;

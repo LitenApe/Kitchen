@@ -11,7 +11,10 @@ import { Accordion, AccordionHeader, AccordionPanel } from '.';
  *
  * `Accordion` holds the open state and shares it with its `AccordionHeader`
  * and `AccordionPanel`, which take care of the accessibility attributes that
- * link the two together. It can be used in two ways:
+ * link the two together. It renders a `div` around them, which receives every
+ * other prop.
+ *
+ * It can be used in two ways:
  *
  * - **Uncontrolled**: the accordion manages its own state. Use `initial` to
  *   choose whether it starts open.
@@ -31,19 +34,11 @@ const meta = {
     },
   },
   argTypes: {
-    initial: {
-      description: 'Whether the accordion starts open when it is uncontrolled.',
-      type: 'boolean',
-    },
-    open: {
+    children: {
       description:
-        'Whether the content is visible. Makes the accordion controlled together with `onClick`.',
-      type: 'boolean',
-    },
-    onClick: {
-      description:
-        'Called with the click event and the requested open state when the heading is clicked.',
-      type: 'function',
+        'An `AccordionHeader` and the `AccordionPanel` it shows or hides. Either can be wrapped in other elements, such as a heading around the header.',
+      control: false,
+      table: { type: { summary: 'ReactNode' } },
     },
   },
 } satisfies Meta<typeof Accordion>;

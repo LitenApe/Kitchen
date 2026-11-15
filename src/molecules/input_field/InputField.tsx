@@ -13,8 +13,13 @@ export type InputFieldProps = {
    * invalid.
    */
   error?: string;
-  /** Renders another input component in place of `Input`. */
+  /**
+   * A component to render in place of `Input`. It only receives the `ref`, so
+   * it has to take its other props from the field through `useField`, as
+   * `Input` does.
+   */
   as?: ComponentType<{ ref?: Ref<HTMLInputElement> }>;
+  /** Passed on to the input. */
   ref?: Ref<HTMLInputElement>;
 } & DistributiveOmit<InputProps, 'ref'>;
 

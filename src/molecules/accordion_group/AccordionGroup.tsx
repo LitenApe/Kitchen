@@ -15,9 +15,9 @@ export type AccordionGroupProps = {
   initial?: number;
   /** The index of the open accordion, or `-1` for none. Makes the group controlled together with `onClick`. */
   open?: number;
-  /** Called with the index of the clicked accordion and its requested open state. */
+  /** Called with the click event, the index of the clicked accordion and its requested open state. */
   onClick?: (event: MouseEvent, index: number, open: boolean) => void;
-  /** The accordions. Anything else is left out with a warning. */
+  /** The `Accordion` elements. Anything else is left out with a warning. */
   children?: ReactNode;
 };
 

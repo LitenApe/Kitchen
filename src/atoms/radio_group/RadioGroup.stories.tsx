@@ -13,12 +13,12 @@ import { Radio } from '../radio';
  * own `Field` and `Label`.
  *
  * Props passed to the group, such as `name`, `onChange` or `required`, are
- * shared with every `Radio` inside it rather than set on the `fieldset`. The
- * `aria-` props which name, describe or validate the group, such as
- * `aria-label`, `aria-labelledby` or `aria-required`, are set on the
- * `fieldset` instead, as they belong to the group as a whole. `onBlur` is
- * only called when focus leaves the group, and not when it moves between the
- * radios inside it.
+ * shared with every `Radio` inside it rather than set on the `fieldset`, and
+ * a radio's own props take precedence over them. The `aria-` props which
+ * name, describe or validate the group, such as `aria-label`,
+ * `aria-labelledby` or `aria-required`, are set on the `fieldset` instead, as
+ * they belong to the group as a whole. `onBlur` is only called when focus
+ * leaves the group, and not when it moves between the radios inside it.
  *
  * `RadioGroup` does not show error messages. To show one, mark the group as
  * invalid with `aria-invalid`, and point it to the message with
@@ -39,21 +39,63 @@ const meta = {
       subtitle: 'Groups radios which share a name and event handlers',
     },
   },
+  // the categories show which props the group keeps and which it shares
   argTypes: {
+    children: { control: false, table: { category: 'Group' } },
     name: {
-      description: 'The name shared by every radio in the group.',
+      description: 'The name of every radio in the group.',
       type: 'string',
+      table: {
+        category: 'Shared with every radio',
+        type: { summary: 'string' },
+      },
     },
     onChange: {
-      description: 'Called when one of the radios is selected.',
+      description: 'Called when one of the radios is chosen.',
+      table: {
+        category: 'Shared with every radio',
+        type: { summary: '(event: ChangeEvent<HTMLInputElement>) => void' },
+      },
     },
     onBlur: {
-      description: 'Called when focus leaves the group.',
+      description:
+        'Called when focus leaves the group, but not when it moves between its radios.',
+      table: {
+        category: 'Group',
+        type: { summary: '(event: FocusEvent<HTMLInputElement>) => void' },
+      },
+    },
+    required: {
+      description: 'Makes choosing one of the radios mandatory.',
+      type: 'boolean',
+      table: {
+        category: 'Shared with every radio',
+        type: { summary: 'boolean' },
+      },
+    },
+    'aria-invalid': {
+      description:
+        'Marks the group as invalid, as a radio cannot be invalid on its own.',
+      type: 'boolean',
+      table: { category: 'Group', type: { summary: 'boolean' } },
+    },
+    'aria-describedby': {
+      description:
+        'The ids of the elements which describe the group, such as its error message. Combined with the ids which a surrounding field shares.',
+      control: false,
+      table: { category: 'Group', type: { summary: 'string' } },
+    },
+    ref: {
+      control: false,
+      table: {
+        category: 'Group',
+        type: { summary: 'Ref<HTMLFieldSetElement>' },
+      },
     },
   },
   args: {
-    onChange: fn(),
     onBlur: fn(),
+    onChange: fn(),
   },
   render: (args) => (
     <RadioGroup {...args}>

@@ -5,16 +5,19 @@ import { Input } from '../../atoms/input';
 import { Label } from '../../atoms/label';
 
 /**
- * `BaseField` is a `Field` which can also show an error message. It is the
- * foundation of `InputField`, `CheckboxField`, `RadioField` and
- * `SelectField`, and can be used directly to build other kinds of fields.
+ * `BaseField` is a `Field` which can also show an error message. Apart from
+ * `error`, it takes the same props as `Field`, and shares them with its
+ * control in the same way. It is the foundation of `InputField`,
+ * `CheckboxField`, `RadioField` and `SelectField`, and can be used directly
+ * to build other kinds of fields.
  *
  * When `error` is set, the message is shown after the field's children in an
- * `Alert`, which screen readers announce. The `Alert` is rendered even while
- * there is no error, so screen readers already know about it when a message
- * arrives. The control is also marked as invalid with `aria-invalid`, and
- * described by the message through `aria-describedby`, alongside any
- * descriptions it already has.
+ * `Alert`, which screen readers announce. The children and the `Alert` are
+ * wrapped in a `div`, and the `Alert` is rendered even while there is no
+ * error, so screen readers already know about it when a message arrives. The
+ * control is also marked as invalid with `aria-invalid`, and described by the
+ * message through `aria-describedby`, alongside any descriptions it already
+ * has.
  *
  * Unlike the browser's own checks, such as `required`, an error does not stop
  * the form from being submitted. Errors which are only cleared when the form
@@ -33,11 +36,7 @@ const meta = {
     },
   },
   argTypes: {
-    error: {
-      description:
-        'An error message to show and announce. Marks the control as invalid.',
-      type: 'string',
-    },
+    children: { control: false },
   },
   render: (args) => (
     <BaseField {...args}>

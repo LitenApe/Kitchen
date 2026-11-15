@@ -16,6 +16,7 @@ type SharedControlProps =
   | ComponentPropsWithoutRef<'textarea'>;
 
 export type FieldProps = {
+  /** The form control and its label. */
   children?: ReactNode;
 } & SharedControlProps;
 

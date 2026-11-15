@@ -12,6 +12,10 @@ import { Backdrop } from '.';
  * passed as `children` is rendered inside the backdrop. Its look can be
  * adjusted with `className` or `style`, which are applied on top of its own
  * styling.
+ *
+ * The backdrop only covers the page visually. Keyboard users can still reach
+ * whatever is behind it, so use it together with a component which keeps
+ * focus inside, such as a modal dialog.
  */
 const meta = {
   title: 'Atom/Backdrop',
@@ -22,9 +26,10 @@ const meta = {
     },
   },
   argTypes: {
-    visible: {
-      description: 'Whether the backdrop is shown.',
-      type: 'boolean',
+    children: {
+      description: 'Content to show on top of the backdrop, such as a dialog.',
+      control: false,
+      table: { type: { summary: 'ReactNode' } },
     },
   },
 } satisfies Meta<typeof Backdrop>;

@@ -20,14 +20,10 @@ const meta = {
     },
   },
   argTypes: {
-    label: {
-      description: 'The text of the label.',
-      type: 'string',
-    },
-    error: {
-      description:
-        'An error message to show and announce. Marks the checkbox as invalid.',
-      type: 'string',
+    ref: {
+      description: 'Passed on to the checkbox.',
+      control: false,
+      table: { type: { summary: 'Ref<HTMLInputElement>' } },
     },
   },
 } satisfies Meta<typeof CheckboxField>;
