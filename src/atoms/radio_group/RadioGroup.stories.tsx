@@ -14,11 +14,12 @@ import { Radio } from '../radio';
  *
  * Props passed to the group, such as `name`, `onChange` or `required`, are
  * shared with every `Radio` inside it rather than set on the `fieldset`, and
- * a radio's own props take precedence over them. The `aria-` props which
- * name, describe or validate the group, such as `aria-label`,
- * `aria-labelledby` or `aria-required`, are set on the `fieldset` instead, as
- * they belong to the group as a whole. `onBlur` is only called when focus
- * leaves the group, and not when it moves between the radios inside it.
+ * a radio's own props take precedence over them unless they are `undefined`.
+ * The `aria-` props which name, describe or validate the group, such as
+ * `aria-label`, `aria-labelledby` or `aria-required`, are set on the
+ * `fieldset` instead, as they belong to the group as a whole. `onBlur` is
+ * only called when focus leaves the group, and not when it moves between the
+ * radios inside it.
  *
  * `RadioGroup` does not show error messages. To show one, mark the group as
  * invalid with `aria-invalid`, and point it to the message with

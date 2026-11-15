@@ -87,6 +87,23 @@ describe('Alert general behavior', () => {
       .toHaveAttribute('aria-live', 'polite');
   });
 
+  // a component which forwards its props passes them on as undefined
+  test('stays an assertive live region when given undefined', async () => {
+    await render(
+      <Alert
+        data-testid="test-alert"
+        aria-live={undefined}
+        aria-atomic={undefined}
+      >
+        message
+      </Alert>
+    );
+    const container = page.getByTestId('test-alert');
+
+    await expect.element(container).toHaveAttribute('aria-live', 'assertive');
+    await expect.element(container).toHaveAttribute('aria-atomic', 'true');
+  });
+
   test('renders as the element given through "as"', async () => {
     await render(
       <Alert as="p" data-testid="test-alert">

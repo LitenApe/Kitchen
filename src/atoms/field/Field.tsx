@@ -15,7 +15,8 @@ function Field({ children, ...props }: FieldProps): JSX.Element {
     <FieldContext
       value={{
         id,
-        getFieldProps: (own) => mergeFieldProps({ id, ...props }, own),
+        // the id goes last, as the field's own may be passed as undefined
+        getFieldProps: (own) => mergeFieldProps({ ...props, id }, own),
       }}
     >
       {children}

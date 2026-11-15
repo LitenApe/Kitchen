@@ -48,9 +48,10 @@ function RadioField({
           <Field key={radioProps.value}>
             <div>
               <Radio
-                // one required radio makes choosing any of them mandatory
-                required={required && index === 0}
                 {...radioProps}
+                // one required radio makes choosing any of them mandatory,
+                // unless the option sets `required` itself
+                required={radioProps.required ?? (required && index === 0)}
                 name={name}
               />
               <Label>{optionLabel}</Label>

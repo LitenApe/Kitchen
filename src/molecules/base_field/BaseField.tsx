@@ -21,11 +21,14 @@ export type BaseFieldProps = FieldProps & {
 function BaseField({ children, error, ...props }: BaseFieldProps): JSX.Element {
   const errorId = useId();
   const hasError = Boolean(error);
+  // the error decides whether the control is invalid, unless the field is
+  // given an `aria-invalid` of its own
+  const { 'aria-invalid': invalid = hasError, ...fieldProps } = props;
 
   return (
     <Field
-      aria-invalid={hasError}
-      {...props}
+      {...fieldProps}
+      aria-invalid={invalid}
       aria-describedby={joinIds(hasError && errorId, props['aria-describedby'])}
     >
       <div>

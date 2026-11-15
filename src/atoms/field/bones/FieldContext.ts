@@ -25,7 +25,7 @@ type FieldContextValue = {
   readonly id: string | undefined;
   /**
    * Merges the props shared by the field with a control's own props, where
-   * the control's own props take precedence.
+   * the control's own props take precedence unless they are `undefined`.
    */
   readonly getFieldProps: <T extends object>(props: T) => T;
 };

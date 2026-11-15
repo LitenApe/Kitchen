@@ -21,6 +21,15 @@ describe('InputElement general behavior', () => {
       .toHaveAttribute('type', 'email');
   });
 
+  // a component which forwards its props passes `type` on as undefined
+  test('stays a text input when its type is undefined', async () => {
+    await render(<InputElement type={undefined} />);
+
+    await expect
+      .element(page.getByRole('textbox'))
+      .toHaveAttribute('type', 'text');
+  });
+
   test('attaches its ref to the input', async () => {
     const ref = createRef<HTMLInputElement>();
     await render(<InputElement ref={ref} />);

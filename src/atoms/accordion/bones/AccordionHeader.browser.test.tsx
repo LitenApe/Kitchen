@@ -139,6 +139,23 @@ describe('AccordionHeader general behavior', () => {
     await expect.element(button).toHaveAttribute('type', 'button');
   });
 
+  // a component which forwards its props passes `type` on as undefined
+  test('does not submit a surrounding form when its type is undefined', async () => {
+    // a submit would navigate away from the test page, so it is prevented
+    const onSubmit = vi.fn((event: SubmitEvent) => event.preventDefault());
+    await render(
+      <form onSubmit={onSubmit}>
+        {inAccordion(<AccordionHeader type={undefined} />)}
+      </form>
+    );
+    const button = page.getByRole('button');
+
+    await userEvent.click(button);
+
+    expect(onSubmit).not.toHaveBeenCalled();
+    await expect.element(button).toHaveAttribute('type', 'button');
+  });
+
   test('toggles a real accordion', async () => {
     await render(
       <Accordion>

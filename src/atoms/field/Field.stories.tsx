@@ -15,10 +15,10 @@ import { Label } from '../label';
  *
  * This links a label to its control without wiring up ids by hand. Props set
  * directly on the control take precedence over the ones shared by the field,
- * so set the `id` on the field rather than on the control, or the label no
- * longer points to it. `aria-describedby` is the exception: the field's and
- * the control's are combined, so that a description shared by the field, such
- * as an error message, is never lost.
+ * unless they are `undefined`, so set the `id` on the field rather than on
+ * the control, or the label no longer points to it. `aria-describedby` is the
+ * exception: the field's and the control's are combined, so that a
+ * description shared by the field, such as an error message, is never lost.
  *
  * Give each control a field of its own, as every control inside a field gets
  * the same `id`. A control only takes props from its closest field, so a

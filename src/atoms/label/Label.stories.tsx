@@ -8,9 +8,9 @@ import { Label } from '.';
  *
  * `Label` renders a `label` and passes every prop on to it. Inside a `Field`,
  * it is linked to the field's control automatically, by setting its `htmlFor`
- * to the field's `id`. An explicit `htmlFor` takes precedence. Unlike the
- * control, the label only takes the `id` from the field, and none of its other
- * props.
+ * to the field's `id`. An explicit `htmlFor` takes precedence, unless it is
+ * `undefined`. Unlike the control, the label only takes the `id` from the
+ * field, and none of its other props.
  */
 const meta = {
   title: 'Atom/Label',

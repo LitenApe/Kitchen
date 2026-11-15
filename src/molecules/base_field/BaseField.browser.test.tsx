@@ -58,6 +58,18 @@ describe('BaseField default behavior', () => {
     await expect.element(input).toHaveAttribute('aria-invalid', 'true');
   });
 
+  // a component which forwards its props passes them on as undefined
+  test('input stays invalid when aria-invalid is undefined', async () => {
+    await render(
+      <BaseField error="some error" aria-invalid={undefined}>
+        <Label>Some label</Label>
+        <Input />
+      </BaseField>
+    );
+
+    await expect.element(page.getByRole('textbox')).toBeInvalid();
+  });
+
   test('input is valid without an error', async () => {
     await render(
       <BaseField>
