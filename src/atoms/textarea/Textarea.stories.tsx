@@ -9,7 +9,9 @@ import { Label } from '../label';
  * `Textarea` lets users enter longer text, which may span several lines. Use
  * `Input` for a single line of text instead.
  *
- * Inside a `Field`, it is linked to its `Label`.
+ * `Textarea` renders a `textarea` and passes every prop on to it. Inside a
+ * `Field`, it is linked to its `Label`, and also takes the props which the
+ * field shares.
  *
  * `Textarea` does not show error messages. To show one, mark the textarea as
  * invalid with `aria-invalid`, and point it to the message with
@@ -28,6 +30,31 @@ const meta = {
     rows: {
       description: 'The number of lines of text which are visible at once.',
       type: 'number',
+      table: { type: { summary: 'number' } },
+    },
+    onChange: {
+      description: 'Called whenever the value changes.',
+      table: {
+        type: { summary: '(event: ChangeEvent<HTMLTextAreaElement>) => void' },
+      },
+    },
+    id: {
+      description:
+        'The id of the textarea. Inside a `Field`, set it on the field instead, so that the label keeps pointing to the textarea.',
+      control: false,
+      table: { type: { summary: 'string' } },
+    },
+    'aria-invalid': {
+      description:
+        'Marks the textarea as invalid. Describe it with the error message through `aria-describedby`.',
+      type: 'boolean',
+      table: { type: { summary: 'boolean' } },
+    },
+    'aria-describedby': {
+      description:
+        'The ids of the elements which describe the textarea, such as its error message. Combined with the ids which a surrounding `Field` shares.',
+      control: false,
+      table: { type: { summary: 'string' } },
     },
   },
   args: {

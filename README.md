@@ -95,7 +95,7 @@ As mentioned in the introduction, the project is still in alpha, which means tha
   - [ ] Dropzone
 - [ ] Other tasks
   - [x] Rewrite the codebase to use JSX
-  - [ ] Add documentation to components
+  - [x] Add documentation to components
   - [ ] Mono or _monolith_ code distribution
   - [ ] GitHub Actions for tagging
   - [ ] GitHub Actions for releases

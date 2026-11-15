@@ -29,11 +29,28 @@ const meta = {
   },
   argTypes: {
     as: {
-      description: 'The element to render. Defaults to `div`.',
+      description: 'The element to render, such as `p` or `span`.',
+      options: ['div', 'p', 'span'],
+      control: { type: 'select' },
+      table: {
+        type: { summary: 'ElementType' },
+        defaultValue: { summary: "'div'" },
+      },
     },
     children: {
       description: 'The message to show and announce.',
       type: 'string',
+      table: { type: { summary: 'ReactNode' } },
+    },
+    'aria-live': {
+      description:
+        'How urgently screen readers announce the message. `assertive` interrupts whatever they are reading, while `polite` waits until they have finished.',
+      options: ['assertive', 'polite'],
+      control: { type: 'inline-radio' },
+      table: {
+        type: { summary: "'assertive' | 'polite' | 'off'" },
+        defaultValue: { summary: "'assertive'" },
+      },
     },
   },
 } satisfies Meta<typeof Alert<'p'>>;

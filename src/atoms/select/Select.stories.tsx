@@ -9,7 +9,9 @@ import { Label } from '../label';
  * list. Add the choices with `Option`, and group related ones under a
  * heading with `OptionGroup`.
  *
- * Inside a `Field`, `Select` is linked to its `Label`.
+ * `Select`, `Option` and `OptionGroup` render a `select`, an `option` and an
+ * `optgroup`, and pass every prop on to them. Inside a `Field`, `Select` is
+ * linked to its `Label`, and also takes the props which the field shares.
  *
  * `Select` does not show error messages. To show one, mark the select as
  * invalid with `aria-invalid`, and point it to the message with
@@ -25,9 +27,33 @@ const meta = {
     },
   },
   argTypes: {
+    children: {
+      description: 'The `Option` and `OptionGroup` elements to choose from.',
+      control: false,
+      table: { type: { summary: 'ReactNode' } },
+    },
     multiple: {
       description: 'Lets users pick more than one option.',
       type: 'boolean',
+      table: { type: { summary: 'boolean' } },
+    },
+    id: {
+      description:
+        'The id of the select. Inside a `Field`, set it on the field instead, so that the label keeps pointing to the select.',
+      control: false,
+      table: { type: { summary: 'string' } },
+    },
+    'aria-invalid': {
+      description:
+        'Marks the select as invalid. Describe it with the error message through `aria-describedby`.',
+      type: 'boolean',
+      table: { type: { summary: 'boolean' } },
+    },
+    'aria-describedby': {
+      description:
+        'The ids of the elements which describe the select, such as its error message. Combined with the ids which a surrounding `Field` shares.',
+      control: false,
+      table: { type: { summary: 'string' } },
     },
   },
   render: (args) => (
@@ -67,7 +93,8 @@ export const Default: Story = {
 /**
  * `Option` is a single choice in a `Select`. Its `value` is what the select
  * reports when the option is chosen, and its content is the text shown to the
- * user.
+ * user. An option without a `value`, like the one below, reports its text
+ * instead.
  */
 export const SingleOption: Story = {
   args: {

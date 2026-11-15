@@ -4,7 +4,8 @@ import { DangerousHTML } from '.';
 
 /**
  * `DangerousHTML` renders a string of HTML, such as content from a CMS or
- * converted markdown, inside an element of your choice.
+ * converted markdown, inside an element of your choice. The element receives
+ * every other prop, apart from `children`, as the HTML takes their place.
  *
  * **Only pass HTML which you trust or have sanitised.** The string is
  * inserted as-is through React's `dangerouslySetInnerHTML`, so untrusted
@@ -22,9 +23,18 @@ const meta = {
     content: {
       description:
         'The HTML string to render inside the element. Must be trusted or sanitised.',
+      type: { name: 'string', required: true },
+      table: { type: { summary: 'string' } },
     },
     as: {
-      description: 'The element to render the HTML into. Defaults to `div`.',
+      description:
+        'The element to render the HTML into, such as `article` or `section`.',
+      options: ['div', 'article', 'section'],
+      control: { type: 'select' },
+      table: {
+        type: { summary: 'ElementType' },
+        defaultValue: { summary: "'div'" },
+      },
     },
   },
 } satisfies Meta<typeof DangerousHTML<'div'>>;

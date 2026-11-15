@@ -6,8 +6,12 @@ import {
 } from 'react';
 
 export type ErrorBoundaryProps = {
+  /** The content to render while nothing has failed. */
   children?: ReactNode;
-  /** Rendered instead of the children after an error. */
+  /**
+   * A component, rather than an element, to render instead of the children
+   * once an error is caught.
+   */
   fallback: ComponentType;
   /** Called with the error and React's error info when an error is caught. */
   logger?: (error: unknown, info: ErrorInfo) => void;

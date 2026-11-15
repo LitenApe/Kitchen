@@ -17,7 +17,10 @@ type OptionData = Omit<OptionProps, 'children' | 'value' | 'ref'> & {
 export type SelectFieldProps = {
   /** The text of the label. */
   label: string;
-  /** The choices, as option data or as components which render options. */
+  /**
+   * The choices, as `{ label, value }` objects, which may also include other
+   * props for their option, or as components which render options.
+   */
   options: Array<OptionData | ComponentType>;
   /**
    * An error message to show and announce, which also marks the select as

@@ -25,7 +25,8 @@ function Position() {
  * attach the `ref` it returns to the element. The hook then provides:
  *
  * - `index`: the element's position, counted in document order regardless of
- *   how deeply it is nested
+ *   how deeply it is nested. It is `-1` during the first render, before the
+ *   element has been registered.
  * - `next(loop)` and `prev(loop)`: the next or previous registered element.
  *   They wrap around at the ends, or stay on the current element when `loop`
  *   is `false`.
@@ -41,6 +42,9 @@ const meta = {
     docs: {
       subtitle: 'Tracks the order of related elements for focus navigation',
     },
+  },
+  argTypes: {
+    children: { control: false },
   },
   render: (args) => (
     <Descendant {...args}>

@@ -13,7 +13,7 @@ export type AccordionProps = {
   initial?: boolean;
   /** Whether the accordion is open. Makes it controlled together with `onClick`. */
   open?: boolean;
-  /** Called with the requested open state when the header is clicked. */
+  /** Called with the click event and the requested open state when the header is clicked. */
   onClick?: (event: MouseEvent, open: boolean) => void;
 } & Omit<ComponentPropsWithRef<'div'>, 'onClick'>;
 

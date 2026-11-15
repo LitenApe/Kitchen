@@ -20,9 +20,9 @@ function ErrorThrower(): JSX.Element {
  * the whole page.
  *
  * After an error, `fallback` is rendered in place of the children until the
- * boundary is remounted. `logger` is called with the error and React's error
- * info, which includes the component stack, for example to report the error
- * to a tracking service.
+ * boundary is remounted, for example by changing its `key`. `logger` is
+ * called with the error and React's error info, which includes the component
+ * stack, for example to report the error to a tracking service.
  *
  * Like any React error boundary, it does not catch errors thrown in event
  * handlers or asynchronous code. The example below renders a child which
@@ -38,14 +38,8 @@ const meta = {
     },
   },
   argTypes: {
-    fallback: {
-      description:
-        'A component to render instead of the children after an error.',
-    },
-    logger: {
-      description:
-        "Called with the error and React's error info when an error is caught.",
-    },
+    children: { control: false },
+    fallback: { control: false },
   },
   args: {
     fallback: Fallback,

@@ -22,7 +22,10 @@ import {
  *   logs a warning and ignores the click.
  *
  * Only `Accordion` elements are allowed as direct children. Anything else is
- * left out, with a warning in the console.
+ * left out, with a warning in the console. The group controls each of its
+ * accordions, so their own `open` and `initial` are ignored, while their own
+ * `onClick` is still called. `AccordionGroup` does not render an element of
+ * its own.
  *
  * The example below is uncontrolled and starts with the second accordion open.
  */
@@ -35,20 +38,7 @@ const meta = {
     },
   },
   argTypes: {
-    open: {
-      description:
-        'The index of the open accordion, or `-1` for none. Makes the group controlled together with `onClick`.',
-      type: 'number',
-    },
-    onClick: {
-      description:
-        "Called with the click event, the accordion's index and its requested open state when a heading is clicked.",
-    },
-    initial: {
-      description:
-        'The index of the accordion which starts open when the group is uncontrolled. Defaults to `-1`, where all of them are closed.',
-      type: 'number',
-    },
+    children: { control: false },
   },
   render: (args) => (
     <AccordionGroup {...args}>

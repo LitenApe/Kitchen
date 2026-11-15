@@ -23,18 +23,10 @@ const meta = {
     },
   },
   argTypes: {
-    label: {
-      description: 'The text of the label.',
-      type: 'string',
-    },
-    options: {
-      description:
-        'The choices, as `{ label, value }` objects or components which render options.',
-    },
-    error: {
-      description:
-        'An error message to show and announce. Marks the select as invalid.',
-      type: 'string',
+    ref: {
+      description: 'Passed on to the select.',
+      control: false,
+      table: { type: { summary: 'Ref<HTMLSelectElement>' } },
     },
   },
 } satisfies Meta<typeof SelectField>;

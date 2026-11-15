@@ -16,7 +16,9 @@ import { useGroupError } from './bones/useGroupError';
  * shared with every radio in the group.
  */
 export type RadioGroupProps = {
+  /** A `Legend`, followed by the radios, each in a `Field` with its `Label`. */
   children?: ReactNode;
+  /** Attached to the `fieldset`. */
   ref?: Ref<HTMLFieldSetElement>;
 } & Omit<ComponentPropsWithoutRef<'input'>, 'children'>;
 

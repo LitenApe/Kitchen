@@ -13,6 +13,10 @@ import { RadioField } from '.';
  * one of them mandatory, which screen readers announce for the group as a
  * whole. When `error` is set, the message is shown after the group, and the
  * group is marked as invalid and described by it.
+ *
+ * Other props, such as `onChange` or `disabled`, do not reach the radios,
+ * because of the problem described under Project Status in the README. Set
+ * them on each of the `options` instead.
  */
 const meta = {
   title: 'Molecule/RadioField',
@@ -23,26 +27,15 @@ const meta = {
     },
   },
   argTypes: {
-    label: {
-      description: 'The legend of the group.',
-      type: 'string',
-    },
-    name: {
-      description: 'The name shared by every radio in the group.',
-      type: 'string',
-    },
-    options: {
-      description:
-        'The choices, as `{ label, value }` objects which may include other radio props.',
-    },
     required: {
       description: 'Whether one of the options has to be chosen.',
       type: 'boolean',
+      table: { type: { summary: 'boolean' } },
     },
-    error: {
-      description:
-        'An error message to show after the group. Marks the group as invalid.',
-      type: 'string',
+    ref: {
+      description: "Attached to the group's `fieldset`.",
+      control: false,
+      table: { type: { summary: 'Ref<HTMLFieldSetElement>' } },
     },
   },
 } satisfies Meta<typeof RadioField>;
