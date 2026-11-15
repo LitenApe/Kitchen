@@ -19,6 +19,8 @@ function AccordionHeader({
 
   return (
     <button
+      // keeps the header from submitting a surrounding form
+      type="button"
       {...props}
       id={`${id}_button`}
       aria-disabled={headerDisabled}

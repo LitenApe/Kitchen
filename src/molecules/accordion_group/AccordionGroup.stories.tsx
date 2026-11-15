@@ -21,11 +21,15 @@ import {
  *   and it is up to you to update `open`. Passing `onClick` without `open`
  *   logs a warning and ignores the click.
  *
- * Only `Accordion` elements are allowed as direct children. Anything else is
- * left out, with a warning in the console. The group controls each of its
- * accordions, so their own `open` and `initial` are ignored, while their own
- * `onClick` is still called. `AccordionGroup` does not render an element of
- * its own.
+ * Only `Accordion` elements are allowed as direct children. Children which
+ * render nothing, such as the `false` from `{condition && <Accordion />}`,
+ * are skipped, and anything else is left out with a warning in the console.
+ * An accordion's index is its position among the children, so it stays the
+ * same when an accordion before it is not rendered.
+ *
+ * The group controls each of its accordions, so their own `open` and
+ * `initial` are ignored, while their own `onClick` is still called.
+ * `AccordionGroup` does not render an element of its own.
  *
  * The example below is uncontrolled and starts with the second accordion open.
  */

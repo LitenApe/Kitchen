@@ -1,10 +1,10 @@
-import type { MouseEvent, ReactNode } from 'react';
+import type { MouseEvent, ReactNode, SubmitEvent } from 'react';
 import { page, userEvent } from 'vitest/browser';
-import { render } from 'vitest-browser-react';
 
 import Accordion from '../Accordion';
 import { AccordionContext } from './AccordionContext';
 import AccordionHeader from './AccordionHeader';
+import { render } from 'vitest-browser-react';
 
 type AccordionState = {
   open?: boolean;
@@ -123,6 +123,20 @@ describe('AccordionHeader general behavior', () => {
     await rerender(inAccordion(<AccordionHeader aria-disabled />));
     await expect.element(button).not.toHaveAttribute('disabled');
     await expect.element(button).toHaveAttribute('aria-disabled', 'true');
+  });
+
+  test('does not submit a surrounding form', async () => {
+    // a submit would navigate away from the test page, so it is prevented
+    const onSubmit = vi.fn((event: SubmitEvent) => event.preventDefault());
+    await render(
+      <form onSubmit={onSubmit}>{inAccordion(<AccordionHeader />)}</form>
+    );
+    const button = page.getByRole('button');
+
+    await userEvent.click(button);
+
+    expect(onSubmit).not.toHaveBeenCalled();
+    await expect.element(button).toHaveAttribute('type', 'button');
   });
 
   test('toggles a real accordion', async () => {

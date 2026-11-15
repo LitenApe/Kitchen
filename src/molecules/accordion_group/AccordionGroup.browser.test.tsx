@@ -1,6 +1,10 @@
 import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
-import { Accordion, AccordionHeader } from '../../atoms/accordion';
+import {
+  Accordion,
+  AccordionHeader,
+  AccordionPanel,
+} from '../../atoms/accordion';
 import AccordionGroup from './AccordionGroup';
 
 describe('AccordionGroup general behavior', () => {
@@ -12,89 +16,101 @@ describe('AccordionGroup general behavior', () => {
     await render(
       <AccordionGroup>
         <Accordion>
-          <AccordionHeader></AccordionHeader>
+          <AccordionHeader>First</AccordionHeader>
+          <AccordionPanel>First content</AccordionPanel>
         </Accordion>
         <Accordion>
-          <AccordionHeader></AccordionHeader>
+          <AccordionHeader>Second</AccordionHeader>
+          <AccordionPanel>Second content</AccordionPanel>
         </Accordion>
         <Accordion>
-          <AccordionHeader></AccordionHeader>
+          <AccordionHeader>Third</AccordionHeader>
+          <AccordionPanel>Third content</AccordionPanel>
         </Accordion>
       </AccordionGroup>
     );
+    const firstContent = page.getByText('First content');
+    const secondContent = page.getByText('Second content');
+    const thirdContent = page.getByText('Third content');
 
-    const buttons = page.getByRole('button').all();
-
-    expect(buttons).toHaveLength(3);
-    for (const button of buttons) {
-      await expect.element(button).toHaveAttribute('aria-expanded', 'false');
-    }
+    expect(page.getByRole('button').all()).toHaveLength(3);
+    await expect.element(firstContent).not.toBeInTheDocument();
+    await expect.element(secondContent).not.toBeInTheDocument();
+    await expect.element(thirdContent).not.toBeInTheDocument();
   });
 
   test('initial open accordion is open when specified', async () => {
     await render(
       <AccordionGroup initial={1}>
         <Accordion>
-          <AccordionHeader></AccordionHeader>
+          <AccordionHeader>First</AccordionHeader>
+          <AccordionPanel>First content</AccordionPanel>
         </Accordion>
         <Accordion>
-          <AccordionHeader></AccordionHeader>
+          <AccordionHeader>Second</AccordionHeader>
+          <AccordionPanel>Second content</AccordionPanel>
         </Accordion>
         <Accordion>
-          <AccordionHeader></AccordionHeader>
+          <AccordionHeader>Third</AccordionHeader>
+          <AccordionPanel>Third content</AccordionPanel>
         </Accordion>
       </AccordionGroup>
     );
+    const firstContent = page.getByText('First content');
+    const secondContent = page.getByText('Second content');
+    const thirdContent = page.getByText('Third content');
 
-    const buttons = page.getByRole('button').all();
-
-    expect(buttons).toHaveLength(3);
-    await expect.element(buttons[0]).toHaveAttribute('aria-expanded', 'false');
-    await expect.element(buttons[1]).toHaveAttribute('aria-expanded', 'true');
-    await expect.element(buttons[2]).toHaveAttribute('aria-expanded', 'false');
+    await expect.element(secondContent).toBeVisible();
+    await expect.element(firstContent).not.toBeInTheDocument();
+    await expect.element(thirdContent).not.toBeInTheDocument();
   });
 
   test('only one accordion is open at the time', async () => {
     await render(
       <AccordionGroup>
         <Accordion>
-          <AccordionHeader></AccordionHeader>
+          <AccordionHeader>First</AccordionHeader>
+          <AccordionPanel>First content</AccordionPanel>
         </Accordion>
         <Accordion>
-          <AccordionHeader></AccordionHeader>
+          <AccordionHeader>Second</AccordionHeader>
+          <AccordionPanel>Second content</AccordionPanel>
         </Accordion>
         <Accordion>
-          <AccordionHeader></AccordionHeader>
+          <AccordionHeader>Third</AccordionHeader>
+          <AccordionPanel>Third content</AccordionPanel>
         </Accordion>
       </AccordionGroup>
     );
+    const firstContent = page.getByText('First content');
+    const secondContent = page.getByText('Second content');
+    const thirdContent = page.getByText('Third content');
 
-    const buttons = page.getByRole('button').all();
+    await expect.element(firstContent).not.toBeInTheDocument();
+    await expect.element(secondContent).not.toBeInTheDocument();
+    await expect.element(thirdContent).not.toBeInTheDocument();
 
-    expect(buttons).toHaveLength(3);
-    await expect.element(buttons[0]).toHaveAttribute('aria-expanded', 'false');
-    await expect.element(buttons[1]).toHaveAttribute('aria-expanded', 'false');
-    await expect.element(buttons[2]).toHaveAttribute('aria-expanded', 'false');
+    // the content which changes is checked first, so the checks after it
+    // run once the group has updated
+    await userEvent.click(page.getByRole('button', { name: 'Third' }));
+    await expect.element(thirdContent).toBeVisible();
+    await expect.element(firstContent).not.toBeInTheDocument();
+    await expect.element(secondContent).not.toBeInTheDocument();
 
-    await userEvent.click(buttons[2]);
-    await expect.element(buttons[0]).toHaveAttribute('aria-expanded', 'false');
-    await expect.element(buttons[1]).toHaveAttribute('aria-expanded', 'false');
-    await expect.element(buttons[2]).toHaveAttribute('aria-expanded', 'true');
+    await userEvent.click(page.getByRole('button', { name: 'First' }));
+    await expect.element(firstContent).toBeVisible();
+    await expect.element(secondContent).not.toBeInTheDocument();
+    await expect.element(thirdContent).not.toBeInTheDocument();
 
-    await userEvent.click(buttons[0]);
-    await expect.element(buttons[0]).toHaveAttribute('aria-expanded', 'true');
-    await expect.element(buttons[1]).toHaveAttribute('aria-expanded', 'false');
-    await expect.element(buttons[2]).toHaveAttribute('aria-expanded', 'false');
+    await userEvent.click(page.getByRole('button', { name: 'Second' }));
+    await expect.element(secondContent).toBeVisible();
+    await expect.element(firstContent).not.toBeInTheDocument();
+    await expect.element(thirdContent).not.toBeInTheDocument();
 
-    await userEvent.click(buttons[1]);
-    await expect.element(buttons[0]).toHaveAttribute('aria-expanded', 'false');
-    await expect.element(buttons[1]).toHaveAttribute('aria-expanded', 'true');
-    await expect.element(buttons[2]).toHaveAttribute('aria-expanded', 'false');
-
-    await userEvent.click(buttons[1]);
-    await expect.element(buttons[0]).toHaveAttribute('aria-expanded', 'false');
-    await expect.element(buttons[1]).toHaveAttribute('aria-expanded', 'false');
-    await expect.element(buttons[2]).toHaveAttribute('aria-expanded', 'false');
+    await userEvent.click(page.getByRole('button', { name: 'Second' }));
+    await expect.element(secondContent).not.toBeInTheDocument();
+    await expect.element(firstContent).not.toBeInTheDocument();
+    await expect.element(thirdContent).not.toBeInTheDocument();
   });
 
   test('onClick is called with index of clicked button and requested new state', async () => {
@@ -102,44 +118,53 @@ describe('AccordionGroup general behavior', () => {
     const { rerender } = await render(
       <AccordionGroup onClick={mock} open={-1}>
         <Accordion>
-          <AccordionHeader></AccordionHeader>
+          <AccordionHeader>First</AccordionHeader>
+          <AccordionPanel>First content</AccordionPanel>
         </Accordion>
         <Accordion>
-          <AccordionHeader></AccordionHeader>
+          <AccordionHeader>Second</AccordionHeader>
+          <AccordionPanel>Second content</AccordionPanel>
         </Accordion>
         <Accordion>
-          <AccordionHeader></AccordionHeader>
+          <AccordionHeader>Third</AccordionHeader>
+          <AccordionPanel>Third content</AccordionPanel>
         </Accordion>
       </AccordionGroup>
     );
-
-    const buttons = page.getByRole('button').all();
+    const secondHeader = page.getByRole('button', { name: 'Second' });
+    const secondContent = page.getByText('Second content');
 
     expect(mock).not.toHaveBeenCalled();
 
-    await userEvent.click(buttons[1]);
+    await userEvent.click(secondHeader);
     expect(mock).toHaveBeenCalledTimes(1);
     expect(mock).toHaveBeenLastCalledWith(
       expect.objectContaining({ type: 'click' }),
       1,
       true
     );
+    // the accordion only opens once "open" changes
+    await expect.element(secondContent).not.toBeInTheDocument();
 
     await rerender(
       <AccordionGroup onClick={mock} open={1}>
         <Accordion>
-          <AccordionHeader></AccordionHeader>
+          <AccordionHeader>First</AccordionHeader>
+          <AccordionPanel>First content</AccordionPanel>
         </Accordion>
         <Accordion>
-          <AccordionHeader></AccordionHeader>
+          <AccordionHeader>Second</AccordionHeader>
+          <AccordionPanel>Second content</AccordionPanel>
         </Accordion>
         <Accordion>
-          <AccordionHeader></AccordionHeader>
+          <AccordionHeader>Third</AccordionHeader>
+          <AccordionPanel>Third content</AccordionPanel>
         </Accordion>
       </AccordionGroup>
     );
+    await expect.element(secondContent).toBeVisible();
 
-    await userEvent.click(buttons[1]);
+    await userEvent.click(secondHeader);
     expect(mock).toHaveBeenCalledTimes(2);
     expect(mock).toHaveBeenLastCalledWith(
       expect.objectContaining({ type: 'click' }),
@@ -155,23 +180,26 @@ describe('AccordionGroup general behavior', () => {
     await render(
       <AccordionGroup onClick={mock}>
         <Accordion>
-          <AccordionHeader></AccordionHeader>
+          <AccordionHeader>First</AccordionHeader>
+          <AccordionPanel>First content</AccordionPanel>
         </Accordion>
         <Accordion>
-          <AccordionHeader></AccordionHeader>
+          <AccordionHeader>Second</AccordionHeader>
+          <AccordionPanel>Second content</AccordionPanel>
         </Accordion>
         <Accordion>
-          <AccordionHeader></AccordionHeader>
+          <AccordionHeader>Third</AccordionHeader>
+          <AccordionPanel>Third content</AccordionPanel>
         </Accordion>
       </AccordionGroup>
     );
 
-    const buttons = page.getByRole('button').all();
-
     expect(mock).not.toHaveBeenCalled();
-    await userEvent.click(buttons[1]);
+    await userEvent.click(page.getByRole('button', { name: 'Second' }));
     expect(mock).not.toHaveBeenCalled();
-    await expect.element(buttons[1]).toHaveAttribute('aria-expanded', 'false');
+    await expect
+      .element(page.getByText('Second content'))
+      .not.toBeInTheDocument();
     expect(warn).toHaveBeenCalledWith(
       expect.stringContaining('AccordionGroup received a change handler')
     );
@@ -185,20 +213,24 @@ describe('AccordionGroup general behavior', () => {
     await render(
       <AccordionGroup>
         <Accordion>
-          <AccordionHeader></AccordionHeader>
+          <AccordionHeader>First</AccordionHeader>
+          <AccordionPanel>First content</AccordionPanel>
         </Accordion>
-        <p data-testid="test-container">fsjks</p>
+        <p>Not an accordion</p>
         <Accordion>
-          <AccordionHeader></AccordionHeader>
+          <AccordionHeader>Second</AccordionHeader>
+          <AccordionPanel>Second content</AccordionPanel>
         </Accordion>
         <Accordion>
-          <AccordionHeader></AccordionHeader>
+          <AccordionHeader>Third</AccordionHeader>
+          <AccordionPanel>Third content</AccordionPanel>
         </Accordion>
       </AccordionGroup>
     );
 
-    const testContainer = page.getByTestId('test-container');
-    await expect.element(testContainer).not.toBeInTheDocument();
+    await expect
+      .element(page.getByText('Not an accordion'))
+      .not.toBeInTheDocument();
     expect(page.getByRole('button').all()).toHaveLength(3);
     expect(warn).toHaveBeenCalledWith(
       expect.stringContaining('only accepts Accordion elements')
@@ -207,33 +239,105 @@ describe('AccordionGroup general behavior', () => {
     warn.mockRestore();
   });
 
+  test('children which render nothing are skipped without a warning', async () => {
+    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+
+    await render(
+      <AccordionGroup>
+        <Accordion>
+          <AccordionHeader>First</AccordionHeader>
+          <AccordionPanel>First content</AccordionPanel>
+        </Accordion>
+        {false}
+        {true}
+        {null}
+        {undefined}
+        <Accordion>
+          <AccordionHeader>Second</AccordionHeader>
+          <AccordionPanel>Second content</AccordionPanel>
+        </Accordion>
+      </AccordionGroup>
+    );
+
+    expect(page.getByRole('button').all()).toHaveLength(2);
+    expect(warn).not.toHaveBeenCalled();
+
+    warn.mockRestore();
+  });
+
+  test('accordions keep their index when one before them is not rendered', async () => {
+    const { rerender } = await render(
+      <AccordionGroup initial={2}>
+        <Accordion>
+          <AccordionHeader>First</AccordionHeader>
+          <AccordionPanel>First content</AccordionPanel>
+        </Accordion>
+        {false}
+        <Accordion>
+          <AccordionHeader>Third</AccordionHeader>
+          <AccordionPanel>Third content</AccordionPanel>
+        </Accordion>
+      </AccordionGroup>
+    );
+    const thirdContent = page.getByText('Third content');
+    await expect.element(thirdContent).toBeVisible();
+
+    await rerender(
+      <AccordionGroup initial={2}>
+        <Accordion>
+          <AccordionHeader>First</AccordionHeader>
+          <AccordionPanel>First content</AccordionPanel>
+        </Accordion>
+        <Accordion>
+          <AccordionHeader>Second</AccordionHeader>
+          <AccordionPanel>Second content</AccordionPanel>
+        </Accordion>
+        <Accordion>
+          <AccordionHeader>Third</AccordionHeader>
+          <AccordionPanel>Third content</AccordionPanel>
+        </Accordion>
+      </AccordionGroup>
+    );
+
+    await expect.element(thirdContent).toBeVisible();
+    await expect
+      .element(page.getByText('Second content'))
+      .not.toBeInTheDocument();
+  });
+
   test('follows "open" when controlled', async () => {
     const { rerender } = await render(
       <AccordionGroup open={0} onClick={vi.fn()}>
         <Accordion>
-          <AccordionHeader></AccordionHeader>
+          <AccordionHeader>First</AccordionHeader>
+          <AccordionPanel>First content</AccordionPanel>
         </Accordion>
         <Accordion>
-          <AccordionHeader></AccordionHeader>
+          <AccordionHeader>Second</AccordionHeader>
+          <AccordionPanel>Second content</AccordionPanel>
         </Accordion>
       </AccordionGroup>
     );
-    const buttons = page.getByRole('button').all();
-    await expect.element(buttons[0]).toHaveAttribute('aria-expanded', 'true');
+    const firstContent = page.getByText('First content');
+    const secondContent = page.getByText('Second content');
+    await expect.element(firstContent).toBeVisible();
+    await expect.element(secondContent).not.toBeInTheDocument();
 
     await rerender(
       <AccordionGroup open={1} onClick={vi.fn()}>
         <Accordion>
-          <AccordionHeader></AccordionHeader>
+          <AccordionHeader>First</AccordionHeader>
+          <AccordionPanel>First content</AccordionPanel>
         </Accordion>
         <Accordion>
-          <AccordionHeader></AccordionHeader>
+          <AccordionHeader>Second</AccordionHeader>
+          <AccordionPanel>Second content</AccordionPanel>
         </Accordion>
       </AccordionGroup>
     );
 
-    await expect.element(buttons[0]).toHaveAttribute('aria-expanded', 'false');
-    await expect.element(buttons[1]).toHaveAttribute('aria-expanded', 'true');
+    await expect.element(secondContent).toBeVisible();
+    await expect.element(firstContent).not.toBeInTheDocument();
   });
 
   test("an accordion's own onClick is invoked as well", async () => {
@@ -241,21 +345,22 @@ describe('AccordionGroup general behavior', () => {
     await render(
       <AccordionGroup>
         <Accordion onClick={mock}>
-          <AccordionHeader></AccordionHeader>
+          <AccordionHeader>First</AccordionHeader>
+          <AccordionPanel>First content</AccordionPanel>
         </Accordion>
         <Accordion>
-          <AccordionHeader></AccordionHeader>
+          <AccordionHeader>Second</AccordionHeader>
+          <AccordionPanel>Second content</AccordionPanel>
         </Accordion>
       </AccordionGroup>
     );
-    const buttons = page.getByRole('button').all();
 
-    await userEvent.click(buttons[0]);
+    await userEvent.click(page.getByRole('button', { name: 'First' }));
 
     expect(mock).toHaveBeenCalledExactlyOnceWith(
       expect.objectContaining({ type: 'click' }),
       true
     );
-    await expect.element(buttons[0]).toHaveAttribute('aria-expanded', 'true');
+    await expect.element(page.getByText('First content')).toBeVisible();
   });
 });

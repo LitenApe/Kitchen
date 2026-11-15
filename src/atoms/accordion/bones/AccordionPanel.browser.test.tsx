@@ -46,6 +46,7 @@ describe('AccordionPanel general behavior', () => {
     );
     await expect.element(panel).toHaveAttribute('aria-hidden', 'false');
     await expect.element(panel).toHaveTextContent('Details');
+    await expect.element(page.getByText('Details')).toBeVisible();
   });
 
   test('passes other props to its element', async () => {
