@@ -28,6 +28,29 @@ export function sortNodes(nodes: HTMLElement[]) {
   });
 }
 
+/**
+ * Finds the closest node which contains every given node, which can be one of
+ * the nodes itself.
+ *
+ * @returns the node, or `null` when there are no nodes or they share no
+ * ancestor
+ */
+export function getCommonAncestor(nodes: ReadonlyArray<Node>): Node | null {
+  let ancestor: Node | null = nodes[0] ?? null;
+
+  while (ancestor !== null) {
+    const candidate: Node = ancestor;
+
+    if (nodes.every((node) => candidate.contains(node))) {
+      return candidate;
+    }
+
+    ancestor = candidate.parentNode;
+  }
+
+  return null;
+}
+
 export function getNextIndex(
   current: number,
   length: number,

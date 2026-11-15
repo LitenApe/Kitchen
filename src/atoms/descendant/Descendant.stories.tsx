@@ -26,7 +26,8 @@ function Position() {
  *
  * - `index`: the element's position, counted in document order regardless of
  *   how deeply it is nested. It is `-1` during the first render, before the
- *   element has been registered.
+ *   element has been registered. It is updated when elements are added,
+ *   removed or moved, such as when a keyed list is reordered.
  * - `next(loop)` and `prev(loop)`: the next or previous registered element.
  *   They wrap around at the ends, or stay on the current element when `loop`
  *   is `false`.

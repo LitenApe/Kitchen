@@ -91,4 +91,38 @@ describe('useDescendantRegistry general behavior', () => {
     expect(result.current.register).toBe(initial.register);
     expect(result.current.unregister).toBe(initial.unregister);
   });
+
+  // React moves elements without registering them again
+  test('sorts its elements again when they are moved', async () => {
+    const [first, second, third] = createElements('first', 'second', 'third');
+    const { result, act } = await renderHook(() => useDescendantRegistry());
+
+    await act(() => {
+      result.current.register(first);
+      result.current.register(second);
+      result.current.register(third);
+    });
+    container.append(first);
+
+    await expect
+      .poll(() => getIds(result.current.elements))
+      .toEqual(['second', 'third', 'first']);
+  });
+
+  // an element which React removes is only unregistered in a later render,
+  // and it can no longer be sorted once it has left the document
+  test('leaves out elements which have left the document', async () => {
+    const [first, second] = createElements('first', 'second');
+    const { result, act } = await renderHook(() => useDescendantRegistry());
+
+    await act(() => {
+      result.current.register(first);
+      result.current.register(second);
+    });
+    first.remove();
+
+    await expect
+      .poll(() => getIds(result.current.elements))
+      .toEqual(['second']);
+  });
 });
