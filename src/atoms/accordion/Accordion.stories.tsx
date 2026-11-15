@@ -98,7 +98,8 @@ export const Default: Story = {
  * `AccordionHeader` is the button which shows or hides the content. It points
  * to its panel through `aria-controls` and reports whether the panel is open
  * through `aria-expanded`. It renders only a button, so wrap it in a heading
- * of the appropriate level (`h2` to `h6`) when using it on a page.
+ * of the appropriate level (`h2` to `h6`) when using it on a page. Unlike a
+ * plain `button`, it does not submit a surrounding form.
  *
  * Setting `disabled` or `aria-disabled` makes it ignore clicks, while keeping
  * it focusable so keyboard and screen reader users can still discover it.

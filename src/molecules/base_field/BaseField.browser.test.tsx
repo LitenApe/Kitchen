@@ -1,4 +1,4 @@
-import type { FormEvent } from 'react';
+import type { SubmitEvent } from 'react';
 import { type Locator, page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
 
@@ -71,7 +71,7 @@ describe('BaseField default behavior', () => {
 
   test('an error marks the input as invalid without stopping the submit', async () => {
     // keeps the browser from leaving the page when the form is submitted
-    const onSubmit = vi.fn((event: FormEvent) => event.preventDefault());
+    const onSubmit = vi.fn((event: SubmitEvent) => event.preventDefault());
     await render(
       <form onSubmit={onSubmit}>
         <BaseField error="some error">

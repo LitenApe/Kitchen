@@ -7,6 +7,7 @@ import {
 } from 'react';
 
 import { callAll } from '../../utils/functions/callAll';
+import { isDefined } from '../../utils/functions/isDefined';
 import { useControllableState } from '../../utils/hooks/useControllableState';
 import { isAccordion } from './bones/isAccordion';
 
@@ -17,7 +18,11 @@ export type AccordionGroupProps = {
   open?: number;
   /** Called with the click event, the index of the clicked accordion and its requested open state. */
   onClick?: (event: MouseEvent, index: number, open: boolean) => void;
-  /** The `Accordion` elements. Anything else is left out with a warning. */
+  /**
+   * The `Accordion` elements. Children which render nothing, such as `null`
+   * or `false`, are skipped, so accordions can be rendered conditionally.
+   * Anything else is left out with a warning.
+   */
   children?: ReactNode;
 };
 
@@ -41,6 +46,13 @@ function AccordionGroup({
   return (
     <>
       {Children.map(children, (child, index) => {
+        // children which render nothing, such as the `false` from
+        // `{condition && <Accordion />}`, are skipped without a warning, but
+        // still count, so the accordions after them keep their index
+        if (!isDefined(child) || typeof child === 'boolean') {
+          return null;
+        }
+
         if (!isAccordion(child)) {
           console.warn(
             'AccordionGroup only accepts Accordion elements as children, so another child was left out.'
