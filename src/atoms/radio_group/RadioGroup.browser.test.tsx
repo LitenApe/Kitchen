@@ -130,6 +130,23 @@ describe('Radios general behavior', () => {
       .toHaveAttribute('name', 'own');
   });
 
+  // a component which forwards its props passes them on as undefined
+  test("a radio keeps the group's props which it passes as undefined", async () => {
+    await render(
+      <RadioGroup name="group">
+        <Radio value="1" name={undefined} />
+        <Radio value="2" name={undefined} />
+      </RadioGroup>
+    );
+    const [first, second] = page.getByRole('radio').all();
+
+    await userEvent.click(first);
+    await userEvent.click(second);
+
+    await expect.element(first).not.toBeChecked();
+    await expect.element(second).toBeChecked();
+  });
+
   test("a radio's own onBlur is invoked as well", async () => {
     const mock = vi.fn();
     await render(

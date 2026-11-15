@@ -64,6 +64,25 @@ describe('RadioField general behavior', () => {
     expect(small.matches(':invalid')).toBe(false);
   });
 
+  // options built from data pass their props on as undefined
+  test('stays required when an option passes required as undefined', async () => {
+    await render(
+      <RadioField
+        name="size"
+        label="Size"
+        options={[
+          { label: 'Small', value: 'small', required: undefined },
+          { label: 'Large', value: 'large', required: undefined },
+        ]}
+        required
+      />
+    );
+
+    expect(page.getByLabelText('Small').element().matches(':invalid')).toBe(
+      true
+    );
+  });
+
   test('tells screen readers that the group is required when required', async () => {
     await render(
       <RadioField name="size" label="Size" options={options} required />

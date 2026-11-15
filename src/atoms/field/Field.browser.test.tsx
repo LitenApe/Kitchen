@@ -87,6 +87,33 @@ describe('Field general behaviour', () => {
     );
   });
 
+  // a component which forwards its props passes them on as undefined
+  test('keeps its label linked when the control is given an undefined id', async () => {
+    await render(
+      <Field>
+        <Label>Name</Label>
+        <Input id={undefined} />
+      </Field>
+    );
+
+    await expect
+      .element(page.getByRole('textbox', { name: 'Name' }))
+      .toBeVisible();
+  });
+
+  test('keeps its label linked when it is given an undefined id', async () => {
+    await render(
+      <Field id={undefined}>
+        <Label>Name</Label>
+        <Input />
+      </Field>
+    );
+
+    await expect
+      .element(page.getByRole('textbox', { name: 'Name' }))
+      .toBeVisible();
+  });
+
   test("keeps its aria-describedby next to a control's own", async () => {
     await render(
       <Field aria-describedby="error">

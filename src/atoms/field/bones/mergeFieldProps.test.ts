@@ -10,6 +10,15 @@ describe('mergeFieldProps', () => {
     expect(merged).toMatchObject({ name: 'own', placeholder: 'field' });
   });
 
+  test("keeps the field's props which the control passes as undefined", () => {
+    const merged = mergeFieldProps(
+      { id: 'field', name: 'field' },
+      { id: undefined, name: 'own' }
+    );
+
+    expect(merged).toMatchObject({ id: 'field', name: 'own' });
+  });
+
   test('combines the descriptions of the field and the control', () => {
     const merged = mergeFieldProps(
       { 'aria-describedby': 'error' },

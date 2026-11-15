@@ -35,6 +35,17 @@ describe('Label general behavior', () => {
     await expect.element(label).toHaveAttribute('for', 'test-id');
   });
 
+  // a component which forwards its props passes them on as undefined
+  test('points at the control of its "Field" when "htmlFor" is undefined', async () => {
+    await render(
+      <Field id="control">
+        <Label htmlFor={undefined} data-testid="test-component" />
+      </Field>
+    );
+    const label = page.getByTestId('test-component');
+    await expect.element(label).toHaveAttribute('for', 'control');
+  });
+
   test('keeps pointing at the control when given an id of its own', async () => {
     await render(
       <Field id="control">

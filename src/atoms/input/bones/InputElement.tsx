@@ -8,12 +8,16 @@ type InputElementProps = ComponentPropsWithRef<'input'> & {
 };
 
 /** The `input` element of `Input`, which an affix may also describe. */
-function InputElement({ affixId, ...props }: InputElementProps): JSX.Element {
+function InputElement({
+  affixId,
+  // an input is a text field unless told otherwise
+  type = 'text',
+  ...props
+}: InputElementProps): JSX.Element {
   return (
     <input
-      // an input is a text field unless told otherwise
-      type="text"
       {...props}
+      type={type}
       aria-describedby={joinIds(props['aria-describedby'], affixId)}
     />
   );

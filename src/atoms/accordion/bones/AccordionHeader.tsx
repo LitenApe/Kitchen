@@ -5,6 +5,8 @@ import { isDisabled } from '../../../utils/functions/isDisabled';
 import { useAccordion } from './AccordionContext';
 
 function AccordionHeader({
+  // keeps the header from submitting a surrounding form
+  type = 'button',
   disabled,
   onClick: ownOnClick,
   ...props
@@ -19,9 +21,8 @@ function AccordionHeader({
 
   return (
     <button
-      // keeps the header from submitting a surrounding form
-      type="button"
       {...props}
+      type={type}
       id={`${id}_button`}
       aria-disabled={headerDisabled}
       aria-controls={`${id}_content`}

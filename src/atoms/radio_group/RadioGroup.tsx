@@ -1,6 +1,7 @@
 import type { ComponentPropsWithoutRef, JSX, ReactNode, Ref } from 'react';
 
 import { callAll } from '../../utils/functions/callAll';
+import { mergeDefinedProps } from '../../utils/functions/mergeDefinedProps';
 import { useMergedRefs } from '../../utils/hooks/useMergedRefs';
 import {
   type GroupMemberProps,
@@ -37,8 +38,7 @@ function RadioGroup({
   function getGroupProps<T extends GroupMemberProps>(radioProps: T): T {
     const ownBlur: GroupMemberProps['onBlur'] = radioProps.onBlur;
     return {
-      ...shared,
-      ...radioProps,
+      ...mergeDefinedProps(shared, radioProps),
       onBlur: callAll(ownBlur, handleBlur),
     };
   }

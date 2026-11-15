@@ -5,7 +5,9 @@ import { useField } from '../field';
 /** Points to the control of the surrounding `Field`, unless given `htmlFor`. */
 function Label(props: ComponentPropsWithRef<'label'>): JSX.Element {
   const { id } = useField();
-  return <label htmlFor={id} {...props} />;
+  const { htmlFor = id, ...labelProps } = props;
+
+  return <label {...labelProps} htmlFor={htmlFor} />;
 }
 
 export default Label;

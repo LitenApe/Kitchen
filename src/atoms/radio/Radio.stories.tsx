@@ -11,10 +11,10 @@ import { Label } from '../label';
  * radio inside it.
  *
  * `Radio` renders an `input` of type `radio`, and passes every prop on to it.
- * Its own props take precedence over the ones its group shares. Inside a
- * `Field`, it is linked to its `Label`, and also takes the props which the
- * field shares. A radio cannot be invalid on its own, so mark its
- * `RadioGroup` as invalid instead.
+ * Its own props take precedence over the ones its group shares, unless they
+ * are `undefined`. Inside a `Field`, it is linked to its `Label`, and also
+ * takes the props which the field shares. A radio cannot be invalid on its
+ * own, so mark its `RadioGroup` as invalid instead.
  */
 const meta = {
   title: 'Atom/Radio',
