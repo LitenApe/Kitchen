@@ -8,7 +8,7 @@ function AccordionPanel({
   className,
   ...props
 }: ComponentPropsWithRef<'section'>): JSX.Element {
-  const { id, open } = useAccordion();
+  const { headerId, panelId, open } = useAccordion();
 
   // the content stays rendered while the accordion is closed, so it keeps its
   // state, such as what was typed into it
@@ -16,8 +16,8 @@ function AccordionPanel({
     <section
       {...props}
       className={joinClassNames(styles.panel, className)}
-      id={`${id}_content`}
-      aria-labelledby={`${id}_button`}
+      id={panelId}
+      aria-labelledby={headerId}
       hidden={!open}
     />
   );

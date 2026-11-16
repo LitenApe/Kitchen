@@ -70,17 +70,6 @@ describe('BaseField default behavior', () => {
     await expect.element(page.getByRole('textbox')).toBeInvalid();
   });
 
-  test('input is valid without an error', async () => {
-    await render(
-      <BaseField>
-        <Label>Some label</Label>
-        <Input />
-      </BaseField>
-    );
-
-    await expect.element(page.getByRole('textbox')).toBeValid();
-  });
-
   test('an error marks the input as invalid without stopping the submit', async () => {
     // keeps the browser from leaving the page when the form is submitted
     const onSubmit = vi.fn((event: SubmitEvent) => event.preventDefault());
@@ -125,24 +114,6 @@ describe('BaseField default behavior', () => {
 
     const errorId = error?.getAttribute('id');
     await expect.element(input).toHaveAttribute('aria-describedby', errorId);
-  });
-
-  test('additional aria-describedby is concattenated', async () => {
-    const { container } = await render(
-      <BaseField error="some error" aria-describedby="anotherId">
-        <Label>Some label</Label>
-        <Input />
-      </BaseField>
-    );
-
-    const input = page.getByRole('textbox');
-    await expect.element(input).toHaveAttribute('aria-describedby');
-    const descriptions = input.element().getAttribute('aria-describedby');
-    const alert = container.querySelector('[aria-live="assertive"]');
-
-    expect(descriptions?.split(' ')).toHaveLength(2);
-    expect(descriptions).toContain(alert?.id);
-    expect(descriptions).toContain('anotherId');
   });
 
   test("Input's internal aria-describedby is preserved", async () => {

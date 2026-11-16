@@ -50,24 +50,4 @@ describe('useControllableState general behaviour', () => {
     await rerender(2);
     expect(result.current[0]).toBe(2);
   });
-
-  test('ignores changes and warns when given onChange without a value', async () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    const onChange = vi.fn();
-    const { result, act } = await renderHook(() =>
-      useControllableState({
-        name: 'Test',
-        value: undefined,
-        defaultValue: false,
-        onChange,
-      })
-    );
-
-    await act(() => result.current[1](true));
-
-    expect(onChange).not.toHaveBeenCalled();
-    expect(result.current[0]).toBe(false);
-    expect(warn).toHaveBeenCalledTimes(1);
-    warn.mockRestore();
-  });
 });

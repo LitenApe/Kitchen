@@ -7,9 +7,10 @@ import {
 } from 'react';
 
 import { callAll } from '../../utils/functions/callAll';
-import { isDefined } from '../../utils/functions/isDefined';
 import { useControllableState } from '../../utils/hooks/useControllableState';
+import { getOpenIndex } from './bones/getOpenIndex';
 import { isAccordion } from './bones/isAccordion';
+import { rendersNothing } from './bones/rendersNothing';
 
 export type AccordionGroupProps = {
   /** The index of the accordion which starts open when uncontrolled, or `-1` for none. */
@@ -49,7 +50,7 @@ function AccordionGroup({
         // children which render nothing, such as the `false` from
         // `{condition && <Accordion />}`, are skipped without a warning, but
         // still count, so the accordions after them keep their index
-        if (!isDefined(child) || typeof child === 'boolean') {
+        if (rendersNothing(child)) {
           return null;
         }
 
@@ -65,7 +66,7 @@ function AccordionGroup({
           open: openIndex === index,
           onClick: callAll(
             (event: MouseEvent, requestedOpen: boolean) =>
-              setOpenIndex(requestedOpen ? index : -1, event, index),
+              setOpenIndex(getOpenIndex(index, requestedOpen), event, index),
             child.props.onClick
           ),
         });

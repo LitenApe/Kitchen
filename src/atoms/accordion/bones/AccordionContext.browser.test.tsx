@@ -5,7 +5,12 @@ import { AccordionContext, useAccordion } from './AccordionContext';
 
 describe('useAccordion general behavior', () => {
   test('returns the state of the surrounding accordion', async () => {
-    const accordion = { id: 'accordion', open: true, onClick: vi.fn() };
+    const accordion = {
+      headerId: 'header',
+      panelId: 'panel',
+      open: true,
+      onClick: vi.fn(),
+    };
     const { result } = await renderHook(() => useAccordion(), {
       wrapper: ({ children }: { children: ReactNode }) => (
         <AccordionContext value={accordion}>{children}</AccordionContext>

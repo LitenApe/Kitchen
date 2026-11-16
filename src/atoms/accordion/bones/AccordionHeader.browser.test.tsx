@@ -17,7 +17,9 @@ function inAccordion(
   { open = false, onClick = () => {} }: AccordionState = {}
 ) {
   return (
-    <AccordionContext value={{ id: 'accordion', open, onClick }}>
+    <AccordionContext
+      value={{ headerId: 'header', panelId: 'panel', open, onClick }}
+    >
       {header}
     </AccordionContext>
   );
@@ -36,10 +38,8 @@ describe('AccordionHeader general behavior', () => {
     await render(inAccordion(<AccordionHeader />));
     const button = page.getByRole('button');
 
-    await expect.element(button).toHaveAttribute('id', 'accordion_button');
-    await expect
-      .element(button)
-      .toHaveAttribute('aria-controls', 'accordion_content');
+    await expect.element(button).toHaveAttribute('id', 'header');
+    await expect.element(button).toHaveAttribute('aria-controls', 'panel');
   });
 
   test('shows whether its accordion is open', async () => {

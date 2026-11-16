@@ -11,7 +11,7 @@ function AccordionHeader({
   onClick: ownOnClick,
   ...props
 }: ComponentPropsWithRef<'button'>): JSX.Element {
-  const { id, open, onClick } = useAccordion();
+  const { headerId, panelId, open, onClick } = useAccordion();
 
   // disabled through aria-disabled only, so the header stays focusable
   const headerDisabled = isDisabled({
@@ -23,9 +23,9 @@ function AccordionHeader({
     <button
       {...props}
       type={type}
-      id={`${id}_button`}
+      id={headerId}
       aria-disabled={headerDisabled}
-      aria-controls={`${id}_content`}
+      aria-controls={panelId}
       aria-expanded={open}
       onClick={headerDisabled ? undefined : callAll(ownOnClick, onClick)}
     />

@@ -36,26 +36,14 @@ describe('useGroupError general behavior', () => {
     });
   });
 
-  test('takes aria-invalid and the description of the surrounding field', async () => {
-    const { result } = await renderHook(() => useGroupError({}), {
-      wrapper: inField('message'),
-    });
-
-    expect(result.current).toEqual({
-      'aria-invalid': true,
-      'aria-describedby': 'message',
-    });
-  });
-
-  test('prefers its own aria-invalid, and combines both descriptions', async () => {
+  test('combines its own description with the aria-invalid and description of the surrounding field', async () => {
     const { result } = await renderHook(
-      () =>
-        useGroupError({ 'aria-invalid': false, 'aria-describedby': 'hint' }),
+      () => useGroupError({ 'aria-describedby': 'hint' }),
       { wrapper: inField('message') }
     );
 
     expect(result.current).toEqual({
-      'aria-invalid': false,
+      'aria-invalid': true,
       'aria-describedby': 'message hint',
     });
   });

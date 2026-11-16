@@ -1,15 +1,15 @@
 import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
 
-import { Accordion } from '.';
+import { Accordion, AccordionHeader, AccordionPanel } from '.';
 import { useAccordion } from './bones/AccordionContext';
 
 /** Shows the state of its accordion, and asks it to toggle when clicked. */
 function Toggle() {
-  const { id, open, onClick } = useAccordion();
+  const { headerId, open, onClick } = useAccordion();
 
   return (
-    <button data-id={id} onClick={onClick}>
+    <button data-id={headerId} onClick={onClick}>
       {`${open}`}
     </button>
   );
@@ -150,6 +150,22 @@ describe('Accordion general behavior', () => {
     expect(first.dataset.id).toBeTruthy();
     expect(second.dataset.id).toBeTruthy();
     expect(first.dataset.id).not.toBe(second.dataset.id);
+  });
+
+  test('links its header and panel to each other', async () => {
+    await render(
+      <Accordion initial>
+        <AccordionHeader>Shipping</AccordionHeader>
+        <AccordionPanel>Details</AccordionPanel>
+      </Accordion>
+    );
+    // the panel is named by the header which labels it
+    const panel = page.getByRole('region', { name: 'Shipping' });
+
+    await expect.element(panel).toBeVisible();
+    await expect
+      .element(page.getByRole('button', { name: 'Shipping' }))
+      .toHaveAttribute('aria-controls', panel.element().id);
   });
 
   test('passes other props to its element', async () => {

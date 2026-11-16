@@ -6,7 +6,7 @@ import {
   useState,
 } from 'react';
 
-import { getNextIndex, getPreviousIndex } from './utils';
+import { getNeighbours } from './utils';
 
 export type DescendantContextValue = {
   /** The registered elements, in document order. */
@@ -61,13 +61,5 @@ export function useDescendant<T extends HTMLElement>(): Descendant<T> {
     [register, unregister]
   );
 
-  const index = element === null ? -1 : elements.indexOf(element);
-
-  return {
-    index,
-    ref,
-    next: (loop = true) => elements[getNextIndex(index, elements.length, loop)],
-    prev: (loop = true) =>
-      elements[getPreviousIndex(index, elements.length, loop)],
-  };
+  return { ...getNeighbours<HTMLElement>(elements, element), ref };
 }

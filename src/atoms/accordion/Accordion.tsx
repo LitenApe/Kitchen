@@ -7,6 +7,7 @@ import {
 
 import { useControllableState } from '../../utils/hooks/useControllableState';
 import { AccordionContext } from './bones/AccordionContext';
+import { getAccordionIds } from './bones/getAccordionIds';
 
 export type AccordionProps = {
   /** Whether the accordion starts open when it is uncontrolled. */
@@ -23,7 +24,7 @@ function Accordion({
   onClick,
   ...props
 }: AccordionProps): JSX.Element {
-  const id = useId();
+  const { headerId, panelId } = getAccordionIds(useId());
   const [isOpen, setOpen] = useControllableState({
     name: 'Accordion',
     value: open,
@@ -37,7 +38,9 @@ function Accordion({
   }
 
   return (
-    <AccordionContext value={{ id, open: isOpen, onClick: toggle }}>
+    <AccordionContext
+      value={{ headerId, panelId, open: isOpen, onClick: toggle }}
+    >
       <div {...props} />
     </AccordionContext>
   );
