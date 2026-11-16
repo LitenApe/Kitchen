@@ -1,11 +1,7 @@
 import type { ReactNode } from 'react';
 import { renderHook } from 'vitest-browser-react';
 
-import {
-  type GroupMemberProps,
-  RadioGroupContext,
-  useRadioGroup,
-} from './RadioGroupContext';
+import { RadioGroupContext, useRadioGroup } from './RadioGroupContext';
 
 describe('useRadioGroup general behavior', () => {
   test('leaves props as they are outside a radio group', async () => {
@@ -17,7 +13,7 @@ describe('useRadioGroup general behavior', () => {
 
   test('returns the surrounding radio group', async () => {
     const group = {
-      getGroupProps: <T extends GroupMemberProps>(props: T) => props,
+      getGroupProps: <T extends object>(props: T) => props,
     };
     const { result } = await renderHook(() => useRadioGroup(), {
       wrapper: ({ children }: { children: ReactNode }) => (

@@ -1,23 +1,18 @@
 import type {
   ComponentPropsWithoutRef,
+  FocusEvent,
   FocusEventHandler,
   JSX,
   ReactNode,
   Ref,
 } from 'react';
 
-import { callAll } from '../../utils/functions/callAll';
 import { mergeDefinedProps } from '../../utils/functions/mergeDefinedProps';
-import { useMergedRefs } from '../../utils/hooks/useMergedRefs';
-import {
-  type GroupMemberProps,
-  RadioGroupContext,
-} from './bones/RadioGroupContext';
+import { RadioGroupContext } from './bones/RadioGroupContext';
 import {
   type SharedRadioProps,
   splitGroupProps,
 } from './bones/splitGroupProps';
-import { useGroupBlur } from './bones/useGroupBlur';
 import { useGroupError } from './bones/useGroupError';
 
 /**
@@ -30,10 +25,11 @@ export type RadioGroupProps = {
   /** A `Legend`, followed by the radios, each in a `Field` with its `Label`. */
   children?: ReactNode;
   /**
-   * Called when focus leaves the group, but not when it moves between its
-   * radios.
+   * Called when focus leaves the group, but not when it moves between the
+   * controls inside it, such as from a radio to a text input. The event's
+   * `target` is the control which lost focus.
    */
-  onBlur?: FocusEventHandler<HTMLInputElement>;
+  onBlur?: FocusEventHandler<HTMLFieldSetElement>;
   /** Attached to the `fieldset`. */
   ref?: Ref<HTMLFieldSetElement>;
 } & SharedRadioProps &
@@ -44,22 +40,23 @@ export type RadioGroupProps = {
 
 function RadioGroup({
   children,
-  ref,
   onBlur,
   ...props
 }: RadioGroupProps): JSX.Element {
   const { shared, group } = splitGroupProps(props);
-  const { groupRef, handleBlur } = useGroupBlur<HTMLFieldSetElement>(onBlur);
-  const fieldsetRef = useMergedRefs(ref, groupRef);
   const { 'aria-invalid': invalid, 'aria-describedby': describedBy } =
     useGroupError(group);
 
-  function getGroupProps<T extends GroupMemberProps>(radioProps: T): T {
-    const ownBlur: GroupMemberProps['onBlur'] = radioProps.onBlur;
-    return {
-      ...mergeDefinedProps(shared, radioProps),
-      onBlur: callAll(ownBlur, handleBlur),
-    };
+  function getGroupProps<T extends object>(radioProps: T): T {
+    return mergeDefinedProps(shared, radioProps);
+  }
+
+  // the blur of every control inside the group bubbles up to the fieldset,
+  // which only passes it on when focus has moved outside the group
+  function handleBlur(event: FocusEvent<HTMLFieldSetElement>) {
+    if (!event.currentTarget.contains(event.relatedTarget)) {
+      onBlur?.(event);
+    }
   }
 
   return (
@@ -67,7 +64,7 @@ function RadioGroup({
       <fieldset
         {...group}
         role="radiogroup"
-        ref={fieldsetRef}
+        onBlur={handleBlur}
         // a surrounding field can also mark and describe the group, rather
         // than its radios
         aria-invalid={invalid}

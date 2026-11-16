@@ -1,4 +1,4 @@
-import { createRef } from 'react';
+import { type FocusEvent, createRef } from 'react';
 import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
 
@@ -128,6 +128,67 @@ describe('Radios general behavior', () => {
     expect(mock).toHaveBeenCalledTimes(1);
   });
 
+  test('onBlur is not invoked when focus moves between a radio and another control inside the group', async () => {
+    const mock = vi.fn();
+    await render(
+      <RadioGroup name="size" onBlur={mock}>
+        <Radio value="other" aria-label="Other" />
+        <input aria-label="Other size" />
+      </RadioGroup>
+    );
+    const radio = page.getByRole('radio', { name: 'Other' });
+
+    await userEvent.click(radio);
+    await userEvent.click(page.getByRole('textbox', { name: 'Other size' }));
+    await userEvent.click(radio);
+
+    expect(mock).not.toHaveBeenCalled();
+  });
+
+  test('onBlur is invoked when focus leaves the group from another control inside it', async () => {
+    const mock = vi.fn();
+    await render(
+      <>
+        <RadioGroup name="size" onBlur={mock}>
+          <Radio value="other" aria-label="Other" />
+          <input aria-label="Other size" />
+        </RadioGroup>
+        <button>Next</button>
+      </>
+    );
+
+    await userEvent.click(page.getByRole('textbox', { name: 'Other size' }));
+    await userEvent.click(page.getByRole('button', { name: 'Next' }));
+
+    expect(mock).toHaveBeenCalledTimes(1);
+  });
+
+  test('onBlur receives the radio which lost focus as its target, and the fieldset as its currentTarget', async () => {
+    // React clears currentTarget once the handler has run, so both are kept
+    let target: EventTarget | undefined;
+    let currentTarget: EventTarget | undefined;
+    const mock = vi.fn((event: FocusEvent<HTMLFieldSetElement>) => {
+      target = event.target;
+      currentTarget = event.currentTarget;
+    });
+    await render(
+      <>
+        <RadioGroup name="size" onBlur={mock}>
+          <Radio value="small" aria-label="Small" />
+        </RadioGroup>
+        <button>Next</button>
+      </>
+    );
+    const radio = page.getByRole('radio', { name: 'Small' });
+
+    await userEvent.click(radio);
+    await userEvent.click(page.getByRole('button', { name: 'Next' }));
+
+    expect(mock).toHaveBeenCalledTimes(1);
+    expect(target).toBe(radio.element());
+    expect(currentTarget).toBe(page.getByRole('radiogroup').element());
+  });
+
   test('renders a fieldset with the radiogroup role', async () => {
     await render(
       <RadioGroup name="size">
@@ -227,21 +288,15 @@ describe('Radios general behavior', () => {
     expect(mock).toHaveBeenCalledTimes(1);
   });
 
-  test('ref is attached to the fieldset without affecting onBlur', async () => {
+  test('ref is attached to the fieldset', async () => {
     const ref = createRef<HTMLFieldSetElement>();
-    const mock = vi.fn();
     await render(
-      <RadioGroup ref={ref} name="testing-group" onBlur={mock}>
+      <RadioGroup ref={ref} name="testing-group">
         <Radio value="1" />
-        <Radio value="2" />
       </RadioGroup>
     );
-    const radios = page.getByRole('radio').elements();
 
     expect(ref.current).toBe(page.getByRole('radiogroup').element());
-    radios[0].focus();
-    radios[1].focus();
-    expect(mock).not.toHaveBeenCalled();
   });
 
   test('aria-invalid marks the group as invalid, rather than its radios', async () => {
