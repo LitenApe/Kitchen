@@ -2,7 +2,7 @@ import { type JSX, useId } from 'react';
 
 import { Alert } from '../../atoms/alert';
 import { Field, type FieldProps } from '../../atoms/field';
-import { joinIds } from '../../utils/functions/joinIds';
+import { getErrorProps } from './bones/getErrorProps';
 
 export type BaseFieldProps = FieldProps & {
   /**
@@ -20,17 +20,10 @@ export type BaseFieldProps = FieldProps & {
  */
 function BaseField({ children, error, ...props }: BaseFieldProps): JSX.Element {
   const errorId = useId();
-  const hasError = Boolean(error);
-  // the error decides whether the control is invalid, unless the field is
-  // given an `aria-invalid` of its own
-  const { 'aria-invalid': invalid = hasError, ...fieldProps } = props;
 
+  // the error props go last, as the field's own may be passed as undefined
   return (
-    <Field
-      {...fieldProps}
-      aria-invalid={invalid}
-      aria-describedby={joinIds(hasError && errorId, props['aria-describedby'])}
-    >
+    <Field {...props} {...getErrorProps(error, errorId, props)}>
       <div>
         {children}
         <Alert id={errorId}>{error}</Alert>

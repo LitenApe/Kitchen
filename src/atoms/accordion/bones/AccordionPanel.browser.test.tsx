@@ -10,7 +10,9 @@ import AccordionPanel from './AccordionPanel';
 /** Places the panel in an accordion which is either open or closed. */
 function inAccordion(panel: ReactNode, open = false) {
   return (
-    <AccordionContext value={{ id: 'accordion', open, onClick: () => {} }}>
+    <AccordionContext
+      value={{ headerId: 'header', panelId: 'panel', open, onClick: () => {} }}
+    >
       {panel}
     </AccordionContext>
   );
@@ -21,10 +23,8 @@ describe('AccordionPanel general behavior', () => {
     await render(inAccordion(<AccordionPanel data-testid="panel" />));
     const panel = page.getByTestId('panel');
 
-    await expect.element(panel).toHaveAttribute('id', 'accordion_content');
-    await expect
-      .element(panel)
-      .toHaveAttribute('aria-labelledby', 'accordion_button');
+    await expect.element(panel).toHaveAttribute('id', 'panel');
+    await expect.element(panel).toHaveAttribute('aria-labelledby', 'header');
   });
 
   test('shows its children only while its accordion is open', async () => {

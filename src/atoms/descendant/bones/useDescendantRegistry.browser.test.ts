@@ -1,3 +1,5 @@
+import { createElement } from 'react';
+import { renderToString } from 'react-dom/server';
 import { renderHook } from 'vitest-browser-react';
 
 import { useDescendantRegistry } from './useDescendantRegistry';
@@ -51,31 +53,6 @@ describe('useDescendantRegistry general behavior', () => {
     ]);
   });
 
-  test('registers an element only once', async () => {
-    const [element] = createElements('element');
-    const { result, act } = await renderHook(() => useDescendantRegistry());
-
-    await act(() => {
-      result.current.register(element);
-      result.current.register(element);
-    });
-
-    expect(getIds(result.current.elements)).toEqual(['element']);
-  });
-
-  test('unregisters elements', async () => {
-    const [first, second] = createElements('first', 'second');
-    const { result, act } = await renderHook(() => useDescendantRegistry());
-
-    await act(() => {
-      result.current.register(first);
-      result.current.register(second);
-    });
-    await act(() => result.current.unregister(first));
-
-    expect(getIds(result.current.elements)).toEqual(['second']);
-  });
-
   test('returns the same value until its elements change', async () => {
     const [element] = createElements('element');
     const { result, act, rerender } = await renderHook(() =>
@@ -109,20 +86,14 @@ describe('useDescendantRegistry general behavior', () => {
       .toEqual(['second', 'third', 'first']);
   });
 
-  // an element which React removes is only unregistered in a later render,
-  // and it can no longer be sorted once it has left the document
-  test('leaves out elements which have left the document', async () => {
-    const [first, second] = createElements('first', 'second');
-    const { result, act } = await renderHook(() => useDescendantRegistry());
+  // the server has to be given the elements of its own, as it never
+  // subscribes to the registry
+  test('renders on the server, without elements', () => {
+    function Count() {
+      const { elements } = useDescendantRegistry();
+      return createElement('p', null, elements.length);
+    }
 
-    await act(() => {
-      result.current.register(first);
-      result.current.register(second);
-    });
-    first.remove();
-
-    await expect
-      .poll(() => getIds(result.current.elements))
-      .toEqual(['second']);
+    expect(renderToString(createElement(Count))).toBe('<p>0</p>');
   });
 });

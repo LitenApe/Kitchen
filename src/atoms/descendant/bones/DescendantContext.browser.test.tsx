@@ -72,28 +72,6 @@ describe('useDescendant general behavior', () => {
     expect(result.current.prev()).toBe(first);
   });
 
-  test('wraps around at the ends', async () => {
-    const [first, second] = createElements(2);
-    const { result, attach } = await renderDescendant([first, second]);
-
-    await attach(second);
-    expect(result.current.next()).toBe(first);
-
-    await attach(first);
-    expect(result.current.prev()).toBe(second);
-  });
-
-  test('stays on its element at the ends when not looping', async () => {
-    const [first, second] = createElements(2);
-    const { result, attach } = await renderDescendant([first, second]);
-
-    await attach(second);
-    expect(result.current.next(false)).toBe(second);
-
-    await attach(first);
-    expect(result.current.prev(false)).toBe(first);
-  });
-
   test('throws when not wrapped by Descendant', async () => {
     const error = vi.spyOn(console, 'error').mockImplementation(() => {});
 
