@@ -18,10 +18,12 @@ import { Radio } from '../radio';
  * group, where choosing one clears the others, when they share a name. Every
  * other prop, such as `id`, `className`, `style` or the `aria-` props which
  * name, describe or validate the group, is set on the `fieldset`. That
- * includes event handlers such as `onClick`, which also receive the events of
- * the radios, as these bubble up to the `fieldset`. `onBlur` is the exception:
- * it is only called when focus leaves the group, and not when it moves between
- * the radios inside it.
+ * includes event handlers such as `onClick` and `onBlur`, which also receive
+ * the events of the radios and any other control inside the group, as these
+ * bubble up to the `fieldset`. `onBlur` is only called when focus leaves the
+ * group, though, and not when it moves between the controls inside it, such
+ * as from a radio to a text input. Its `target` is the control which lost
+ * focus.
  *
  * `RadioGroup` does not show error messages. To show one, mark the group as
  * invalid with `aria-invalid`, and point it to the message with
@@ -87,7 +89,7 @@ const meta = {
     onBlur: {
       table: {
         category: 'Group',
-        type: { summary: '(event: FocusEvent<HTMLInputElement>) => void' },
+        type: { summary: '(event: FocusEvent<HTMLFieldSetElement>) => void' },
       },
     },
     id: {

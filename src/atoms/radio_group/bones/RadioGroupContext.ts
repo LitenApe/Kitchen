@@ -1,15 +1,11 @@
-import { type FocusEventHandler, createContext, use } from 'react';
-
-export type GroupMemberProps = {
-  onBlur?: FocusEventHandler<HTMLInputElement>;
-};
+import { createContext, use } from 'react';
 
 type RadioGroupContextValue = {
   /**
    * Merges the props shared by the group with a radio's own props, where the
    * radio's own props take precedence unless they are `undefined`.
    */
-  readonly getGroupProps: <T extends GroupMemberProps>(props: T) => T;
+  readonly getGroupProps: <T extends object>(props: T) => T;
 };
 
 export const RadioGroupContext = createContext<RadioGroupContextValue>({
