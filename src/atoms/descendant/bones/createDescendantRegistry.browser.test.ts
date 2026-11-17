@@ -175,4 +175,26 @@ describe('createDescendantRegistry', () => {
 
     expect(getIds(registry.getElements())).toEqual(['first', 'second']);
   });
+
+  // the elements are registered before the second listener subscribes, so
+  // the registry is already watching them when it does
+  test('sorts its elements again until every listener has unsubscribed', async () => {
+    const [first, second] = createElements('first', 'second');
+    const registry = createDescendantRegistry();
+    const unsubscribeFirst = registry.subscribe(vi.fn());
+    registry.register(first);
+    registry.register(second);
+    const unsubscribeSecond = registry.subscribe(vi.fn());
+
+    unsubscribeFirst();
+    container.append(first);
+    await expect
+      .poll(() => getIds(registry.getElements()))
+      .toEqual(['second', 'first']);
+
+    unsubscribeSecond();
+    container.append(second);
+    await waitForObserver();
+    expect(getIds(registry.getElements())).toEqual(['second', 'first']);
+  });
 });
