@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import { type ReactNode, useState } from 'react';
 import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
 
@@ -15,6 +15,24 @@ function inAccordion(panel: ReactNode, open = false) {
     >
       {panel}
     </AccordionContext>
+  );
+}
+
+type ShippingProps = {
+  /** The panel of the accordion. */
+  children: ReactNode;
+  startsOpen?: boolean;
+};
+
+/** A real accordion, whose user opens and closes it whenever it asks. */
+function Shipping({ children, startsOpen = false }: ShippingProps) {
+  const [open, setOpen] = useState(startsOpen);
+
+  return (
+    <Accordion open={open} onOpenChange={setOpen}>
+      <AccordionHeader>Shipping</AccordionHeader>
+      {children}
+    </Accordion>
   );
 }
 
@@ -81,10 +99,9 @@ describe('AccordionPanel general behavior', () => {
 
   test('opens together with a real accordion', async () => {
     await render(
-      <Accordion>
-        <AccordionHeader>Shipping</AccordionHeader>
+      <Shipping>
         <AccordionPanel>Details</AccordionPanel>
-      </Accordion>
+      </Shipping>
     );
 
     await userEvent.click(page.getByRole('button'));
@@ -94,12 +111,11 @@ describe('AccordionPanel general behavior', () => {
 
   test('keeps the state of its content while its accordion is closed', async () => {
     await render(
-      <Accordion initial>
-        <AccordionHeader>Shipping</AccordionHeader>
+      <Shipping startsOpen>
         <AccordionPanel>
           <input aria-label="Address" />
         </AccordionPanel>
-      </Accordion>
+      </Shipping>
     );
     const header = page.getByRole('button', { name: 'Shipping' });
     // a hidden input has no role, as it is left out of the accessibility tree

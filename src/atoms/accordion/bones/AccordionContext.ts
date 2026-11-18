@@ -6,8 +6,8 @@ type AccordionContextValue = {
   /** The id of the panel, which the header controls. */
   readonly panelId: string;
   readonly open: boolean;
-  /** Requests the accordion to open or close. */
-  readonly onClick: (event: MouseEvent) => void;
+  /** Asks the accordion's user to open or close the accordion. */
+  readonly onClick: (event: MouseEvent<HTMLButtonElement>) => void;
 };
 
 export const AccordionContext = createContext<AccordionContextValue | null>(

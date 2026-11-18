@@ -1,4 +1,9 @@
-import type { MouseEvent, ReactNode, SubmitEvent } from 'react';
+import {
+  type MouseEvent,
+  type ReactNode,
+  type SubmitEvent,
+  useState,
+} from 'react';
 import { page, userEvent } from 'vitest/browser';
 
 import Accordion from '../Accordion';
@@ -8,7 +13,7 @@ import { render } from 'vitest-browser-react';
 
 type AccordionState = {
   open?: boolean;
-  onClick?: (event: MouseEvent) => void;
+  onClick?: (event: MouseEvent<HTMLButtonElement>) => void;
 };
 
 /** Places the header in an accordion with the given state. */
@@ -156,12 +161,17 @@ describe('AccordionHeader general behavior', () => {
     await expect.element(button).toHaveAttribute('type', 'button');
   });
 
-  test('toggles a real accordion', async () => {
-    await render(
-      <Accordion>
-        <AccordionHeader>Shipping</AccordionHeader>
-      </Accordion>
-    );
+  test('opens and closes a real accordion whose user updates "open"', async () => {
+    function Shipping() {
+      const [open, setOpen] = useState(false);
+
+      return (
+        <Accordion open={open} onOpenChange={setOpen}>
+          <AccordionHeader>Shipping</AccordionHeader>
+        </Accordion>
+      );
+    }
+    await render(<Shipping />);
     const button = page.getByRole('button');
 
     await userEvent.click(button);

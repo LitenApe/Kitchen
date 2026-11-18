@@ -5,41 +5,39 @@ import {
   useId,
 } from 'react';
 
-import { useControllableState } from '../../utils/hooks/useControllableState';
 import { AccordionContext } from './bones/AccordionContext';
 import { getAccordionIds } from './bones/getAccordionIds';
 
 export type AccordionProps = {
-  /** Whether the accordion starts open when it is uncontrolled. */
-  initial?: boolean;
-  /** Whether the accordion is open. Makes it controlled together with `onClick`. */
-  open?: boolean;
-  /** Called with the click event and the requested open state when the header is clicked. */
-  onClick?: (event: MouseEvent, open: boolean) => void;
-} & Omit<ComponentPropsWithRef<'div'>, 'onClick'>;
+  /** Whether the accordion is open. */
+  open: boolean;
+  /**
+   * Called with the requested open state, and the click event, when the
+   * header is clicked. The accordion only opens or closes once `open` changes.
+   */
+  onOpenChange: (open: boolean, event: MouseEvent<HTMLButtonElement>) => void;
+} & ComponentPropsWithRef<'div'>;
 
+/**
+ * Shows or hides its panel as `open` says. A click on its header only asks
+ * for the opposite through `onOpenChange`, so what a click does is up to the
+ * accordion's user.
+ */
 function Accordion({
-  initial = false,
   open,
-  onClick,
+  onOpenChange,
   ...props
 }: AccordionProps): JSX.Element {
   const { headerId, panelId } = getAccordionIds(useId());
-  const [isOpen, setOpen] = useControllableState({
-    name: 'Accordion',
-    value: open,
-    defaultValue: initial,
-    onChange:
-      onClick && ((next: boolean, event: MouseEvent) => onClick(event, next)),
-  });
-
-  function toggle(event: MouseEvent) {
-    setOpen(!isOpen, event);
-  }
 
   return (
     <AccordionContext
-      value={{ headerId, panelId, open: isOpen, onClick: toggle }}
+      value={{
+        headerId,
+        panelId,
+        open,
+        onClick: (event) => onOpenChange(!open, event),
+      }}
     >
       <div {...props} />
     </AccordionContext>

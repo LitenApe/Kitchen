@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
 
@@ -15,45 +16,22 @@ function Toggle() {
   );
 }
 
+/** An accordion whose user opens and closes it whenever it asks. */
+function Shipping() {
+  const [open, setOpen] = useState(false);
+
+  return (
+    <Accordion open={open} onOpenChange={setOpen}>
+      <AccordionHeader>Shipping</AccordionHeader>
+      <AccordionPanel>Details</AccordionPanel>
+    </Accordion>
+  );
+}
+
 describe('Accordion general behavior', () => {
-  test('is closed by default', async () => {
-    await render(
-      <Accordion>
-        <Toggle />
-      </Accordion>
-    );
-
-    await expect.element(page.getByRole('button')).toHaveTextContent('false');
-  });
-
-  test('starts open when "initial" is set', async () => {
-    await render(
-      <Accordion initial>
-        <Toggle />
-      </Accordion>
-    );
-
-    await expect.element(page.getByRole('button')).toHaveTextContent('true');
-  });
-
-  test('toggles itself when uncontrolled', async () => {
-    await render(
-      <Accordion>
-        <Toggle />
-      </Accordion>
-    );
-    const button = page.getByRole('button');
-
-    await userEvent.click(button);
-    await expect.element(button).toHaveTextContent('true');
-
-    await userEvent.click(button);
-    await expect.element(button).toHaveTextContent('false');
-  });
-
-  test('follows "open" when controlled', async () => {
+  test('follows "open"', async () => {
     const { rerender } = await render(
-      <Accordion open={false} onClick={vi.fn()}>
+      <Accordion open={false} onOpenChange={vi.fn()}>
         <Toggle />
       </Accordion>
     );
@@ -61,86 +39,74 @@ describe('Accordion general behavior', () => {
     await expect.element(button).toHaveTextContent('false');
 
     await rerender(
-      <Accordion open onClick={vi.fn()}>
+      <Accordion open onOpenChange={vi.fn()}>
         <Toggle />
       </Accordion>
     );
     await expect.element(button).toHaveTextContent('true');
   });
 
-  test('requests the opposite state through onClick when controlled', async () => {
-    const onClick = vi.fn();
+  test('asks for the opposite state through onOpenChange when clicked', async () => {
+    const onOpenChange = vi.fn();
     const { rerender } = await render(
-      <Accordion open={false} onClick={onClick}>
+      <Accordion open={false} onOpenChange={onOpenChange}>
         <Toggle />
       </Accordion>
     );
     const button = page.getByRole('button');
 
     await userEvent.click(button);
-    expect(onClick).toHaveBeenCalledTimes(1);
-    expect(onClick).toHaveBeenLastCalledWith(
-      expect.objectContaining({ type: 'click' }),
-      true
+    expect(onOpenChange).toHaveBeenLastCalledWith(
+      true,
+      expect.objectContaining({ type: 'click' })
     );
-    // only the user changes "open"
-    await expect.element(button).toHaveTextContent('false');
 
     await rerender(
-      <Accordion open onClick={onClick}>
+      <Accordion open onOpenChange={onOpenChange}>
         <Toggle />
       </Accordion>
     );
 
     await userEvent.click(button);
-    expect(onClick).toHaveBeenCalledTimes(2);
-    expect(onClick).toHaveBeenLastCalledWith(
-      expect.objectContaining({ type: 'click' }),
-      false
+    expect(onOpenChange).toHaveBeenLastCalledWith(
+      false,
+      expect.objectContaining({ type: 'click' })
     );
+    expect(onOpenChange).toHaveBeenCalledTimes(2);
   });
 
-  test('ignores clicks when controlled without onClick', async () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
+  // its user can refuse a change by leaving "open" as it is
+  test('does not open or close by itself when clicked', async () => {
     await render(
-      <Accordion open={false}>
-        <Toggle />
+      <Accordion open={false} onOpenChange={vi.fn()}>
+        <AccordionHeader>Shipping</AccordionHeader>
+        <AccordionPanel>Details</AccordionPanel>
       </Accordion>
     );
-    const button = page.getByRole('button');
 
-    await userEvent.click(button);
+    await userEvent.click(page.getByRole('button', { name: 'Shipping' }));
 
-    await expect.element(button).toHaveTextContent('false');
-    expect(warn).not.toHaveBeenCalled();
-    warn.mockRestore();
+    await expect.element(page.getByText('Details')).not.toBeVisible();
   });
 
-  test('warns and ignores clicks when given onClick without "open"', async () => {
-    const warn = vi.spyOn(console, 'warn').mockImplementation(() => {});
-    const onClick = vi.fn();
-    await render(
-      <Accordion onClick={onClick}>
-        <Toggle />
-      </Accordion>
-    );
-    const button = page.getByRole('button');
+  test('opens and closes when its user updates "open" from onOpenChange', async () => {
+    await render(<Shipping />);
+    const header = page.getByRole('button', { name: 'Shipping' });
 
-    await userEvent.click(button);
+    await userEvent.click(header);
+    await expect.element(page.getByText('Details')).toBeVisible();
 
-    await expect.element(button).toHaveTextContent('false');
-    expect(onClick).not.toHaveBeenCalled();
-    expect(warn).toHaveBeenCalledTimes(1);
-    warn.mockRestore();
+    await userEvent.click(header);
+    await expect.element(page.getByText('Details')).not.toBeVisible();
   });
 
   test('gives every accordion an id of its own', async () => {
     await render(
       <>
-        <Accordion>
+        <Accordion open={false} onOpenChange={vi.fn()}>
           <Toggle />
         </Accordion>
-        <Accordion>
+        <Accordion open={false} onOpenChange={vi.fn()}>
           <Toggle />
         </Accordion>
       </>
@@ -154,7 +120,7 @@ describe('Accordion general behavior', () => {
 
   test('links its header and panel to each other', async () => {
     await render(
-      <Accordion initial>
+      <Accordion open onOpenChange={vi.fn()}>
         <AccordionHeader>Shipping</AccordionHeader>
         <AccordionPanel>Details</AccordionPanel>
       </Accordion>
@@ -169,7 +135,33 @@ describe('Accordion general behavior', () => {
   });
 
   test('passes other props to its element', async () => {
-    await render(<Accordion data-testid="accordion" className="custom" />);
+    await render(
+      <Accordion
+        open={false}
+        onOpenChange={vi.fn()}
+        data-testid="accordion"
+        className="custom"
+      />
+    );
     await expect.element(page.getByTestId('accordion')).toHaveClass('custom');
+  });
+
+  // onClick is the element's own, so it can be used to track clicks
+  test('passes onClick on to its element, which also hears clicks on the header', async () => {
+    const onClick = vi.fn();
+    const onOpenChange = vi.fn();
+    await render(
+      <Accordion open={false} onOpenChange={onOpenChange} onClick={onClick}>
+        <AccordionHeader>Shipping</AccordionHeader>
+      </Accordion>
+    );
+
+    await userEvent.click(page.getByRole('button', { name: 'Shipping' }));
+
+    expect(onClick).toHaveBeenCalledTimes(1);
+    expect(onOpenChange).toHaveBeenCalledExactlyOnceWith(
+      true,
+      expect.objectContaining({ type: 'click' })
+    );
   });
 });

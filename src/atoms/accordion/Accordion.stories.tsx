@@ -9,21 +9,36 @@ import { Accordion, AccordionHeader, AccordionPanel } from '.';
  * content. Accordions are commonly used to reduce the need to scroll when
  * presenting multiple sections on a single page.
  *
- * `Accordion` holds the open state and shares it with its `AccordionHeader`
- * and `AccordionPanel`, which take care of the accessibility attributes that
- * link the two together. It renders a `div` around them, which receives every
- * other prop.
+ * `Accordion` shares its state with its `AccordionHeader` and
+ * `AccordionPanel`, which take care of the accessibility attributes that link
+ * the two together. It renders a `div` around them, which receives every
+ * other prop, including `onClick`.
  *
- * It can be used in two ways:
+ * `Accordion` is controlled: it shows its panel while `open` is set, and a
+ * click on its header only calls `onOpenChange` with the opposite state and
+ * the click event. Update `open` from there to open or close the accordion,
+ * or leave it as it is to refuse the change. That leaves it to you how a set
+ * of accordions behaves, such as keeping only one of them open at a time:
  *
- * - **Uncontrolled**: the accordion manages its own state. Use `initial` to
- *   choose whether it starts open.
- * - **Controlled**: pass both `open` and `onClick`. A click only calls
- *   `onClick` with the requested state, and it is up to you to update `open`.
- *   Passing `onClick` without `open` logs a warning and ignores the click.
+ * ```tsx
+ * const [openIndex, setOpenIndex] = useState(-1);
  *
- * The first example is controlled. Clicking the heading logs the requested
- * state in the **Actions** panel, and `open` can be changed from **Controls**.
+ * sections.map((section, index) => (
+ *   <Accordion
+ *     key={section.id}
+ *     open={openIndex === index}
+ *     onOpenChange={(open) => setOpenIndex(open ? index : -1)}
+ *   >
+ *     …
+ *   </Accordion>
+ * ));
+ * ```
+ *
+ * If an open accordion cannot be closed, such as one which always has to stay
+ * open, set `aria-disabled` on its header, so that screen readers know.
+ *
+ * In the first example, clicking the heading logs the requested state in the
+ * **Actions** panel, and `open` can be changed from **Controls**.
  */
 const meta = {
   title: 'Atom/Accordion',
@@ -40,6 +55,17 @@ const meta = {
       control: false,
       table: { type: { summary: 'ReactNode' } },
     },
+    onOpenChange: {
+      table: {
+        type: {
+          summary:
+            '(open: boolean, event: MouseEvent<HTMLButtonElement>) => void',
+        },
+      },
+    },
+  },
+  args: {
+    onOpenChange: fn(),
   },
 } satisfies Meta<typeof Accordion>;
 
@@ -49,7 +75,6 @@ type Story = StoryObj<typeof meta>;
 export const Default: Story = {
   args: {
     open: true,
-    onClick: fn(),
     children: (
       <>
         <AccordionHeader>Accordion Heading</AccordionHeader>
@@ -95,19 +120,22 @@ export const Default: Story = {
 };
 
 /**
- * `AccordionHeader` is the button which shows or hides the content. It points
- * to its panel through `aria-controls` and reports whether the panel is open
- * through `aria-expanded`. It renders only a button, so wrap it in a heading
- * of the appropriate level (`h2` to `h6`) when using it on a page. Unlike a
- * plain `button`, it does not submit a surrounding form.
+ * `AccordionHeader` is the button which asks for its accordion to be opened
+ * or closed. It points to its panel through `aria-controls` and reports
+ * whether the panel is open through `aria-expanded`. It renders only a button,
+ * so wrap it in a heading of the appropriate level (`h2` to `h6`) when using
+ * it on a page. Unlike a plain `button`, it does not submit a surrounding
+ * form.
  *
  * Setting `disabled` or `aria-disabled` makes it ignore clicks, while keeping
  * it focusable so keyboard and screen reader users can still discover it.
  *
- * This example is uncontrolled, so clicking it toggles `aria-expanded`.
+ * Change `open` from **Controls** to see `aria-expanded` follow it. Clicking
+ * the header logs the requested state in the **Actions** panel.
  */
 export const Header: Story = {
   args: {
+    open: false,
     children: <AccordionHeader>Accordion Heading</AccordionHeader>,
   },
 };
