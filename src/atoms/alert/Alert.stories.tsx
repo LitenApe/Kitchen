@@ -15,9 +15,11 @@ import { Alert } from '.';
  * Screen readers only announce changes to live regions they already know
  * about, so a message rendered together with its container could go
  * unnoticed. `Alert` therefore holds its content back for 100 ms after it
- * mounts, and shows every later change straight away. To announce a message
- * the moment it arrives, render the `Alert` ahead of time and only change its
- * content.
+ * mounts in the browser, and shows every later change straight away. To
+ * announce a message the moment it arrives, render the `Alert` ahead of time
+ * and only change its content. A message rendered on the server is part of
+ * the page from the start, rather than something which arrives, so it is
+ * shown straight away, also while the page hydrates.
  */
 const meta = {
   title: 'Atom/Alert',

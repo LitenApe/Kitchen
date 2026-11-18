@@ -1,7 +1,52 @@
+import { hydrateRoot } from 'react-dom/client';
+import { renderToString } from 'react-dom/server';
 import { page } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
 
 import { Alert } from '.';
+
+describe('Alert on the server', () => {
+  test('renders its message on the server', () => {
+    expect(renderToString(<Alert>Choose a size</Alert>)).toContain(
+      'Choose a size'
+    );
+  });
+
+  // a message which is there from the start is part of the page, rather than
+  // something to announce
+  test('keeps showing a message rendered on the server while it hydrates', async () => {
+    const alert = <Alert>Choose a size</Alert>;
+    const container = document.createElement('div');
+    container.innerHTML = renderToString(alert);
+    document.body.append(container);
+    expect(container.textContent).toBe('Choose a size');
+    const texts: Array<string | null> = [];
+    const observer = new MutationObserver(() =>
+      texts.push(container.textContent)
+    );
+    observer.observe(container, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
+    const errors: unknown[] = [];
+
+    const root = hydrateRoot(container, alert, {
+      onRecoverableError: (error) => errors.push(error),
+    });
+    onTestFinished(() => {
+      observer.disconnect();
+      root.unmount();
+      container.remove();
+    });
+    // longer than a message is held back after the alert mounts
+    await new Promise((resolve) => setTimeout(resolve, 200));
+
+    await expect.element(page.getByText('Choose a size')).toBeVisible();
+    expect(texts.every((text) => text === 'Choose a size')).toBe(true);
+    expect(errors).toEqual([]);
+  });
+});
 
 describe('Alert general behavior', () => {
   beforeEach(() => {

@@ -2,6 +2,7 @@ import type { AriaAttributes, ElementType, JSX, ReactNode } from 'react';
 
 import type { PolymorphicProps } from '../../utils/types/PolymorphicProps';
 import { useHasElapsed } from './bones/useHasElapsed';
+import { useWasServerRendered } from './bones/useWasServerRendered';
 
 /**
  * Screen readers only announce changes to live regions they already know
@@ -31,7 +32,11 @@ function Alert<T extends ElementType = 'div'>({
   ...props
 }: AlertProps<T>): JSX.Element {
   const Component: ElementType = as ?? 'div';
-  const isReady = useHasElapsed(ANNOUNCEMENT_DELAY_MS);
+  const wasServerRendered = useWasServerRendered();
+  const hasElapsed = useHasElapsed(ANNOUNCEMENT_DELAY_MS);
+  // a message rendered on the server is part of the page from the start,
+  // rather than something which arrives, so it is not held back
+  const isReady = wasServerRendered || hasElapsed;
 
   return (
     <Component {...props} aria-live={live} aria-atomic={atomic}>
