@@ -87,7 +87,7 @@ As mentioned in the introduction, the project is still in alpha, which means tha
   - [ ] ComboboxField
 - [ ] Layout components
   - [ ] Dialog
-  - [ ] VisuallyHidden
+  - [x] ScreenReaderOnly
 - [ ] Utility components
   - [ ] Dropzone
 - [ ] Other tasks

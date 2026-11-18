@@ -1,0 +1,15 @@
+/* Hides the content from sight, while screen readers still read it. The
+   declarations are important, so that styles given to the element for other
+   reasons, even inline ones, can't make it visible. */
+.screenReaderOnly {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  padding: 0 !important;
+  margin: -1px !important;
+  overflow: hidden !important;
+  clip-path: inset(50%) !important;
+  /* keeps screen readers from running the words together */
+  white-space: nowrap !important;
+  border: 0 !important;
+}
