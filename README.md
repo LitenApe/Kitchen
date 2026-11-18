@@ -22,7 +22,7 @@ The project is structured following the **atomic design system** to slowly build
 
 Each component directory consists of at least three files: the component itself, a story for documenting and developing said component, and tests for the component. All complementary components and logic which the **main** component needs to function are separated into a directory named **bones** to keep the root tidy. Bones are component-specific functionality tailored to one particular use case. They make no attempt at generalising their problem, which means that other components with a similar, but not identical, use case will have their own version tailored to their own use case.
 
-Styles are never written inline. A component or story which needs styles keeps them in a CSS module next to it, such as `Backdrop.module.css`, so that they stay scoped to that file.
+Styles are never written inline. A component or story which needs styles keeps them in a CSS module next to it, such as `AccordionPanel.module.css`, so that they stay scoped to that file.
 
 Tests sit next to the file they test and are named after it, such as `Alert.browser.test.tsx` next to `Alert.tsx` or `joinIds.test.ts` next to `joinIds.ts`. The one exception is the visual regression test at the root of `src`, which covers every story. Every hook and utility function has a test of its own, so that a mistake in it can be told apart from a mistake in the components which use it.
 
@@ -64,7 +64,6 @@ As mentioned in the introduction, the project is still in alpha, which means tha
 - [x] Layout components
   - [x] Accordion
   - [x] Alert
-  - [x] Backdrop
 - [x] Utility components
   - [x] DangerousHTML
   - [x] Descendants
