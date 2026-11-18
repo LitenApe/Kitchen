@@ -125,9 +125,9 @@ export const Default: Story = {
  * or closed. It sets its own `id`, points to its panel through
  * `aria-controls` and reports whether the panel is open through
  * `aria-expanded`, so it does not take these as props. It renders only a
- * button, so wrap it in a heading of the appropriate level (`h2` to `h6`)
- * when using it on a page. Unlike a plain `button`, it does not submit a
- * surrounding form.
+ * button, so wrap it in a heading of the appropriate level (`h2` to `h6`),
+ * with nothing else inside the heading, as the ARIA Authoring Practices ask.
+ * Unlike a plain `button`, it does not submit a surrounding form.
  *
  * Setting `disabled` or `aria-disabled` makes it ignore clicks, while keeping
  * it focusable so keyboard and screen reader users can still discover it.
@@ -143,14 +143,21 @@ export const Header: Story = {
 };
 
 /**
- * `AccordionPanel` is a `section` which holds the content, and is labelled by
- * its header. It sets its own `id`, which its header points to, and its
- * `aria-labelledby` and `hidden`, so it does not take these as props. While
- * the accordion is closed, the panel is hidden with the `hidden` attribute,
- * even if it is given a `display` of its own. Its content is rendered even
- * while the accordion is closed, so it keeps its state, such as what was
- * typed into it. Like any hidden content, the browser's find-in-page can't
- * find it while it is closed.
+ * `AccordionPanel` is a `section` which holds the content. It sets its own
+ * `id`, which its header points to, and its `aria-labelledby` and `hidden`,
+ * so it does not take these as props. While the accordion is closed, the
+ * panel is hidden with the `hidden` attribute, even if it is given a
+ * `display` of its own. Its content is rendered even while the accordion is
+ * closed, so it keeps its state, such as what was typed into it. Like any
+ * hidden content, the browser's find-in-page can't find it while it is
+ * closed.
+ *
+ * The panel is a region landmark named by its header, which helps screen
+ * reader users find their way through longer content, such as panels with
+ * headings of their own. The ARIA Authoring Practices advise against regions
+ * where more than about six panels can be open at once, as that many
+ * landmarks get in the way instead. Set `region={false}` on the panels of
+ * such accordions. The header still points to its panel either way.
  *
  * Change `open` from **Controls** to show or hide the content.
  */

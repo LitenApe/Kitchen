@@ -9,12 +9,17 @@ import styles from './AccordionPanel.module.css';
  * follows the accordion, so the accordion sets them rather than taking them
  * as props.
  */
-export type AccordionPanelProps = Omit<
-  ComponentPropsWithRef<'section'>,
-  'id' | 'aria-labelledby' | 'hidden'
->;
+export type AccordionPanelProps = {
+  /**
+   * Whether the panel is a region landmark, named by its header. Turn it off
+   * for accordions where more than about six panels can be open at once, as
+   * that many landmarks get in the way of finding one's way around the page.
+   */
+  region?: boolean;
+} & Omit<ComponentPropsWithRef<'section'>, 'id' | 'aria-labelledby' | 'hidden'>;
 
 function AccordionPanel({
+  region = true,
   className,
   ...props
 }: AccordionPanelProps): JSX.Element {
@@ -27,7 +32,8 @@ function AccordionPanel({
       {...props}
       className={joinClassNames(styles.panel, className)}
       id={panelId}
-      aria-labelledby={headerId}
+      // a section is only a region while it has a name
+      aria-labelledby={region ? headerId : undefined}
       hidden={!open}
     />
   );

@@ -97,6 +97,47 @@ describe('AccordionPanel general behavior', () => {
     await expect.element(page.getByTestId('panel')).toHaveClass('custom');
   });
 
+  test('is a region named by its header', async () => {
+    await render(
+      <Shipping startsOpen>
+        <AccordionPanel>Details</AccordionPanel>
+      </Shipping>
+    );
+    const region = page.getByRole('region', { name: 'Shipping' });
+
+    await expect.element(region).toBeVisible();
+    await expect.element(region).toHaveTextContent('Details');
+  });
+
+  // a component which forwards its props passes them on as undefined
+  test('stays a region when region is undefined', async () => {
+    await render(
+      <Shipping startsOpen>
+        <AccordionPanel region={undefined}>Details</AccordionPanel>
+      </Shipping>
+    );
+
+    await expect
+      .element(page.getByRole('region', { name: 'Shipping' }))
+      .toBeVisible();
+  });
+
+  // many open regions crowd the landmarks screen readers list
+  test('is no landmark when region is false, while its header still controls it', async () => {
+    await render(
+      <Shipping startsOpen>
+        <AccordionPanel region={false}>Details</AccordionPanel>
+      </Shipping>
+    );
+    const details = page.getByText('Details');
+
+    await expect.element(details).toBeVisible();
+    await expect.element(page.getByRole('region')).not.toBeInTheDocument();
+    await expect
+      .element(page.getByRole('button', { name: 'Shipping' }))
+      .toHaveAttribute('aria-controls', details.element().id);
+  });
+
   test('opens together with a real accordion', async () => {
     await render(
       <Shipping>

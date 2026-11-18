@@ -9,6 +9,12 @@ describe('AccordionPanelProps', () => {
     expectTypeOf<AccordionPanelProps>().not.toHaveProperty('hidden');
   });
 
+  test('can be kept from being a region', () => {
+    expectTypeOf<AccordionPanelProps['region']>().toEqualTypeOf<
+      boolean | undefined
+    >();
+  });
+
   test('keeps the props of a section', () => {
     expectTypeOf<AccordionPanelProps>().toHaveProperty('className');
     expectTypeOf<AccordionPanelProps>().toHaveProperty('ref');
