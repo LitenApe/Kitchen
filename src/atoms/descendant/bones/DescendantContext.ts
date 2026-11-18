@@ -6,7 +6,7 @@ import {
   useState,
 } from 'react';
 
-import { getNeighbours } from './utils';
+import { navigateFrom } from './utils';
 
 export type DescendantContextValue = {
   /** The registered elements, in document order. */
@@ -28,6 +28,10 @@ type Descendant<T extends HTMLElement> = {
   next: (loop?: boolean) => HTMLElement | undefined;
   /** The previous descendant. Wraps around to the last unless `loop` is false. */
   prev: (loop?: boolean) => HTMLElement | undefined;
+  /** The first descendant, such as for the Home key. */
+  first: () => HTMLElement | undefined;
+  /** The last descendant, such as for the End key. */
+  last: () => HTMLElement | undefined;
 };
 
 function useDescendantContext(): DescendantContextValue {
@@ -42,7 +46,8 @@ function useDescendantContext(): DescendantContextValue {
 
 /**
  * Registers an element as a descendant of the surrounding `Descendant`, which
- * gives it a position in document order and access to its neighbours.
+ * gives it a position in document order, and access to its neighbours and to
+ * the first and last descendant.
  */
 export function useDescendant<T extends HTMLElement>(): Descendant<T> {
   const { elements, register, unregister } = useDescendantContext();
@@ -61,5 +66,5 @@ export function useDescendant<T extends HTMLElement>(): Descendant<T> {
     [register, unregister]
   );
 
-  return { ...getNeighbours<HTMLElement>(elements, element), ref };
+  return { ...navigateFrom<HTMLElement>(elements, element), ref };
 }

@@ -1,4 +1,4 @@
-import { getNeighbours, getNextIndex, getPreviousIndex } from './utils';
+import { getNextIndex, getPreviousIndex, navigateFrom } from './utils';
 
 describe('getNextIndex', () => {
   test('increment with 1 when current is lower then length', () => {
@@ -28,32 +28,46 @@ describe('getPreviousIndex', () => {
   });
 });
 
-describe('getNeighbours', () => {
+describe('navigateFrom', () => {
   const elements = ['first', 'second', 'third'];
 
   test('finds the position of the element', () => {
-    expect(getNeighbours(elements, 'second').index).toBe(1);
+    expect(navigateFrom(elements, 'second').index).toBe(1);
   });
 
   test('has no position without an element, or for one which is not among them', () => {
-    expect(getNeighbours(elements, null).index).toBe(-1);
-    expect(getNeighbours(elements, 'fourth').index).toBe(-1);
+    expect(navigateFrom(elements, null).index).toBe(-1);
+    expect(navigateFrom(elements, 'fourth').index).toBe(-1);
   });
 
   test('returns the elements next to it', () => {
-    const { next, prev } = getNeighbours(elements, 'second');
+    const { next, prev } = navigateFrom(elements, 'second');
 
     expect(next()).toBe('third');
     expect(prev()).toBe('first');
   });
 
   test('wraps around at the ends', () => {
-    expect(getNeighbours(elements, 'third').next()).toBe('first');
-    expect(getNeighbours(elements, 'first').prev()).toBe('third');
+    expect(navigateFrom(elements, 'third').next()).toBe('first');
+    expect(navigateFrom(elements, 'first').prev()).toBe('third');
   });
 
   test('stays on the element at the ends when not looping', () => {
-    expect(getNeighbours(elements, 'third').next(false)).toBe('third');
-    expect(getNeighbours(elements, 'first').prev(false)).toBe('first');
+    expect(navigateFrom(elements, 'third').next(false)).toBe('third');
+    expect(navigateFrom(elements, 'first').prev(false)).toBe('first');
+  });
+
+  test('returns the elements at either end', () => {
+    const { first, last } = navigateFrom(elements, 'second');
+
+    expect(first()).toBe('first');
+    expect(last()).toBe('third');
+  });
+
+  test('has no elements at the ends when there are none', () => {
+    const { first, last } = navigateFrom<string>([], null);
+
+    expect(first()).toBeUndefined();
+    expect(last()).toBeUndefined();
   });
 });

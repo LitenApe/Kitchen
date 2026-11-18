@@ -31,6 +31,8 @@ function Position() {
  * - `next(loop)` and `prev(loop)`: the next or previous registered element.
  *   They wrap around at the ends, or stay on the current element when `loop`
  *   is `false`.
+ * - `first()` and `last()`: the first and last registered element, such as
+ *   for the Home and End keys.
  *
  * Elements are unregistered automatically when they unmount. In the example
  * below, each paragraph shows the position it has been given, even though the

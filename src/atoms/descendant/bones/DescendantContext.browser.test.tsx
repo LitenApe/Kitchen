@@ -61,7 +61,7 @@ describe('useDescendant general behavior', () => {
     expect(result.current.index).toBe(-1);
   });
 
-  test('takes its index and neighbours from the registered elements', async () => {
+  test('takes its index, neighbours and ends from the registered elements', async () => {
     const [first, second, third] = createElements(3);
     const { result, attach } = await renderDescendant([first, second, third]);
 
@@ -70,6 +70,8 @@ describe('useDescendant general behavior', () => {
     expect(result.current.index).toBe(1);
     expect(result.current.next()).toBe(third);
     expect(result.current.prev()).toBe(first);
+    expect(result.current.first()).toBe(first);
+    expect(result.current.last()).toBe(third);
   });
 
   test('throws when not wrapped by Descendant', async () => {

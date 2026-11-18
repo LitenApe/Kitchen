@@ -28,14 +28,18 @@ function TestComponent({ name }: { name: string }) {
 
 /**
  * A button which shows its position, and moves focus to the next button when
- * the down arrow key is pressed.
+ * the down arrow key is pressed, and to the first or last one on Home or End.
  */
 function Item({ name }: { name: string }) {
-  const { index, ref, next } = useDescendant<HTMLButtonElement>();
+  const { index, ref, next, first, last } = useDescendant<HTMLButtonElement>();
 
   function handleKeyDown(event: KeyboardEvent<HTMLButtonElement>) {
     if (event.key === 'ArrowDown') {
       next()?.focus();
+    } else if (event.key === 'Home') {
+      first()?.focus();
+    } else if (event.key === 'End') {
+      last()?.focus();
     }
   }
 
@@ -230,6 +234,25 @@ describe('Descendant default behavior', () => {
       const second = page.getByTestId('second');
       await expect.element(second).toHaveAttribute('data-next', 'third');
       await expect.element(second).toHaveAttribute('data-prev', 'first');
+    });
+
+    test('moves focus to the first and last elements', async () => {
+      await render(
+        <Descendant>
+          <Item name="first" />
+          <Item name="second" />
+          <Item name="third" />
+        </Descendant>
+      );
+      const first = page.getByRole('button', { name: 'first at 0' });
+      const third = page.getByRole('button', { name: 'third at 2' });
+
+      await userEvent.click(page.getByRole('button', { name: 'second at 1' }));
+      await userEvent.keyboard('{End}');
+      await expect.element(third).toHaveFocus();
+
+      await userEvent.keyboard('{Home}');
+      await expect.element(first).toHaveFocus();
     });
 
     test('wraps around at the ends when looping', async () => {

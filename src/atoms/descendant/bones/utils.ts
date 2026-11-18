@@ -79,26 +79,32 @@ export function getPreviousIndex(
   return loop ? length - 1 : current;
 }
 
-type Neighbours<T> = {
+type Navigation<T> = {
   /** The element's position, or -1 when it is not one of the elements. */
   index: number;
   /** The next element. Wraps around to the first unless `loop` is false. */
   next: (loop?: boolean) => T | undefined;
   /** The previous element. Wraps around to the last unless `loop` is false. */
   prev: (loop?: boolean) => T | undefined;
+  /** The first of the elements. */
+  first: () => T | undefined;
+  /** The last of the elements. */
+  last: () => T | undefined;
 };
 
 /**
- * Finds an element among the others, together with its neighbours.
+ * Finds an element among the others, together with the elements which can be
+ * moved to from it.
  *
  * @param elements the elements, in order
  * @param element the element to find, or `null` for none
- * @returns the element's position, and functions which return its neighbours
+ * @returns the element's position, and functions which return the elements
+ * next to it and at either end
  */
-export function getNeighbours<T>(
+export function navigateFrom<T>(
   elements: ReadonlyArray<T>,
   element: T | null
-): Neighbours<T> {
+): Navigation<T> {
   const index = element === null ? -1 : elements.indexOf(element);
 
   return {
@@ -106,5 +112,7 @@ export function getNeighbours<T>(
     next: (loop = true) => elements[getNextIndex(index, elements.length, loop)],
     prev: (loop = true) =>
       elements[getPreviousIndex(index, elements.length, loop)],
+    first: () => elements.at(0),
+    last: () => elements.at(-1),
   };
 }
