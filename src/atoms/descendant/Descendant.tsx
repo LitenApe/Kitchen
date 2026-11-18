@@ -3,7 +3,7 @@ import type { JSX, ReactNode } from 'react';
 import { DescendantContext } from './bones/DescendantContext';
 import { useDescendantRegistry } from './bones/useDescendantRegistry';
 
-type DescendantProps = {
+export type DescendantProps = {
   /** The content which holds the elements to keep track of, at any depth. */
   children?: ReactNode;
 };

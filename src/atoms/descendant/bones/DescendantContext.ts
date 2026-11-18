@@ -19,7 +19,8 @@ export const DescendantContext = createContext<DescendantContextValue | null>(
   null
 );
 
-type Descendant<T extends HTMLElement> = {
+/** What `useDescendant` returns for an element of type `T`. */
+export type UseDescendantResult<T extends HTMLElement> = {
   /** The element's position among the descendants, or -1 until it is registered. */
   index: number;
   /** Attach to the element to register it as a descendant. */
@@ -55,7 +56,7 @@ function useDescendantContext(): DescendantContextValue {
  * gives it a position in document order, and access to its neighbours and to
  * the first and last descendant.
  */
-export function useDescendant<T extends HTMLElement>(): Descendant<T> {
+export function useDescendant<T extends HTMLElement>(): UseDescendantResult<T> {
   const { elements, register, unregister } = useDescendantContext();
   const [element, setElement] = useState<T | null>(null);
 
