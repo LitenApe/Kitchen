@@ -30,7 +30,7 @@ function Position() {
  *   removed or moved, such as when a keyed list is reordered.
  * - `next(loop)` and `prev(loop)`: the next or previous registered element.
  *   They wrap around at the ends, or stay on the current element when `loop`
- *   is `false`.
+ *   is `false`. Until the element has registered, they return nothing.
  * - `first()` and `last()`: the first and last registered element, such as
  *   for the Home and End keys.
  *

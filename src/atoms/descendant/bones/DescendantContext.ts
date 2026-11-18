@@ -24,9 +24,15 @@ type Descendant<T extends HTMLElement> = {
   index: number;
   /** Attach to the element to register it as a descendant. */
   ref: RefCallback<T>;
-  /** The next descendant. Wraps around to the first unless `loop` is false. */
+  /**
+   * The next descendant, which there is none of until the element has
+   * registered. Wraps around to the first unless `loop` is false.
+   */
   next: (loop?: boolean) => HTMLElement | undefined;
-  /** The previous descendant. Wraps around to the last unless `loop` is false. */
+  /**
+   * The previous descendant, which there is none of until the element has
+   * registered. Wraps around to the last unless `loop` is false.
+   */
   prev: (loop?: boolean) => HTMLElement | undefined;
   /** The first descendant, such as for the Home key. */
   first: () => HTMLElement | undefined;

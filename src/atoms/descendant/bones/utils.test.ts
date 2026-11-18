@@ -57,6 +57,25 @@ describe('navigateFrom', () => {
     expect(navigateFrom(elements, 'first').prev(false)).toBe('first');
   });
 
+  // such as an element which has not registered yet
+  test('has no neighbours without an element, or for one which is not among them', () => {
+    for (const element of [null, 'fourth']) {
+      const { next, prev } = navigateFrom(elements, element);
+
+      expect(next()).toBeUndefined();
+      expect(prev()).toBeUndefined();
+      expect(next(false)).toBeUndefined();
+      expect(prev(false)).toBeUndefined();
+    }
+  });
+
+  test('still finds the elements at either end without an element', () => {
+    const { first, last } = navigateFrom(elements, null);
+
+    expect(first()).toBe('first');
+    expect(last()).toBe('third');
+  });
+
   test('returns the elements at either end', () => {
     const { first, last } = navigateFrom(elements, 'second');
 

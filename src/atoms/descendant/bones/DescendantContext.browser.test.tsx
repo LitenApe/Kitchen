@@ -61,6 +61,16 @@ describe('useDescendant general behavior', () => {
     expect(result.current.index).toBe(-1);
   });
 
+  test('has no neighbours until its ref is attached, but finds the first and last descendant', async () => {
+    const [first, second] = createElements(2);
+    const { result } = await renderDescendant([first, second]);
+
+    expect(result.current.next()).toBeUndefined();
+    expect(result.current.prev()).toBeUndefined();
+    expect(result.current.first()).toBe(first);
+    expect(result.current.last()).toBe(second);
+  });
+
   test('takes its index, neighbours and ends from the registered elements', async () => {
     const [first, second, third] = createElements(3);
     const { result, attach } = await renderDescendant([first, second, third]);

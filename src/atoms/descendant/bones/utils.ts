@@ -82,9 +82,15 @@ export function getPreviousIndex(
 type Navigation<T> = {
   /** The element's position, or -1 when it is not one of the elements. */
   index: number;
-  /** The next element. Wraps around to the first unless `loop` is false. */
+  /**
+   * The next element, which there is none of while the element is not one of
+   * the elements. Wraps around to the first unless `loop` is false.
+   */
   next: (loop?: boolean) => T | undefined;
-  /** The previous element. Wraps around to the last unless `loop` is false. */
+  /**
+   * The previous element, which there is none of while the element is not one
+   * of the elements. Wraps around to the last unless `loop` is false.
+   */
   prev: (loop?: boolean) => T | undefined;
   /** The first of the elements. */
   first: () => T | undefined;
@@ -106,12 +112,20 @@ export function navigateFrom<T>(
   element: T | null
 ): Navigation<T> {
   const index = element === null ? -1 : elements.indexOf(element);
+  // an element without a position, such as one which has not registered yet,
+  // has no neighbours
+  const isAmong = index !== -1;
 
   return {
     index,
-    next: (loop = true) => elements[getNextIndex(index, elements.length, loop)],
+    next: (loop = true) =>
+      isAmong
+        ? elements[getNextIndex(index, elements.length, loop)]
+        : undefined,
     prev: (loop = true) =>
-      elements[getPreviousIndex(index, elements.length, loop)],
+      isAmong
+        ? elements[getPreviousIndex(index, elements.length, loop)]
+        : undefined,
     first: () => elements.at(0),
     last: () => elements.at(-1),
   };
