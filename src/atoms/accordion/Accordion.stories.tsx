@@ -16,10 +16,20 @@ import { Accordion, AccordionHeader, AccordionPanel } from '.';
  * including `onClick`. Give that `div` an `id` to link to the accordion.
  *
  * `Accordion` is controlled: it shows its panel while `open` is set, and a
- * click on its header only calls `onOpenChange` with the opposite state and
- * the click event. Update `open` from there to open or close the accordion,
- * or leave it as it is to refuse the change. That leaves it to you how a set
- * of accordions behaves, such as keeping only one of them open at a time:
+ * click on its header only calls `onOpenChange` with the click event. Update
+ * `open` from there to open or close the accordion, or leave it as it is to
+ * refuse the change:
+ *
+ * ```tsx
+ * const [open, setOpen] = useState(false);
+ *
+ * <Accordion open={open} onOpenChange={() => setOpen(!open)}>
+ *   …
+ * </Accordion>
+ * ```
+ *
+ * That leaves it to you how a set of accordions behaves, such as keeping only
+ * one of them open at a time:
  *
  * ```tsx
  * const [openIndex, setOpenIndex] = useState(-1);
@@ -28,7 +38,7 @@ import { Accordion, AccordionHeader, AccordionPanel } from '.';
  *   <Accordion
  *     key={section.id}
  *     open={openIndex === index}
- *     onOpenChange={(open) => setOpenIndex(open ? index : -1)}
+ *     onOpenChange={() => setOpenIndex(openIndex === index ? -1 : index)}
  *   >
  *     …
  *   </Accordion>
@@ -38,7 +48,7 @@ import { Accordion, AccordionHeader, AccordionPanel } from '.';
  * If an open accordion cannot be closed, such as one which always has to stay
  * open, set `aria-disabled` on its header, so that screen readers know.
  *
- * In the first example, clicking the heading logs the requested state in the
+ * In the first example, clicking the heading logs the click in the
  * **Actions** panel, and `open` can be changed from **Controls**.
  */
 const meta = {
@@ -58,10 +68,7 @@ const meta = {
     },
     onOpenChange: {
       table: {
-        type: {
-          summary:
-            '(open: boolean, event: MouseEvent<HTMLButtonElement>) => void',
-        },
+        type: { summary: '(event: MouseEvent<HTMLButtonElement>) => void' },
       },
     },
   },
@@ -133,7 +140,7 @@ export const Default: Story = {
  * it focusable so keyboard and screen reader users can still discover it.
  *
  * Change `open` from **Controls** to see `aria-expanded` follow it. Clicking
- * the header logs the requested state in the **Actions** panel.
+ * the header logs the click in the **Actions** panel.
  */
 export const Header: Story = {
   args: {

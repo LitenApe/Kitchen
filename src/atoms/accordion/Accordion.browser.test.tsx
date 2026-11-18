@@ -21,7 +21,7 @@ function Shipping() {
   const [open, setOpen] = useState(false);
 
   return (
-    <Accordion open={open} onOpenChange={setOpen}>
+    <Accordion open={open} onOpenChange={() => setOpen(!open)}>
       <AccordionHeader>Shipping</AccordionHeader>
       <AccordionPanel>Details</AccordionPanel>
     </Accordion>
@@ -46,33 +46,19 @@ describe('Accordion general behavior', () => {
     await expect.element(button).toHaveTextContent('true');
   });
 
-  test('asks for the opposite state through onOpenChange when clicked', async () => {
+  test('calls onOpenChange with the click event when clicked', async () => {
     const onOpenChange = vi.fn();
-    const { rerender } = await render(
+    await render(
       <Accordion open={false} onOpenChange={onOpenChange}>
         <Toggle />
       </Accordion>
     );
-    const button = page.getByRole('button');
 
-    await userEvent.click(button);
-    expect(onOpenChange).toHaveBeenLastCalledWith(
-      true,
+    await userEvent.click(page.getByRole('button'));
+
+    expect(onOpenChange).toHaveBeenCalledExactlyOnceWith(
       expect.objectContaining({ type: 'click' })
     );
-
-    await rerender(
-      <Accordion open onOpenChange={onOpenChange}>
-        <Toggle />
-      </Accordion>
-    );
-
-    await userEvent.click(button);
-    expect(onOpenChange).toHaveBeenLastCalledWith(
-      false,
-      expect.objectContaining({ type: 'click' })
-    );
-    expect(onOpenChange).toHaveBeenCalledTimes(2);
   });
 
   // its user can refuse a change by leaving "open" as it is
@@ -160,7 +146,6 @@ describe('Accordion general behavior', () => {
 
     expect(onClick).toHaveBeenCalledTimes(1);
     expect(onOpenChange).toHaveBeenCalledExactlyOnceWith(
-      true,
       expect.objectContaining({ type: 'click' })
     );
   });

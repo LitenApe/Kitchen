@@ -166,7 +166,7 @@ describe('AccordionHeader general behavior', () => {
       const [open, setOpen] = useState(false);
 
       return (
-        <Accordion open={open} onOpenChange={setOpen}>
+        <Accordion open={open} onOpenChange={() => setOpen(!open)}>
           <AccordionHeader>Shipping</AccordionHeader>
         </Accordion>
       );

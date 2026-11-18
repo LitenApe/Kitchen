@@ -29,7 +29,7 @@ function Shipping({ children, startsOpen = false }: ShippingProps) {
   const [open, setOpen] = useState(startsOpen);
 
   return (
-    <Accordion open={open} onOpenChange={setOpen}>
+    <Accordion open={open} onOpenChange={() => setOpen(!open)}>
       <AccordionHeader>Shipping</AccordionHeader>
       {children}
     </Accordion>

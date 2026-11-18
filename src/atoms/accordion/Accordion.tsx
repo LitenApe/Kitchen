@@ -1,7 +1,7 @@
 import {
   type ComponentPropsWithRef,
   type JSX,
-  type MouseEvent,
+  type MouseEventHandler,
   useId,
 } from 'react';
 
@@ -12,16 +12,15 @@ export type AccordionProps = {
   /** Whether the accordion is open. */
   open: boolean;
   /**
-   * Called with the requested open state, and the click event, when the
-   * header is clicked. The accordion only opens or closes once `open` changes.
+   * Called with the click event when the header is clicked. The accordion
+   * only opens or closes once `open` changes.
    */
-  onOpenChange: (open: boolean, event: MouseEvent<HTMLButtonElement>) => void;
+  onOpenChange: MouseEventHandler<HTMLButtonElement>;
 } & ComponentPropsWithRef<'div'>;
 
 /**
- * Shows or hides its panel as `open` says. A click on its header only asks
- * for the opposite through `onOpenChange`, so what a click does is up to the
- * accordion's user.
+ * Shows or hides its panel as `open` says. A click on its header only calls
+ * `onOpenChange`, so what a click does is up to the accordion's user.
  */
 function Accordion({
   open,
@@ -32,12 +31,7 @@ function Accordion({
 
   return (
     <AccordionContext
-      value={{
-        headerId,
-        panelId,
-        open,
-        onClick: (event) => onOpenChange(!open, event),
-      }}
+      value={{ headerId, panelId, open, onClick: onOpenChange }}
     >
       <div {...props} />
     </AccordionContext>
