@@ -20,6 +20,12 @@ import { Alert } from '.';
  * and only change its content. A message rendered on the server is part of
  * the page from the start, rather than something which arrives, so it is
  * shown straight away, also while the page hydrates.
+ *
+ * As only changes are announced, showing the same message again, such as the
+ * same error after a second submit, goes unannounced. To announce it again,
+ * give the `Alert` a new `key`, such as the number of submits. React then
+ * mounts it afresh, so it holds the message back for 100 ms before showing it
+ * again, which gets it announced.
  */
 const meta = {
   title: 'Atom/Alert',

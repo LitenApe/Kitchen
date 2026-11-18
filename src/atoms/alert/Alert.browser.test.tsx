@@ -94,6 +94,32 @@ describe('Alert general behavior', () => {
     expect(container.element()).toHaveTextContent('second message');
   });
 
+  // screen readers only announce changes, so the same message is announced
+  // again by mounting the alert afresh
+  test('holds the same message back again when given a new key', async () => {
+    const { rerender } = await render(
+      <Alert key={1} data-testid="test-alert">
+        same message
+      </Alert>
+    );
+    vi.runAllTimers();
+    await expect
+      .element(page.getByTestId('test-alert'))
+      .toHaveTextContent('same message');
+
+    await rerender(
+      <Alert key={2} data-testid="test-alert">
+        same message
+      </Alert>
+    );
+    expect(page.getByTestId('test-alert').element()).toBeEmptyDOMElement();
+
+    vi.runAllTimers();
+    await expect
+      .element(page.getByTestId('test-alert'))
+      .toHaveTextContent('same message');
+  });
+
   test('re-rendering does not hold the content back', async () => {
     const createAlert = () => (
       <Alert data-testid="test-alert">
