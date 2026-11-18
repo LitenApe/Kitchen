@@ -1,6 +1,8 @@
 import type { ComponentPropsWithRef, JSX } from 'react';
 
-function Legend(props: ComponentPropsWithRef<'legend'>): JSX.Element {
+export type LegendProps = ComponentPropsWithRef<'legend'>;
+
+function Legend(props: LegendProps): JSX.Element {
   return <legend {...props} />;
 }
 
