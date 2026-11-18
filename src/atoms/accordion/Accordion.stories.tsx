@@ -11,8 +11,9 @@ import { Accordion, AccordionHeader, AccordionPanel } from '.';
  *
  * `Accordion` shares its state with its `AccordionHeader` and
  * `AccordionPanel`, which take care of the accessibility attributes that link
- * the two together. It renders a `div` around them, which receives every
- * other prop, including `onClick`.
+ * the two together, including their ids, so neither of them takes an `id`.
+ * The accordion renders a `div` around them, which receives every other prop,
+ * including `onClick`. Give that `div` an `id` to link to the accordion.
  *
  * `Accordion` is controlled: it shows its panel while `open` is set, and a
  * click on its header only calls `onOpenChange` with the opposite state and
@@ -121,11 +122,12 @@ export const Default: Story = {
 
 /**
  * `AccordionHeader` is the button which asks for its accordion to be opened
- * or closed. It points to its panel through `aria-controls` and reports
- * whether the panel is open through `aria-expanded`. It renders only a button,
- * so wrap it in a heading of the appropriate level (`h2` to `h6`) when using
- * it on a page. Unlike a plain `button`, it does not submit a surrounding
- * form.
+ * or closed. It sets its own `id`, points to its panel through
+ * `aria-controls` and reports whether the panel is open through
+ * `aria-expanded`, so it does not take these as props. It renders only a
+ * button, so wrap it in a heading of the appropriate level (`h2` to `h6`)
+ * when using it on a page. Unlike a plain `button`, it does not submit a
+ * surrounding form.
  *
  * Setting `disabled` or `aria-disabled` makes it ignore clicks, while keeping
  * it focusable so keyboard and screen reader users can still discover it.
@@ -142,11 +144,13 @@ export const Header: Story = {
 
 /**
  * `AccordionPanel` is a `section` which holds the content, and is labelled by
- * its header. While the accordion is closed, the panel is hidden with the
- * `hidden` attribute, even if it is given a `display` of its own. Its content
- * is rendered even while the accordion is closed, so it keeps its state, such
- * as what was typed into it. Like any hidden content, the browser's
- * find-in-page can't find it while it is closed.
+ * its header. It sets its own `id`, which its header points to, and its
+ * `aria-labelledby` and `hidden`, so it does not take these as props. While
+ * the accordion is closed, the panel is hidden with the `hidden` attribute,
+ * even if it is given a `display` of its own. Its content is rendered even
+ * while the accordion is closed, so it keeps its state, such as what was
+ * typed into it. Like any hidden content, the browser's find-in-page can't
+ * find it while it is closed.
  *
  * Change `open` from **Controls** to show or hide the content.
  */
