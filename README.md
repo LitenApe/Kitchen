@@ -77,8 +77,6 @@ As mentioned in the introduction, the project is still in alpha, which means tha
   - [x] InputField
   - [x] RadioField
   - [x] SelectField
-- [x] Layout components
-  - [x] AccordionGroup
 - [x] Utility components
   - [x] BaseField
 
