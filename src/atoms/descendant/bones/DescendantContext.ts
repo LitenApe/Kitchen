@@ -21,7 +21,11 @@ export const DescendantContext = createContext<DescendantContextValue | null>(
 
 /** What `useDescendant` returns for an element of type `T`. */
 export type UseDescendantResult<T extends HTMLElement> = {
-  /** The element's position among the descendants, or -1 until it is registered. */
+  /**
+   * The element's position among the descendants, or -1 until it is
+   * registered. In the browser, -1 is replaced before it is painted, but it
+   * stays in server-rendered HTML until the page has hydrated.
+   */
   index: number;
   /** Attach to the element to register it as a descendant. */
   ref: RefCallback<T>;

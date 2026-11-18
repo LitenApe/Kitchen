@@ -25,9 +25,13 @@ function Position() {
  * attach the `ref` it returns to the element. The hook then provides:
  *
  * - `index`: the element's position, counted in document order regardless of
- *   how deeply it is nested. It is `-1` during the first render, before the
- *   element has been registered. It is updated when elements are added,
- *   removed or moved, such as when a keyed list is reordered.
+ *   how deeply it is nested. It is updated when elements are added, removed
+ *   or moved, such as when a keyed list is reordered. Until the element has
+ *   registered, it is `-1`. In the browser, that only lasts for the first
+ *   render, which is replaced before anything is painted. Elements never
+ *   register on the server, though, so server-rendered HTML always has `-1`
+ *   until the page has hydrated. Markup which has to work before then, such
+ *   as which element can be tabbed to, should not depend on it.
  * - `next(loop)` and `prev(loop)`: the next or previous registered element.
  *   They wrap around at the ends, or stay on the current element when `loop`
  *   is `false`. Until the element has registered, they return nothing.

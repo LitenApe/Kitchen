@@ -1,4 +1,5 @@
 import { type KeyboardEvent, memo, useState } from 'react';
+import { createRoot } from 'react-dom/client';
 import { page, userEvent } from 'vitest/browser';
 import { render } from 'vitest-browser-react';
 
@@ -65,6 +66,39 @@ describe('Descendant default behavior', () => {
 
       const element = page.getByTestId('first');
       await expect.element(element).toHaveAttribute('data-index', '0');
+    });
+
+    // The browser only paints once the task which rendered, and its
+    // microtasks, have finished, which is when the observer is called. React
+    // renders without act here, as act would finish all of its work at once.
+    test('has the real index by the time the browser could first paint', async () => {
+      const container = document.createElement('div');
+      document.body.append(container);
+      const root = createRoot(container);
+      onTestFinished(() => {
+        root.unmount();
+        container.remove();
+      });
+      const firstPaint = new Promise<string | null>((resolve) => {
+        const observer = new MutationObserver(() => {
+          observer.disconnect();
+          resolve(container.textContent);
+        });
+        observer.observe(container, {
+          childList: true,
+          subtree: true,
+          characterData: true,
+        });
+      });
+
+      root.render(
+        <Descendant>
+          <Item name="first" />
+          <Item name="second" />
+        </Descendant>
+      );
+
+      expect(await firstPaint).toBe('first at 0second at 1');
     });
 
     test('elements are indexed in document order regardless of nesting', async () => {
