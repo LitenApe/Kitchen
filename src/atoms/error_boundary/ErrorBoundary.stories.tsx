@@ -2,11 +2,16 @@ import type { JSX } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { fn } from 'storybook/test';
 
-import { ErrorBoundary } from '.';
+import { ErrorBoundary, type ErrorBoundaryFallbackProps } from '.';
 
-/** Rendered in place of the children which failed. */
-function Fallback(): JSX.Element {
-  return <p>Fallback component rendered</p>;
+/** Rendered in place of the children which failed, with what was thrown. */
+function Fallback({ error }: ErrorBoundaryFallbackProps): JSX.Element {
+  return (
+    <p>
+      Fallback component rendered:{' '}
+      {error instanceof Error ? error.message : 'something went wrong'}
+    </p>
+  );
 }
 
 /** Always throws while rendering, to trigger the fallback. */
@@ -24,10 +29,15 @@ function ErrorThrower(): JSX.Element {
  * called with the error and React's error info, which includes the component
  * stack, for example to report the error to a tracking service.
  *
+ * The fallback is given the same `error` and `info` as props. Both are
+ * optional, so a fallback which only shows a message can leave them out. The
+ * `info` arrives just after the error, so the fallback first renders without
+ * it.
+ *
  * Like any React error boundary, it does not catch errors thrown in event
  * handlers or asynchronous code. The example below renders a child which
- * always throws, so the fallback is shown and the error is logged in the
- * **Actions** panel.
+ * always throws, so the fallback shows the error's message, and the error is
+ * logged in the **Actions** panel.
  */
 const meta = {
   title: 'Atom/ErrorBoundary',
