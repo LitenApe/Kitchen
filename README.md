@@ -90,6 +90,7 @@ As mentioned in the introduction, the project is still in alpha, which means tha
   - [x] ScreenReaderOnly
 - [ ] Utility components
   - [ ] Dropzone
+  - [x] Portal
 - [ ] Other tasks
   - [x] Rewrite the codebase to use JSX
   - [x] Add documentation to components
